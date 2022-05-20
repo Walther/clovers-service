@@ -3,8 +3,8 @@ services:
   clovers-back:
     restart: always
     build:
-      context: ./clovers-back
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./clovers-back/Dockerfile
     ports:
       - 8080:8080
     environment:
@@ -13,6 +13,19 @@ services:
       - LISTEN_ADDRESS=0.0.0.0:8080
     depends_on:
       - redis
+
+  clovers-batch:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./clovers-batch/Dockerfile
+    environment:
+      - REDIS_CONNETIONINFO=redis://redis:6379/
+      - RUST_LOG=clovers_batch=trace,tower_http=trace
+      - LISTEN_ADDRESS=0.0.0.0:8080
+    depends_on:
+      - redis
+      - clovers-back
 
   redis:
     restart: always

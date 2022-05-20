@@ -6,10 +6,7 @@ use axum::{
     routing::{get, post},
     Extension, Json, Router,
 };
-use dotenv::dotenv;
 use redis::aio::ConnectionManager;
-use serde::{Deserialize, Serialize};
-use std::net::SocketAddr;
 use tower_http::{
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
     LatencyUnit,
@@ -18,32 +15,7 @@ use tracing::Level;
 use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-mod store;
-
-/// Main configuration structure for the application
-#[derive(Debug)]
-struct Config {
-    /// Address and port to start the server at, eg. `0.0.0.0:8080`.
-    listen_address: SocketAddr,
-    /// Log level configuration. Example: `clovers_back=trace,tower_http=trace`.
-    rustlog: String,
-    /// Full address string of the redis server to connect to, e.g. `redis://redis:6379/`
-    redis_connectioninfo: redis::ConnectionInfo,
-}
-
-/// Loads the configuration from the .env file, erroring if required fields are missing or malformed.
-fn load_configs() -> anyhow::Result<Config> {
-    dotenv().ok();
-    let listen_address = dotenv::var("LISTEN_ADDRESS")?.parse()?;
-    let rustlog = dotenv::var("RUST_LOG")?;
-    let redis_connectioninfo = dotenv::var("REDIS_CONNETIONINFO")?.parse()?;
-
-    Ok(Config {
-        listen_address,
-        rustlog,
-        redis_connectioninfo,
-    })
-}
+use clovers_svc_common::*;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -98,12 +70,6 @@ async fn main() -> anyhow::Result<()> {
         .unwrap();
 
     Ok(())
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct RenderRequest {
-    /// minimum viable test: name of existing scene file
-    path: String,
 }
 
 /// simple example route handler
