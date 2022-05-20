@@ -7,9 +7,8 @@ use axum::{
     Extension, Json, Router,
 };
 use dotenv::dotenv;
-use redis::{AsyncCommands, AsyncIter};
+use redis::aio::ConnectionManager;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::net::SocketAddr;
 use tower_http::{
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
@@ -18,7 +17,8 @@ use tower_http::{
 use tracing::Level;
 use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use uuid::Uuid;
+
+mod store;
 
 /// Main configuration structure for the application
 #[derive(Debug)]
@@ -58,7 +58,8 @@ async fn main() -> anyhow::Result<()> {
     tracing::debug!("starting with configuration: {:?}", &config);
 
     // set up redis
-    let redis_client = redis::Client::open(config.redis_connectioninfo).unwrap();
+    let redis = redis::Client::open(config.redis_connectioninfo).unwrap();
+    let redis_connection_manager = ConnectionManager::new(redis).await?;
 
     // assemble the application
     let app = Router::new()
@@ -72,8 +73,10 @@ async fn main() -> anyhow::Result<()> {
         .route("/queue", get(queue_list_all))
         // `GET /queue/:id` gets the specific task by id
         .route("/queue/:id", get(queue_get))
+        // `GET /render/:id` gets the specific render result by id
+        .route("/render/:id", get(render_result_get))
         // redis connection
-        .layer(Extension(redis_client))
+        .layer(Extension(redis_connection_manager))
         // 404 handler
         .fallback(not_found.into_service())
         // tracing layer
@@ -121,63 +124,48 @@ async fn not_found() -> impl IntoResponse {
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
 async fn queue_post(
     Json(render_request): Json<RenderRequest>,
-    Extension(redis_client): Extension<redis::Client>,
+    Extension(mut redis_connection): Extension<ConnectionManager>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let id = Uuid::new_v4();
-    let data = json!(render_request).to_string();
-    // TODO: this feels extremely unergonomic
-    let mut con = match redis_client.get_async_connection().await {
-        Ok(con) => con,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
-    };
-    // queue:{uuidv4} -> data
-    let _result: String = match con.set(format!("queue:{id}"), data).await {
-        Ok(result) => result,
+    let ok = match store::queue_rendertask(render_request, &mut redis_connection).await {
+        Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
 
-    Ok((StatusCode::CREATED, Json(id)))
+    Ok((StatusCode::OK, Json(ok)))
 }
 
 /// List the task ids currently in the queue
 async fn queue_list_all(
-    Extension(redis_client): Extension<redis::Client>,
+    Extension(mut redis_connection): Extension<ConnectionManager>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    // TODO: this feels extremely unergonomic
-    let mut con = match redis_client.get_async_connection().await {
-        Ok(con) => con,
+    let rendertasks = match store::list_render_tasks(&mut redis_connection).await {
+        Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
-    // queue:{uuidv4} -> data
-    let mut async_iter: AsyncIter<String> = match con.scan_match("queue*").await {
-        Ok(async_iter) => async_iter,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
-    };
-    let mut results: Vec<String> = Vec::new();
-    while let Some(mut element) = async_iter.next_item().await {
-        // remove the `queue:` text from start, leave only uuid
-        let id: String = element.split_off("queue:".len());
-        results.push(id)
-    }
-
-    Ok((StatusCode::OK, Json(results)))
+    Ok((StatusCode::OK, Json(rendertasks)))
 }
 
 /// Get the task by id in the queue
 async fn queue_get(
     Path(id): Path<String>,
-    Extension(redis_client): Extension<redis::Client>,
+    Extension(mut redis_connection): Extension<ConnectionManager>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let key = format!("queue:{id}");
-    // TODO: this feels extremely unergonomic
-    let mut con = match redis_client.get_async_connection().await {
-        Ok(con) => con,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
-    };
-    let result: String = match con.get(key).await {
-        Ok(result) => result,
+    let rendertask = match store::get_render_task(id, &mut redis_connection).await {
+        Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
     // this field already contains json, so we don't need to json-ify it again
-    Ok((StatusCode::OK, result))
+    Ok((StatusCode::OK, rendertask))
+}
+
+/// Get the render result by id
+async fn render_result_get(
+    Path(id): Path<String>,
+    Extension(mut redis_connection): Extension<ConnectionManager>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let render_result = match store::get_render_result(id, &mut redis_connection).await {
+        Ok(data) => data,
+        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+    };
+    Ok((StatusCode::OK, render_result))
 }
