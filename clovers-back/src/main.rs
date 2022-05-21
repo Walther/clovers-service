@@ -7,6 +7,7 @@ use axum::{
     Extension, Json, Router,
 };
 use redis::aio::ConnectionManager;
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tower_http::{
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
     LatencyUnit,
@@ -29,6 +30,12 @@ async fn main() -> anyhow::Result<()> {
         .init();
     tracing::debug!("starting with configuration: {:?}", &config);
 
+    // set up postgres
+    let postgres_pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&config.postgres_connectioninfo)
+        .await?;
+
     // set up redis
     let redis = redis::Client::open(config.redis_connectioninfo).unwrap();
     let redis_connection_manager = ConnectionManager::new(redis).await?;
@@ -47,6 +54,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/queue/:id", get(queue_get))
         // `GET /render/:id` gets the specific render result by id
         .route("/render/:id", get(render_result_get))
+        // postgres
+        .layer(Extension(postgres_pool))
         // redis connection
         .layer(Extension(redis_connection_manager))
         // 404 handler
@@ -89,15 +98,18 @@ async fn not_found() -> impl IntoResponse {
 
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
 async fn queue_post(
-    Json(render_request): Json<RenderRequest>,
+    Json(render_request): Json<RenderTask>,
     Extension(mut redis_connection): Extension<ConnectionManager>,
+    Extension(postgres_pool): Extension<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let ok = match store::queue_rendertask(render_request, &mut redis_connection).await {
+    let uuid = match store::queue_rendertask(render_request, &mut redis_connection, &postgres_pool)
+        .await
+    {
         Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
 
-    Ok((StatusCode::OK, Json(ok)))
+    Ok((StatusCode::OK, uuid.to_string()))
 }
 
 /// List the task ids currently in the queue
@@ -114,24 +126,25 @@ async fn queue_list_all(
 /// Get the task by id in the queue
 async fn queue_get(
     Path(id): Path<String>,
-    Extension(mut redis_connection): Extension<ConnectionManager>,
+    Extension(postgres_pool): Extension<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let rendertask = match store::get_render_task(id, &mut redis_connection).await {
+    let rendertask = match store::get_render_task(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
-    // this field already contains json, so we don't need to json-ify it again
-    Ok((StatusCode::OK, rendertask))
+
+    Ok((StatusCode::OK, Json(rendertask)))
 }
 
 /// Get the render result by id
 async fn render_result_get(
     Path(id): Path<String>,
-    Extension(mut redis_connection): Extension<ConnectionManager>,
+    Extension(postgres_pool): Extension<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let render_result = match store::get_render_result(id, &mut redis_connection).await {
+    let render_result = match store::get_render_result(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
-    Ok((StatusCode::OK, render_result))
+    // png over json might be a bad idea, heh.
+    Ok((StatusCode::OK, Json(render_result)))
 }

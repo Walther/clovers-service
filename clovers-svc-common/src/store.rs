@@ -1,6 +1,9 @@
+use std::str::FromStr;
+
+use anyhow::{anyhow, Result};
 use redis::{aio::ConnectionManager, AsyncCommands};
 use serde_json::json;
-use uuid::Uuid;
+use sqlx::{types::Uuid, Pool, Postgres, Row};
 
 use super::*;
 
@@ -10,18 +13,32 @@ use super::*;
 /// 1. Creates a new key-value pair for the rendering data
 /// 2. Adds the id to the FIFO rendering queue
 pub async fn queue_rendertask(
-    render_request: RenderRequest,
+    render_request: RenderTask,
     redis_connection: &mut ConnectionManager,
-) -> redis::RedisResult<String> {
-    let id = Uuid::new_v4().to_string();
-    let key = format!("{RENDER_TASK_PREFIX}{id}");
-    let value = json!(render_request).to_string();
+    postgres_pool: &Pool<Postgres>,
+) -> Result<Uuid> {
+    let id: Uuid = match sqlx::query(
+        r#"
+INSERT INTO render_tasks ( data )
+VALUES ( $1 )
+RETURNING id
+        "#,
+    )
+    .bind(json!(render_request))
+    .fetch_one(postgres_pool)
+    .await
+    {
+        Ok(row) => row.try_get("id")?,
+        Err(e) => return Err(anyhow!("Error saving rendertask to postgres: {e}")),
+    };
 
-    // TODO: this should be a transaction block. However, https://github.com/redis-rs/redis-rs/issues/353
-    redis_connection.set(key, value).await?;
-    redis_connection
-        .rpush(RENDER_QUEUE_NAME, id.clone())
-        .await?;
+    let _count: u64 = match redis_connection
+        .rpush(RENDER_QUEUE_NAME, id.to_string())
+        .await
+    {
+        Ok(count) => count,
+        Err(e) => return Err(anyhow!("Error saving rendertask to redis: {e}")),
+    };
 
     Ok(id)
 }
@@ -35,39 +52,100 @@ pub async fn list_render_tasks(
 }
 
 /// Gets the full rendering task by id.
-pub async fn get_render_task(
-    id: String, // TODO: Uuid v4 type here?
-    redis_connection: &mut ConnectionManager,
-) -> redis::RedisResult<String> {
-    let key = format!("{RENDER_TASK_PREFIX}{id}");
-    let rendertask: String = redis_connection.get(key).await?;
-    Ok(rendertask)
+pub async fn get_render_task(id: String, postgres_pool: &Pool<Postgres>) -> Result<RenderTask> {
+    let id = Uuid::from_str(&id)?;
+    let render_task: String = match sqlx::query(
+        r#"
+SELECT data FROM render_tasks
+WHERE id = ( $1 )
+        "#,
+    )
+    .bind(id)
+    .fetch_one(postgres_pool)
+    .await
+    {
+        Ok(row) => row.try_get("data")?,
+        Err(e) => return Err(anyhow!("Error fetching rendertask {id} from postgres: {e}")),
+    };
+
+    let render_task: RenderTask = serde_json::from_str(&render_task)?;
+
+    Ok(render_task)
 }
 
 /// Deletes the full rendering task by id.
-pub async fn delete_render_task(
-    id: String, // TODO: Uuid v4 type here?
-    redis_connection: &mut ConnectionManager,
-) -> redis::RedisResult<u64> {
-    let key = format!("{RENDER_TASK_PREFIX}{id}");
-    let rendertask: u64 = redis_connection.del(key).await?;
-    Ok(rendertask)
+pub async fn delete_render_task(id: String, postgres_pool: &Pool<Postgres>) -> Result<Uuid> {
+    let id = Uuid::from_str(&id)?;
+    let id: Uuid = match sqlx::query(
+        r#"
+DELETE FROM render_tasks
+WHERE id = ( $1 )
+RETURNING id
+        "#,
+    )
+    .bind(id)
+    .fetch_one(postgres_pool)
+    .await
+    {
+        Ok(row) => row.try_get("id")?,
+        Err(e) => return Err(anyhow!("Error saving rendertask to postgres: {e}")),
+    };
+
+    Ok(id)
+}
+
+/// Saves the full rendering result
+pub async fn save_render_result(
+    render_result: RenderResult,
+    postgres_pool: &Pool<Postgres>,
+) -> Result<Uuid> {
+    let id: Uuid = match sqlx::query(
+        r#"
+INSERT INTO render_results ( data )
+VALUES ( $1 )
+RETURNING id
+        "#,
+    )
+    .bind(render_result.data)
+    .fetch_one(postgres_pool)
+    .await
+    {
+        Ok(row) => row.try_get("id")?,
+        Err(e) => return Err(anyhow!("Error saving rendertask to postgres: {e}")),
+    };
+
+    Ok(id)
 }
 
 /// Gets the full rendering result by id.
-pub async fn get_render_result(
-    id: String, // TODO: Uuid v4 type here?
-    redis_connection: &mut ConnectionManager,
-) -> redis::RedisResult<String> {
-    let key = format!("{RENDER_RESULT_PREFIX}{id}");
-    let rendertask: String = redis_connection.get(key).await?;
-    Ok(rendertask)
+pub async fn get_render_result(id: String, postgres_pool: &Pool<Postgres>) -> Result<RenderResult> {
+    let id = Uuid::from_str(&id)?;
+    let data: Vec<u8> = match sqlx::query(
+        r#"
+SELECT data FROM render_results
+WHERE id = ( $1 )
+        "#,
+    )
+    .bind(id)
+    .fetch_one(postgres_pool)
+    .await
+    {
+        Ok(row) => row.try_get("data")?,
+        Err(e) => {
+            return Err(anyhow!(
+                "Error fetching renderresult {id} from postgres: {e}"
+            ))
+        }
+    };
+
+    let render_result = RenderResult { data };
+
+    Ok(render_result)
 }
 
 /// Pops the first rendering task in the rendering queue, returning the id.
-pub async fn pop_render_queue(
-    redis_connection: &mut ConnectionManager,
-) -> redis::RedisResult<String> {
-    let rendertask: String = redis_connection.lpop(RENDER_QUEUE_NAME, None).await?;
-    Ok(rendertask)
+pub async fn pop_render_queue(redis_connection: &mut ConnectionManager) -> Result<Uuid> {
+    let rendertask_id: String = redis_connection.lpop(RENDER_QUEUE_NAME, None).await?;
+    let rendertask_id = Uuid::from_str(&rendertask_id)?;
+    Ok(rendertask_id)
 }
