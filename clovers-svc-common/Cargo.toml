@@ -12,4 +12,4 @@ redis = { version = "0.21.5", features = ["tokio-comp", "connection-manager"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.68"
 sqlx = { version = "0.5", features = [ "postgres", "uuid", "runtime-tokio-rustls", "json" ] }
-uuid = { version = "1.0.0", features = ["v4", "serde"] }
+clovers = { git = "https://github.com/Walther/clovers/", rev = "f0d48be032f1098816f666085604f43abcb260cf", default-features = false, features = ["serde-derive"] }

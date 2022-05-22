@@ -1,9 +1,13 @@
 use std::str::FromStr;
 
+use super::RenderTask;
 use anyhow::{anyhow, Result};
 use redis::{aio::ConnectionManager, AsyncCommands};
 use serde_json::json;
-use sqlx::{types::Uuid, Pool, Postgres, Row};
+use sqlx::{
+    types::{Json, Uuid},
+    Pool, Postgres, Row,
+};
 
 use super::*;
 
@@ -13,7 +17,7 @@ use super::*;
 /// 1. Creates a new key-value pair for the rendering data
 /// 2. Adds the id to the FIFO rendering queue
 pub async fn queue_rendertask(
-    render_request: RenderTask,
+    render_task: RenderTask,
     redis_connection: &mut ConnectionManager,
     postgres_pool: &Pool<Postgres>,
 ) -> Result<Uuid> {
@@ -24,7 +28,7 @@ VALUES ( $1 )
 RETURNING id
         "#,
     )
-    .bind(json!(render_request))
+    .bind(json!(render_task))
     .fetch_one(postgres_pool)
     .await
     {
@@ -52,9 +56,8 @@ pub async fn list_render_tasks(
 }
 
 /// Gets the full rendering task by id.
-pub async fn get_render_task(id: String, postgres_pool: &Pool<Postgres>) -> Result<RenderTask> {
-    let id = Uuid::from_str(&id)?;
-    let render_task: String = match sqlx::query(
+pub async fn get_render_task(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result<RenderTask> {
+    let render_task: Json<RenderTask> = match sqlx::query(
         r#"
 SELECT data FROM render_tasks
 WHERE id = ( $1 )
@@ -68,14 +71,12 @@ WHERE id = ( $1 )
         Err(e) => return Err(anyhow!("Error fetching rendertask {id} from postgres: {e}")),
     };
 
-    let render_task: RenderTask = serde_json::from_str(&render_task)?;
-
-    Ok(render_task)
+    // TODO: is this actually the correct way to do this? .as_ref().to_owned()
+    Ok(render_task.as_ref().to_owned())
 }
 
 /// Deletes the full rendering task by id.
-pub async fn delete_render_task(id: String, postgres_pool: &Pool<Postgres>) -> Result<Uuid> {
-    let id = Uuid::from_str(&id)?;
+pub async fn delete_render_task(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result<Uuid> {
     let id: Uuid = match sqlx::query(
         r#"
 DELETE FROM render_tasks
@@ -118,8 +119,7 @@ RETURNING id
 }
 
 /// Gets the full rendering result by id.
-pub async fn get_render_result(id: String, postgres_pool: &Pool<Postgres>) -> Result<RenderResult> {
-    let id = Uuid::from_str(&id)?;
+pub async fn get_render_result(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result<Vec<u8>> {
     let data: Vec<u8> = match sqlx::query(
         r#"
 SELECT data FROM render_results
@@ -138,9 +138,7 @@ WHERE id = ( $1 )
         }
     };
 
-    let render_result = RenderResult { data };
-
-    Ok(render_result)
+    Ok(data)
 }
 
 /// Pops the first rendering task in the rendering queue, returning the id.

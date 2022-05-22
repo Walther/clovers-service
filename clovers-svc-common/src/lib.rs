@@ -1,13 +1,14 @@
+use clovers::{scenes::SceneFile, RenderOpts};
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 
+/// Data related operations, postgres & redis
 pub mod store;
 
-/// Redis prefix for the render task keys
-pub const RENDER_TASK_PREFIX: &str = "render_task:";
-/// Redis prefix for the render result keys
-pub const RENDER_RESULT_PREFIX: &str = "render_result:";
+/// Re-export the clovers library for internal use
+pub use clovers;
+
 /// Redis list name for the rendering queue
 pub const RENDER_QUEUE_NAME: &str = "render_queue";
 
@@ -41,10 +42,12 @@ pub fn load_configs() -> anyhow::Result<Config> {
 }
 
 /// The main object for a rendering request. Contains all the information necessary for performing a full render of a scene.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct RenderTask {
-    /// minimum viable test: name of existing scene file
-    pub path: String,
+    /// All the details of the scene to be rendered
+    pub scene_file: SceneFile,
+    /// Rendering options for the render
+    pub opts: RenderOpts,
 }
 
 /// The main object for the rendering result. Contains an image and assorted metadata.

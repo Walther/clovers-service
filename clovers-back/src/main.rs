@@ -7,7 +7,7 @@ use axum::{
     Extension, Json, Router,
 };
 use redis::aio::ConnectionManager;
-use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use sqlx::{postgres::PgPoolOptions, types::Uuid, Pool, Postgres};
 use tower_http::{
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
     LatencyUnit,
@@ -128,6 +128,10 @@ async fn queue_get(
     Path(id): Path<String>,
     Extension(postgres_pool): Extension<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
+    let id: Uuid = match id.parse() {
+        Ok(id) => id,
+        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+    };
     let rendertask = match store::get_render_task(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
@@ -141,10 +145,15 @@ async fn render_result_get(
     Path(id): Path<String>,
     Extension(postgres_pool): Extension<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let render_result = match store::get_render_result(id, &postgres_pool).await {
+    let id: Uuid = match id.parse() {
+        Ok(id) => id,
+        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+    };
+    let render_result: Vec<u8> = match store::get_render_result(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     };
-    // png over json might be a bad idea, heh.
-    Ok((StatusCode::OK, Json(render_result)))
+
+    // sending raw byte array here. is this sensible?
+    Ok((StatusCode::OK, render_result))
 }
