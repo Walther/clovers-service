@@ -1,0 +1,13 @@
+button {
+  border: none;
+  padding: 0.5rem;
+  background: var(--grey-baseline);
+}
+
+button:hover {
+  background: var(--grey-lightened);
+}
+
+button:active {
+  background: var(--grey-darkened);
+}

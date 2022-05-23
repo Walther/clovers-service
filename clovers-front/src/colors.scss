@@ -1,20 +1,46 @@
-:root[data-theme="light"] {
-  --main-bg-color: white;
-  --inverse-bg-color: #272822;
+:root {
+  // Monokai inspired
+  --pink: #f92672;
+  --green: #a6e22e;
+  --orange: #f4bf75;
+  --blue: #66d9ef;
+  --purple: #ae81ff;
+  --teal: #a1efe4;
+  --whiteish: #f8f8f2;
+  --blackish: #272822;
 
-  --main-txt-color: #272822;
-  --inverse-txt-color: white;
+  // Others
+  --grey-darkened: #aaa;
+  --grey-baseline: #bbb;
+  --grey-lightened: #ccc;
+}
+
+:root[data-theme="light"] {
+  --main-bg-color: var(--whiteish);
+  --inverse-bg-color: var(--blackish);
+
+  --main-txt-color: var(--blackish);
+  --inverse-txt-color: var(--whiteish);
 }
 
 :root[data-theme="dark"] {
-  --main-bg-color: #272822;
-  --inverse-bg-color: white;
+  --main-bg-color: var(--blackish);
+  --inverse-bg-color: var(--whiteish);
 
-  --main-txt-color: white;
-  --inverse-txt-color: #272822;
+  --main-txt-color: var(--whiteish);
+  --inverse-txt-color: var(--blackish);
 }
 
-html, body {
+html,
+body {
   background: var(--main-bg-color);
   color: var(--main-txt-color);
+}
+
+a {
+  color: var(--blue);
+}
+
+a:visited {
+  color: var(--purple);
 }
