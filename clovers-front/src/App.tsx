@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import "./App.scss";
 import axios from "axios";
+import { ThemeToggle } from "./ThemeToggle";
+import { Button } from "./Button";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
@@ -13,14 +15,6 @@ const render_default_options = {
   quiet: false,
   normalmap: false,
 };
-
-const Button = ({
-  handleClick,
-  text,
-}: {
-  handleClick: React.MouseEventHandler;
-  text: String;
-}) => <button onClick={handleClick}>{text}</button>;
 
 const RenderQueue = ({ queue }: { queue: Array<String> }): ReactElement => {
   return (
@@ -162,6 +156,7 @@ function App() {
       </main>
       <footer>
         <p>&copy; clovers 2022</p>
+        <ThemeToggle />
       </footer>
     </div>
   );

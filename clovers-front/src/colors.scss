@@ -1,0 +1,20 @@
+:root[data-theme="light"] {
+  --main-bg-color: white;
+  --inverse-bg-color: #272822;
+
+  --main-txt-color: #272822;
+  --inverse-txt-color: white;
+}
+
+:root[data-theme="dark"] {
+  --main-bg-color: #272822;
+  --inverse-bg-color: white;
+
+  --main-txt-color: white;
+  --inverse-txt-color: #272822;
+}
+
+html, body {
+  background: var(--main-bg-color);
+  color: var(--main-txt-color);
+}

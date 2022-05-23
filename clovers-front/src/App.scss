@@ -35,8 +35,8 @@ footer {
 }
 
 .MessageBox {
-  background: #272822;
-  color: white;
+  background: var(--inverse-bg-color);
+  color: var(--inverse-txt-color);
   padding: 1rem;
   width: 100%;
 }
