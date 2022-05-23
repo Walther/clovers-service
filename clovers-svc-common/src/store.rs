@@ -33,7 +33,10 @@ RETURNING id
     .await
     {
         Ok(row) => row.try_get("id")?,
-        Err(e) => return Err(anyhow!("Error saving rendertask to postgres: {e}")),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err(anyhow!("Error saving rendertask to postgres: {e}"));
+        }
     };
 
     let _count: u64 = match redis_connection
@@ -41,7 +44,11 @@ RETURNING id
         .await
     {
         Ok(count) => count,
-        Err(e) => return Err(anyhow!("Error saving rendertask to redis: {e}")),
+        Err(e) => {
+            let error_message = format!("Error saving rendertask to redis: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
+        }
     };
 
     Ok(id)
@@ -68,7 +75,11 @@ WHERE id = ( $1 )
     .await
     {
         Ok(row) => row.try_get("data")?,
-        Err(e) => return Err(anyhow!("Error fetching rendertask {id} from postgres: {e}")),
+        Err(e) => {
+            let error_message = format!("Error fetching rendertask {id} from postgres: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
+        }
     };
 
     // TODO: is this actually the correct way to do this? .as_ref().to_owned()
@@ -89,7 +100,11 @@ RETURNING id
     .await
     {
         Ok(row) => row.try_get("id")?,
-        Err(e) => return Err(anyhow!("Error saving rendertask to postgres: {e}")),
+        Err(e) => {
+            let error_message = format!("Error saving rendertask to postgres: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
+        }
     };
 
     Ok(id)
@@ -112,7 +127,11 @@ RETURNING id
     .await
     {
         Ok(row) => row.try_get("id")?,
-        Err(e) => return Err(anyhow!("Error saving rendertask to postgres: {e}")),
+        Err(e) => {
+            let error_message = format!("Error saving rendertask to postgres: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
+        }
     };
 
     Ok(id)
@@ -132,13 +151,43 @@ WHERE id = ( $1 )
     {
         Ok(row) => row.try_get("data")?,
         Err(e) => {
-            return Err(anyhow!(
-                "Error fetching renderresult {id} from postgres: {e}"
-            ))
+            let error_message = format!("Error fetching renderresult {id} from postgres: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
         }
     };
 
     Ok(data)
+}
+
+/// Lists all rendering results in the db
+pub async fn list_render_results(postgres_pool: &Pool<Postgres>) -> Result<Vec<Uuid>> {
+    let render_result_ids: Result<Vec<Uuid>, sqlx::Error> = match sqlx::query(
+        r#"
+SELECT id FROM render_results
+        "#,
+    )
+    .fetch_all(postgres_pool)
+    .await
+    {
+        Ok(rows) => rows.iter().map(|row| row.try_get("id")).collect(),
+        Err(e) => {
+            let error_message = format!("Error listing render_results from postgres: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
+        }
+    };
+    // TODO: ergonomics...
+    let render_result_ids = match render_result_ids {
+        Ok(data) => data,
+        Err(e) => {
+            let error_message = format!("Error listing render_results from postgres: {e}");
+            tracing::error!("{error_message}");
+            return Err(anyhow!("{error_message}"));
+        }
+    };
+
+    Ok(render_result_ids)
 }
 
 /// Pops the first rendering task in the rendering queue, returning the id.

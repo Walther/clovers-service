@@ -1,14 +1,18 @@
 use axum::{
     extract::Path,
     handler::Handler,
-    http::StatusCode,
-    response::IntoResponse,
+    http::{
+        header::{self, CONTENT_TYPE},
+        HeaderValue, Method, StatusCode,
+    },
+    response::{AppendHeaders, IntoResponse},
     routing::{get, post},
     Extension, Json, Router,
 };
 use redis::aio::ConnectionManager;
 use sqlx::{postgres::PgPoolOptions, types::Uuid, Pool, Postgres};
 use tower_http::{
+    cors::CorsLayer,
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
     LatencyUnit,
 };
@@ -52,6 +56,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/queue", get(queue_list_all))
         // `GET /queue/:id` gets the specific task by id
         .route("/queue/:id", get(queue_get))
+        // `GET /render/` gets all the render results in the db
+        .route("/render", get(render_result_list_all))
         // `GET /render/:id` gets the specific render result by id
         .route("/render/:id", get(render_result_get))
         // postgres
@@ -60,6 +66,13 @@ async fn main() -> anyhow::Result<()> {
         .layer(Extension(redis_connection_manager))
         // 404 handler
         .fallback(not_found.into_service())
+        // CORS layer
+        .layer(
+            CorsLayer::new()
+                .allow_origin(config.frontend_address.parse::<HeaderValue>().unwrap())
+                .allow_headers([header::CONTENT_TYPE])
+                .allow_methods([Method::GET, Method::POST]),
+        )
         // tracing layer
         .layer(
             TraceLayer::new_for_http()
@@ -88,12 +101,12 @@ async fn hello() -> &'static str {
 
 /// healthcheck endpoint
 async fn healthz() -> impl IntoResponse {
-    (StatusCode::OK, "ok\n")
+    (StatusCode::OK, Json("ok\n"))
 }
 
 /// 404 not found handler
 async fn not_found() -> impl IntoResponse {
-    (StatusCode::NOT_FOUND, "not found\n")
+    (StatusCode::NOT_FOUND, Json("not found\n"))
 }
 
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
@@ -106,10 +119,13 @@ async fn queue_post(
         .await
     {
         Ok(data) => data,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
     };
 
-    Ok((StatusCode::OK, uuid.to_string()))
+    Ok((StatusCode::OK, Json(uuid.to_string())))
 }
 
 /// List the task ids currently in the queue
@@ -118,7 +134,10 @@ async fn queue_list_all(
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let rendertasks = match store::list_render_tasks(&mut redis_connection).await {
         Ok(data) => data,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
     };
     Ok((StatusCode::OK, Json(rendertasks)))
 }
@@ -130,11 +149,17 @@ async fn queue_get(
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let id: Uuid = match id.parse() {
         Ok(id) => id,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
     };
     let rendertask = match store::get_render_task(id, &postgres_pool).await {
         Ok(data) => data,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
     };
 
     Ok((StatusCode::OK, Json(rendertask)))
@@ -147,13 +172,39 @@ async fn render_result_get(
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let id: Uuid = match id.parse() {
         Ok(id) => id,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
     };
     let render_result: Vec<u8> = match store::get_render_result(id, &postgres_pool).await {
         Ok(data) => data,
-        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
     };
 
-    // sending raw byte array here. is this sensible?
-    Ok((StatusCode::OK, render_result))
+    Ok((
+        StatusCode::OK,
+        AppendHeaders([(CONTENT_TYPE, "image/png")]),
+        render_result,
+    ))
+}
+
+/// Get a list of all the render results
+async fn render_result_list_all(
+    Extension(postgres_pool): Extension<Pool<Postgres>>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let render_results: Vec<Uuid> = match store::list_render_results(&postgres_pool).await {
+        Ok(data) => data,
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+    // TODO: can this be cleaned up somehow?
+    let render_results: Vec<String> = render_results.iter().map(|id| id.to_string()).collect();
+
+    Ok((StatusCode::OK, Json(render_results)))
 }

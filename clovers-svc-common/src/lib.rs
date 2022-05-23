@@ -23,6 +23,8 @@ pub struct Config {
     pub redis_connectioninfo: redis::ConnectionInfo,
     /// Full address string of the postgres server to connect to, e.g. `postgres://postgres:password@localhost/test`
     pub postgres_connectioninfo: String,
+    /// Address of the frontend. Used for CORS allow purposes
+    pub frontend_address: String,
 }
 
 /// Loads the configuration from the .env file, erroring if required fields are missing or malformed.
@@ -32,12 +34,14 @@ pub fn load_configs() -> anyhow::Result<Config> {
     let rustlog = dotenv::var("RUST_LOG")?;
     let redis_connectioninfo = dotenv::var("REDIS_CONNETIONINFO")?.parse()?;
     let postgres_connectioninfo = dotenv::var("POSTGRES_CONNETIONINFO")?.parse()?;
+    let frontend_address = dotenv::var("FRONTEND_ADDRESS")?.parse()?;
 
     Ok(Config {
         listen_address,
         rustlog,
         redis_connectioninfo,
         postgres_connectioninfo,
+        frontend_address,
     })
 }
 
