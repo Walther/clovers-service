@@ -3,18 +3,13 @@ import "./App.scss";
 import axios from "axios";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "./Button";
+import {
+  RenderOptions,
+  RenderOptionsForm,
+  render_default_options,
+} from "./RenderOptions";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
-
-const render_default_options = {
-  width: 1024,
-  height: 1024,
-  samples: 10,
-  max_depth: 100,
-  gamma: 2.0,
-  quiet: false,
-  normalmap: false,
-};
 
 const RenderQueue = ({ queue }: { queue: Array<String> }): ReactElement => {
   return (
@@ -47,8 +42,8 @@ const MessageBox = ({ message }: { message: String }): ReactElement => {
 };
 
 function App() {
-  const [renderopts, setRenderopts] = useState(
-    JSON.stringify(render_default_options, null, 2)
+  const [renderOptions, setRenderOptions] = useState<RenderOptions>(
+    render_default_options
   );
   const [scenefile, setScenefile] = useState("");
   const [queue, setQueue] = useState<Array<String>>([]);
@@ -69,7 +64,7 @@ function App() {
 
     // parse the json inputs
     try {
-      opts = JSON.parse(renderopts);
+      opts = renderOptions;
       scene_file = JSON.parse(scenefile);
     } catch (error: any) {
       setMessage(error.message);
@@ -129,12 +124,9 @@ function App() {
       </header>
       <main>
         <form onSubmit={handleSubmit}>
-          <h2>render options</h2>
-          <textarea
-            value={renderopts}
-            onChange={(e) => setRenderopts(e.target.value)}
-            placeholder={`{"json": "paste your render options here"}`}
-            className="json_input"
+          <RenderOptionsForm
+            renderOptions={renderOptions}
+            setRenderOptions={setRenderOptions}
           />
           <h2>scene file</h2>
           <textarea
