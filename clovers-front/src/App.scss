@@ -1,0 +1,26 @@
+.App {
+  display: grid;
+  grid-template-columns: [left-column] auto [main-column] 1200px [right-column] auto;
+  grid-template-rows: [nav-row] auto [main-row] 1fr [footer-row] auto;
+  min-height: 100%;
+}
+
+header {
+  grid-column: main-column;
+  grid-row: nav-row;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+main {
+  grid-column: main-column;
+  grid-row: main-row;
+  height: 100%;
+}
+
+footer {
+  grid-column: main-column;
+  grid-row: footer-row;
+}
