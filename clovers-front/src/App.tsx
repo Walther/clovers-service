@@ -8,7 +8,12 @@ import {
   RenderOptionsForm,
   defaultRenderOptions,
 } from "./RenderOptions";
-import { implicitSceneSettings, SceneForm } from "./SceneForm";
+import {
+  defaultScene,
+  implicitSceneSettings,
+  Scene,
+  SceneForm,
+} from "./SceneForm";
 import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
@@ -48,7 +53,7 @@ function App() {
     useState<RenderOptions>(defaultRenderOptions);
   const [cameraOptions, setCameraOptions] =
     useState<CameraOptions>(defaultCameraOptions);
-  const [scenefile, setScenefile] = useState("");
+  const [scene, setScene] = useState<Scene>(defaultScene);
   const [queue, setQueue] = useState<Array<String>>([]);
   const [renders, setRenders] = useState<Array<String>>([]);
   const [message, setMessage] = useState<String>("Ready.");
@@ -58,8 +63,7 @@ function App() {
     refreshRenders();
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     setMessage("Ready.");
 
     let opts;
@@ -68,7 +72,7 @@ function App() {
     // parse the json inputs
     try {
       opts = renderOptions;
-      scene_file = JSON.parse(scenefile);
+      scene_file = scene;
       scene_file = {
         ...implicitSceneSettings,
         ...scene_file,
@@ -131,20 +135,19 @@ function App() {
         <h1>clovers web frontend</h1>
       </header>
       <main>
-        <RenderOptionsForm
-          renderOptions={renderOptions}
-          setRenderOptions={setRenderOptions}
-        />
-        <CameraForm
-          cameraOptions={cameraOptions}
-          setCameraOptions={setCameraOptions}
-        />
-        <SceneForm
-          scenefile={scenefile}
-          setScenefile={setScenefile}
-          handleSubmit={handleSubmit}
-        />
-        <h2>message</h2>
+        <div className="OptionsGroup">
+          <RenderOptionsForm
+            renderOptions={renderOptions}
+            setRenderOptions={setRenderOptions}
+          />
+          <CameraForm
+            cameraOptions={cameraOptions}
+            setCameraOptions={setCameraOptions}
+          />
+        </div>
+        <SceneForm scene={scene} setScene={setScene} />
+        <h2>render</h2>
+        <Button handleClick={() => handleSubmit()} text="render" />
         <MessageBox message={message} />
         <h2>queue</h2>
         <Button handleClick={() => refreshQueue()} text="refresh queue" />
