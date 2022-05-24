@@ -8,6 +8,7 @@ import {
   RenderOptionsForm,
   render_default_options,
 } from "./RenderOptions";
+import { SceneForm } from "./SceneForm";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
@@ -123,20 +124,15 @@ function App() {
         <h1>clovers web frontend</h1>
       </header>
       <main>
-        <form onSubmit={handleSubmit}>
-          <RenderOptionsForm
-            renderOptions={renderOptions}
-            setRenderOptions={setRenderOptions}
-          />
-          <h2>scene file</h2>
-          <textarea
-            value={scenefile}
-            onChange={(e) => setScenefile(e.target.value)}
-            placeholder={`{"json": "paste your scene file here"}`}
-            className="json_input"
-          />
-          <button type="submit">render</button>
-        </form>
+        <RenderOptionsForm
+          renderOptions={renderOptions}
+          setRenderOptions={setRenderOptions}
+        />
+        <SceneForm
+          scenefile={scenefile}
+          setScenefile={setScenefile}
+          handleSubmit={handleSubmit}
+        />
         <h2>message</h2>
         {message && <MessageBox message={message} />}
         <h2>queue</h2>

@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { Button } from "./Button";
 import "./RenderOptions.scss";
 
@@ -26,7 +27,7 @@ export const RenderOptionsForm = ({
 }: {
   renderOptions: RenderOptions;
   setRenderOptions: Function;
-}) => {
+}): ReactElement => {
   return (
     <div className="RenderOptionsForm">
       <h2>render options</h2>
