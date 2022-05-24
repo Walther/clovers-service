@@ -1,3 +1,6 @@
+import { Button } from "./Button";
+import "./RenderOptions.scss";
+
 export type RenderOptions = {
   width: number;
   height: number;
@@ -25,7 +28,7 @@ export const RenderOptionsForm = ({
   setRenderOptions: Function;
 }) => {
   return (
-    <>
+    <div className="RenderOptionsForm">
       <h2>render options</h2>
 
       <label htmlFor="width">width: </label>
@@ -40,7 +43,6 @@ export const RenderOptionsForm = ({
           })
         }
       />
-      <br />
 
       <label htmlFor="height">height: </label>
       <input
@@ -54,7 +56,6 @@ export const RenderOptionsForm = ({
           })
         }
       />
-      <br />
 
       <label htmlFor="samples">samples: </label>
       <input
@@ -68,7 +69,11 @@ export const RenderOptionsForm = ({
           })
         }
       />
-      <br />
-    </>
+
+      <Button
+        handleClick={(_e) => setRenderOptions(render_default_options)}
+        text={"defaults"}
+      />
+    </div>
   );
 };

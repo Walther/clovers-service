@@ -147,8 +147,9 @@ function App() {
         <RenderRenders renders={renders} />
       </main>
       <footer>
-        <p>&copy; clovers 2022</p>
-        <ThemeToggle />
+        <p>
+          &copy; clovers 2022 <ThemeToggle />
+        </p>
       </footer>
     </div>
   );

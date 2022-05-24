@@ -1,6 +1,9 @@
 .App {
   display: grid;
-  grid-template-columns: [left-column] auto [main-column] 1200px [right-column] auto;
+  grid-template-columns:
+    [left-column] minmax(1rem, auto)
+    [main-column] minmax(350px, 1200px)
+    [right-column] minmax(1rem, auto);
   grid-template-rows: [nav-row] auto [main-row] 1fr [footer-row] auto;
   min-height: 100%;
 }
@@ -16,6 +19,7 @@ h1 {
 
 h2 {
   font-size: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 main {
@@ -32,6 +36,7 @@ footer {
 .json_input {
   width: 100%;
   height: 300px;
+  resize: vertical;
 }
 
 .MessageBox {
