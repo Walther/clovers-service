@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
-import "./RenderOptions.scss";
+import "./OptionsForm.scss";
 
 export type RenderOptions = {
   width: number;
@@ -11,7 +11,7 @@ export type RenderOptions = {
   quiet: boolean;
   normalmap: boolean;
 };
-export const render_default_options: RenderOptions = {
+export const defaultRenderOptions: RenderOptions = {
   width: 1024,
   height: 1024,
   samples: 10,
@@ -29,7 +29,7 @@ export const RenderOptionsForm = ({
   setRenderOptions: Function;
 }): ReactElement => {
   return (
-    <div className="RenderOptionsForm">
+    <div className="OptionsForm">
       <h2>render options</h2>
 
       <label htmlFor="width">width: </label>
@@ -72,7 +72,7 @@ export const RenderOptionsForm = ({
       />
 
       <Button
-        handleClick={(_e) => setRenderOptions(render_default_options)}
+        handleClick={(_e) => setRenderOptions(defaultRenderOptions)}
         text={"defaults"}
       />
     </div>

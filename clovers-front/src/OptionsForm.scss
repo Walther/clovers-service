@@ -1,0 +1,49 @@
+.OptionsForm {
+  display: grid;
+  grid-template-columns: 150px 150px auto;
+  grid-auto-rows: auto;
+  grid-template-areas:
+    "header header header"
+    "label input ."
+    ". reset .";
+
+  h2 {
+    grid-area: header;
+  }
+
+  label {
+    grid-column-start: label;
+  }
+
+  input {
+    grid-column-start: input;
+    height: 2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  button {
+    grid-column-start: reset;
+  }
+}
+
+.TripleInput {
+  grid-column: input;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+  grid-template-areas: "x y z";
+
+  input {
+    width: 100%;
+  }
+
+  input:nth-child(0) {
+    grid-column: x;
+  }
+  input:nth-child(1) {
+    grid-column: y;
+  }
+  input:nth-child(2) {
+    grid-column: z;
+  }
+}

@@ -6,9 +6,10 @@ import { Button } from "./Button";
 import {
   RenderOptions,
   RenderOptionsForm,
-  render_default_options,
+  defaultRenderOptions,
 } from "./RenderOptions";
-import { SceneForm } from "./SceneForm";
+import { implicitSceneSettings, SceneForm } from "./SceneForm";
+import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
@@ -43,13 +44,14 @@ const MessageBox = ({ message }: { message: String }): ReactElement => {
 };
 
 function App() {
-  const [renderOptions, setRenderOptions] = useState<RenderOptions>(
-    render_default_options
-  );
+  const [renderOptions, setRenderOptions] =
+    useState<RenderOptions>(defaultRenderOptions);
+  const [cameraOptions, setCameraOptions] =
+    useState<CameraOptions>(defaultCameraOptions);
   const [scenefile, setScenefile] = useState("");
   const [queue, setQueue] = useState<Array<String>>([]);
   const [renders, setRenders] = useState<Array<String>>([]);
-  const [message, setMessage] = useState<String | null>(null);
+  const [message, setMessage] = useState<String>("Ready.");
 
   useEffect(() => {
     refreshQueue();
@@ -58,7 +60,7 @@ function App() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setMessage(null);
+    setMessage("Ready.");
 
     let opts;
     let scene_file;
@@ -67,6 +69,11 @@ function App() {
     try {
       opts = renderOptions;
       scene_file = JSON.parse(scenefile);
+      scene_file = {
+        ...implicitSceneSettings,
+        ...scene_file,
+        camera: cameraOptions,
+      };
     } catch (error: any) {
       setMessage(error.message);
       return;
@@ -128,13 +135,17 @@ function App() {
           renderOptions={renderOptions}
           setRenderOptions={setRenderOptions}
         />
+        <CameraForm
+          cameraOptions={cameraOptions}
+          setCameraOptions={setCameraOptions}
+        />
         <SceneForm
           scenefile={scenefile}
           setScenefile={setScenefile}
           handleSubmit={handleSubmit}
         />
         <h2>message</h2>
-        {message && <MessageBox message={message} />}
+        <MessageBox message={message} />
         <h2>queue</h2>
         <Button handleClick={() => refreshQueue()} text="refresh queue" />
         <RenderQueue queue={queue} />
