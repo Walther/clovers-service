@@ -1,17 +1,14 @@
 .OptionsGroup {
-  display: grid;
-  grid-template-columns: 100%;
-  align-self: start;
-  justify-content: start;
-
-  @media only screen and (min-width: 600px) {
-    grid-template-columns: auto;
-    gap: 2rem;
-    grid-auto-flow: column;
-  }
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .OptionsForm {
+  border: 1px solid var(--main-txt-color); // TODO: debug only
+  padding: 0.5rem;
+  width: 100%;
   display: grid;
   align-self: start;
   grid-auto-flow: row;
@@ -22,10 +19,12 @@
     "label input";
 
   @media only screen and (min-width: 600px) {
+    width: auto;
     grid-template-columns: 150px 150px;
   }
 
-  h2 {
+  h2,
+  h3 {
     grid-column: header;
   }
 

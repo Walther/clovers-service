@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
+import { ObjectForm, SceneObject } from "./SceneObject";
 
 export const implicitSceneSettings = {
   time_0: 0,
@@ -8,8 +9,8 @@ export const implicitSceneSettings = {
 };
 
 export type Scene = {
-  objects: Array<Object>;
-  priority_objects: Array<Object>;
+  objects: Array<SceneObject>;
+  priority_objects: Array<SceneObject>;
 };
 
 export const defaultScene: Scene = {
@@ -199,11 +200,40 @@ export const SceneForm = ({
   return (
     <div>
       <h2>scene</h2>
+      <h3>objects</h3>
+      <div className="OptionsGroup">
+        {scene.objects.map((obj) => (
+          <ObjectForm object={obj} />
+        ))}
+      </div>
+      <h3>objects json debug view</h3>
       <textarea
-        id="scene"
-        value={JSON.stringify(scene)}
-        onChange={(e) => setScene(JSON.parse(e.target.value))}
-        placeholder={`{"json": "paste your scene file here"}`}
+        id="objects"
+        value={JSON.stringify(scene.objects)}
+        onChange={(e) =>
+          setScene({
+            ...scene,
+            objects: JSON.parse(e.target.value),
+          })
+        }
+        className="json_input"
+      />
+      <h3>priority objects</h3>
+      <div className="OptionsGroup">
+        {scene.priority_objects.map((obj) => (
+          <ObjectForm object={obj} />
+        ))}
+      </div>
+      <h3>priority objects json debug view</h3>
+      <textarea
+        id="priority_objects"
+        value={JSON.stringify(scene.priority_objects)}
+        onChange={(e) =>
+          setScene({
+            ...scene,
+            priority_objects: JSON.parse(e.target.value),
+          })
+        }
         className="json_input"
       />
       <Button handleClick={(_e) => setScene(defaultScene)} text={"defaults"} />
