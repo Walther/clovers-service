@@ -1,9 +1,10 @@
 import { ReactElement } from "react";
 import { Input, TripleInput } from "../Input";
+import { ObjectForm, SceneObject } from "./SceneObject";
 
 export type Translate = {
   comment?: string;
-  object: any;
+  object: SceneObject;
   offset: [number, number, number];
 };
 
@@ -17,7 +18,7 @@ export const TranslateForm = ({
       <h3>translate</h3>
       <Input fieldname="comment" object={object} />
       <TripleInput fieldname="offset" object={object} />
-      <Input fieldname="object" object={object} stringify={true} />
+      <ObjectForm object={object.object} />
     </div>
   );
 };

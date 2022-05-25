@@ -201,8 +201,8 @@ export const SceneForm = ({
     <div>
       <h2>objects</h2>
       <div className="OptionsGroup">
-        {scene.objects.map((obj) => (
-          <ObjectForm object={obj} />
+        {scene.objects.map((obj, index) => (
+          <ObjectForm object={obj} key={index} />
         ))}
       </div>
       <details>
@@ -230,8 +230,8 @@ export const SceneForm = ({
       />
       <h2>priority objects</h2>
       <div className="OptionsGroup">
-        {scene.priority_objects.map((obj) => (
-          <ObjectForm object={obj} />
+        {scene.priority_objects.map((obj, index) => (
+          <ObjectForm object={obj} key={index} />
         ))}
       </div>
       <details>

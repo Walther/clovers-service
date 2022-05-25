@@ -4,7 +4,7 @@ import { ConstantMedium, ConstantMediumForm } from "./ConstantMedium";
 import { FlipFace, FlipFaceForm } from "./FlipFace";
 import { MovingSphere, MovingSphereForm } from "./MovingSphere";
 import { Quad, QuadForm } from "./Quad";
-import { Rotate, RotateForm } from "./Rotate";
+import { Rotate, RotateYForm } from "./Rotate";
 import { Sphere, SphereForm } from "./Sphere";
 import { STL, STLForm } from "./STL";
 import { Translate, TranslateForm } from "./Translate";
@@ -26,9 +26,10 @@ export type SceneObject =
 export type SceneObject = any; // TODO: proper types
 
 const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
+  const name = Object.keys(object)[0];
   return (
     <div className="OptionsForm">
-      <h3>other object</h3>
+      <h3>other object: {name}</h3>
       <label htmlFor="json">json: </label>
       <input id="json" type="text" value={JSON.stringify(object)} />
     </div>
@@ -53,8 +54,8 @@ export const ObjectForm = ({
       return <MovingSphereForm object={object[kind] as MovingSphere} />;
     case "Quad":
       return <QuadForm object={object[kind] as Quad} />;
-    case "Rotate":
-      return <RotateForm object={object[kind] as Rotate} />;
+    case "RotateY":
+      return <RotateYForm object={object[kind] as Rotate} />;
     case "Sphere":
       return <SphereForm object={object[kind] as Sphere} />;
     case "STL":

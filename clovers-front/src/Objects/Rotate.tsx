@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { Input } from "../Input";
+import { ObjectForm } from "./SceneObject";
 
 export type Rotate = {
   comment?: string;
@@ -7,13 +8,13 @@ export type Rotate = {
   angle: number;
 };
 
-export const RotateForm = ({ object }: { object: Rotate }): ReactElement => {
+export const RotateYForm = ({ object }: { object: Rotate }): ReactElement => {
   return (
     <div className="OptionsForm">
-      <h3>rotate</h3>
+      <h3>rotate y</h3>
       <Input fieldname="comment" object={object} />
       <Input fieldname="angle" object={object} />
-      <Input fieldname="object" object={object} stringify={true} />
+      <ObjectForm object={object.object} />
     </div>
   );
 };
