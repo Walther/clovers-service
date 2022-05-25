@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { DielectricForm } from "./Dielectric";
 import { DiffuseLightForm } from "./DiffuseLight";
 import { IsotropicForm } from "./Isotropic";
@@ -16,11 +16,12 @@ import { MetalForm } from "./Metal";
 export type Material = any;
 
 const DebugForm = ({ material }: { material: Material }): ReactElement => {
+  const id = useId();
   return (
     <div className="OptionsForm">
       <h3>material</h3>
-      <label htmlFor="json">json: </label>
-      <input id="json" type="text" value={JSON.stringify(material)} />
+      <label htmlFor={id}>json: </label>
+      <input id={id} type="text" value={JSON.stringify(material)} />
     </div>
   );
 };

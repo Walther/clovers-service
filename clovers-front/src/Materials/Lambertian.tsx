@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Lambertian = {
@@ -10,12 +10,13 @@ export const LambertianForm = ({
 }: {
   material: Lambertian;
 }): ReactElement => {
+  const id = useId();
   const mat = "Lambertian";
   return (
     <div className="OptionsForm">
       <h3>material</h3>
-      <label htmlFor="type">type: </label>
-      <select id="type">
+      <label htmlFor={id}>type: </label>
+      <select id={id}>
         <option>{mat}</option>
       </select>
       <TextureForm texture={material.albedo} />

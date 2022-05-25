@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { Boxy, BoxyForm } from "./Boxy";
 import { ConstantMedium, ConstantMediumForm } from "./ConstantMedium";
 import { FlipFace, FlipFaceForm } from "./FlipFace";
@@ -26,12 +26,13 @@ export type SceneObject =
 export type SceneObject = any; // TODO: proper types
 
 const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
+  const id = useId();
   const name = Object.keys(object)[0];
   return (
     <div className="OptionsForm">
       <h3>other object: {name}</h3>
-      <label htmlFor="json">json: </label>
-      <input id="json" type="text" value={JSON.stringify(object)} />
+      <label htmlFor={id}>json: </label>
+      <input id={id} type="text" value={JSON.stringify(object)} />
     </div>
   );
 };

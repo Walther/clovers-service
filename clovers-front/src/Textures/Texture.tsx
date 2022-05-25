@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { SolidColorForm } from "./SolidColor";
 import { SurfaceCheckerForm } from "./SurfaceChecker";
 
@@ -6,11 +6,12 @@ import { SurfaceCheckerForm } from "./SurfaceChecker";
 export type Texture = any;
 
 const DebugForm = ({ texture }: { texture: Texture }): ReactElement => {
+  const id = useId();
   return (
     <div className="OptionsForm">
       <h3>texture</h3>
-      <label htmlFor="json">json: </label>
-      <input id="json" type="text" value={JSON.stringify(texture)} />
+      <label htmlFor={id}>json: </label>
+      <input id={id} type="text" value={JSON.stringify(texture)} />
     </div>
   );
 };

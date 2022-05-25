@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { Input, TripleInput } from "../Input";
 
 export type SpatialChecker = {
@@ -12,11 +12,12 @@ export const SpatialCheckerForm = ({
 }: {
   texture: SpatialChecker;
 }): ReactElement => {
+  const id = useId();
   return (
     <div className="OptionsForm">
       <h3>texture</h3>
-      <label htmlFor="type">type: </label>
-      <select id="type">
+      <label htmlFor={id}>type: </label>
+      <select id={id}>
         <option>SpatialChecker</option>
       </select>
       <Input fieldname="density" object={texture} />

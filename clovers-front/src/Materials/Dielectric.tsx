@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useId } from "react";
 import { Input, TripleInput } from "../Input";
 
 export type Dielectric = {
@@ -11,12 +11,13 @@ export const DielectricForm = ({
 }: {
   material: Dielectric;
 }): ReactElement => {
+  const id = useId();
   const mat = "Dielectric";
   return (
     <div className="OptionsForm">
       <h3>material</h3>
-      <label htmlFor="type">type: </label>
-      <select id="type">
+      <label htmlFor={id}>type: </label>
+      <select id={id}>
         <option>{mat}</option>
       </select>
       <Input fieldname="refractive_index" object={material} />
