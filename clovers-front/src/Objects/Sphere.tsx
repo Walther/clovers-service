@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Input, TripleInput } from "../Input";
-import { Material } from "../Material";
+import { Material, MaterialForm } from "../Materials/Material";
 
 export type Sphere = {
   comment?: string;
@@ -16,7 +16,7 @@ export const SphereForm = ({ object }: { object: Sphere }): ReactElement => {
       <Input fieldname="comment" object={object} />
       <Input fieldname="radius" object={object} />
       <TripleInput fieldname="center" object={object} />
-      <Input fieldname="material" object={object} stringify={true} />
+      <MaterialForm material={object.material} />
     </div>
   );
 };

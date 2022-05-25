@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Input, TripleInput } from "../Input";
-import { Material } from "../Material";
+import { Material, MaterialForm } from "../Materials/Material";
 
 export type Boxy = {
   comment?: string;
@@ -16,7 +16,7 @@ export const BoxyForm = ({ object }: { object: Boxy }): ReactElement => {
       <Input fieldname="comment" object={object} />
       <TripleInput fieldname="corner_0" object={object} />
       <TripleInput fieldname="corner_1" object={object} />
-      <Input fieldname="material" object={object} stringify={true} />
+      <MaterialForm material={object.material} />
     </div>
   );
 };

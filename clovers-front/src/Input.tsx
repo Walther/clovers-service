@@ -30,13 +30,15 @@ export const TripleInput = ({
   fieldname: string;
   object: SceneObject;
 }): ReactElement => {
+  // TODO: remove silly fix
+  const value = object[fieldname] ? object[fieldname] : [];
   return (
     <>
       <label htmlFor="{fieldname}">{fieldname}: </label>
       <div className="TripleInput">
-        <input id={`${fieldname}_x`} type="text" value={object[fieldname][0]} />
-        <input id={`${fieldname}_y`} type="text" value={object[fieldname][1]} />
-        <input id={`${fieldname}_z`} type="text" value={object[fieldname][2]} />
+        <input id={`${fieldname}_x`} type="text" value={value[0]} />
+        <input id={`${fieldname}_y`} type="text" value={value[1]} />
+        <input id={`${fieldname}_z`} type="text" value={value[2]} />
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Input, TripleInput } from "../Input";
-import { Material } from "../Material";
+import { Material, MaterialForm } from "../Materials/Material";
 
 export type Triangle = {
   comment?: string;
@@ -22,7 +22,7 @@ export const TriangleForm = ({
       <TripleInput fieldname="q" object={object} />
       <TripleInput fieldname="u" object={object} />
       <TripleInput fieldname="v" object={object} />
-      <Input fieldname="material" object={object} stringify={true} />
+      <MaterialForm material={object.material} />
     </div>
   );
 };

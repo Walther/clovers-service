@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns:
     [left-column] minmax(1rem, auto)
-    [main-column] minmax(350px, 1200px)
+    [main-column] minmax(350px, 1500px)
     [right-column] minmax(1rem, auto);
   grid-template-rows: [nav-row] auto [main-row] 1fr [footer-row] auto;
   min-height: 100%;

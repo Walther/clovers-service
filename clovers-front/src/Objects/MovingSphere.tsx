@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Input, TripleInput } from "../Input";
-import { Material } from "../Material";
+import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
   comment?: string;
@@ -27,7 +27,7 @@ export const MovingSphereForm = ({
       <TripleInput fieldname="center_1" object={object} />
       <Input fieldname="time_0" object={object} />
       <Input fieldname="time_1" object={object} />
-      <Input fieldname="material" object={object} stringify={true} />
+      <MaterialForm material={object.material} />
     </div>
   );
 };
