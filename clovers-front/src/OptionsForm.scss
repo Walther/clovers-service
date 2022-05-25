@@ -1,14 +1,16 @@
 .OptionsGroup {
-  display: flex;
+  display: grid;
   max-width: 100%;
-  flex-wrap: wrap;
   gap: 1rem;
+
+  @media only screen and (min-width: 600px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .OptionsForm {
-  border: 1px solid var(--main-txt-color); // TODO: debug only
+  border: 1px solid var(--grey-baseline); // TODO: debug only
   padding: 0.5rem;
-  width: 100%;
   display: grid;
   align-self: start;
   grid-auto-flow: row;
@@ -18,9 +20,8 @@
     "header header"
     "label input";
 
-  @media only screen and (min-width: 600px) {
-    width: auto;
-    grid-template-columns: 150px 150px;
+  @media only screen and (max-width: 600px) {
+    width: 100%;
   }
 
   h2,
