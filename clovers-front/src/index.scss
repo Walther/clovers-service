@@ -7,6 +7,7 @@ body {
   font-family: Iosevka, Helvetica, Arial, sans-serif;
   line-height: 1.75;
   height: 100%;
+  accent-color: var(--main-txt-color);
 }
 
 #root {
@@ -16,4 +17,8 @@ body {
 * {
   box-sizing: border-box;
   font-family: Iosevka, Helvetica, Arial, sans-serif;
+}
+
+::selection {
+  background-color: var(--grey-baseline);
 }

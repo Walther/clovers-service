@@ -17,8 +17,8 @@ export const Input = ({
 
   return (
     <>
-      <label htmlFor="{fieldname}">{fieldname}: </label>
-      <input id="{fieldname}" type="text" value={value} />
+      <label htmlFor={fieldname}>{fieldname}: </label>
+      <input id={fieldname} type="text" value={value} />
     </>
   );
 };
@@ -34,7 +34,7 @@ export const TripleInput = ({
   const value = object[fieldname] ? object[fieldname] : [];
   return (
     <>
-      <label htmlFor="{fieldname}">{fieldname}: </label>
+      <label htmlFor={fieldname}>{fieldname}: </label>
       <div className="TripleInput">
         <input id={`${fieldname}_x`} type="text" value={value[0]} />
         <input id={`${fieldname}_y`} type="text" value={value[1]} />

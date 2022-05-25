@@ -30,7 +30,7 @@ export const RenderOptionsForm = ({
 }): ReactElement => {
   return (
     <div className="OptionsForm">
-      <h2>render options</h2>
+      <h3>render</h3>
 
       <label htmlFor="width">width: </label>
       <input

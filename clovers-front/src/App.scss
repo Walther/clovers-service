@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns:
     [left-column] minmax(1rem, auto)
-    [main-column] minmax(350px, 1500px)
+    [main-column] minmax(350px, 1600px)
     [right-column] minmax(1rem, auto);
   grid-template-rows: [nav-row] auto [main-row] 1fr [footer-row] auto;
   min-height: 100%;
@@ -19,6 +19,7 @@ h1 {
 
 h2 {
   font-size: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 h3 {
@@ -32,7 +33,23 @@ main {
   min-width: 0;
 }
 
+header {
+  display: grid;
+  justify-items: start;
+  align-items: center;
+  grid-template-columns:
+    [heading] 1fr
+    [themebutton] auto;
+
+  button {
+    height: auto;
+  }
+}
+
 footer {
+  border-top: 1px solid var(--grey-baseline);
+  margin-top: 1rem;
+  padding: 1rem 0;
   grid-column: main-column;
   grid-row: footer-row;
 }
@@ -45,8 +62,8 @@ footer {
 
 .MessageBox {
   margin-top: 0.5rem;
-  background: var(--inverse-bg-color);
-  color: var(--inverse-txt-color);
+  background: white;
+  color: var(--blackish);
   padding: 1rem;
   width: 100%;
 }

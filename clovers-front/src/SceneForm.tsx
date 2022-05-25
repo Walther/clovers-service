@@ -199,44 +199,64 @@ export const SceneForm = ({
 }): ReactElement => {
   return (
     <div>
-      <h2>scene</h2>
-      <h3>objects</h3>
+      <h2>objects</h2>
       <div className="OptionsGroup">
         {scene.objects.map((obj) => (
           <ObjectForm object={obj} />
         ))}
       </div>
-      <h3>objects json debug view</h3>
-      <textarea
-        id="objects"
-        value={JSON.stringify(scene.objects)}
-        onChange={(e) =>
+      <details>
+        <summary>objects json import</summary>
+        <textarea
+          id="objects"
+          value={JSON.stringify(scene.objects)}
+          onChange={(e) =>
+            setScene({
+              ...scene,
+              objects: JSON.parse(e.target.value),
+            })
+          }
+          className="json_input"
+        />
+      </details>
+      <Button
+        handleClick={(_e) =>
           setScene({
             ...scene,
-            objects: JSON.parse(e.target.value),
+            objects: defaultScene.objects,
           })
         }
-        className="json_input"
+        text={"defaults"}
       />
-      <h3>priority objects</h3>
+      <h2>priority objects</h2>
       <div className="OptionsGroup">
         {scene.priority_objects.map((obj) => (
           <ObjectForm object={obj} />
         ))}
       </div>
-      <h3>priority objects json debug view</h3>
-      <textarea
-        id="priority_objects"
-        value={JSON.stringify(scene.priority_objects)}
-        onChange={(e) =>
+      <details>
+        <summary>priority objects json import</summary>
+        <textarea
+          id="priority_objects"
+          value={JSON.stringify(scene.priority_objects)}
+          onChange={(e) =>
+            setScene({
+              ...scene,
+              priority_objects: JSON.parse(e.target.value),
+            })
+          }
+          className="json_input"
+        />
+      </details>
+      <Button
+        handleClick={(_e) =>
           setScene({
             ...scene,
-            priority_objects: JSON.parse(e.target.value),
+            priority_objects: defaultScene.priority_objects,
           })
         }
-        className="json_input"
+        text={"defaults"}
       />
-      <Button handleClick={(_e) => setScene(defaultScene)} text={"defaults"} />
     </div>
   );
 };

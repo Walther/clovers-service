@@ -133,8 +133,10 @@ function App() {
     <div className="App">
       <header>
         <h1>clovers web frontend</h1>
+        <ThemeToggle />
       </header>
       <main>
+        <h2>options</h2>
         <div className="OptionsGroup">
           <RenderOptionsForm
             renderOptions={renderOptions}
@@ -157,9 +159,7 @@ function App() {
         <RenderRenders renders={renders} />
       </main>
       <footer>
-        <p>
-          &copy; clovers 2022 <ThemeToggle />
-        </p>
+        <p>&copy; clovers 2022</p>
       </footer>
     </div>
   );
