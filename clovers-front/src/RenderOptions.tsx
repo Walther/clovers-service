@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
+import { Input } from "./Input";
 import "./OptionsForm.scss";
 
 export type RenderOptions = {
@@ -32,11 +33,9 @@ export const RenderOptionsForm = ({
     <div className="OptionsForm">
       <h3>render</h3>
 
-      <label htmlFor="width">width: </label>
-      <input
-        id="width"
-        type="text"
-        value={renderOptions.width}
+      <Input
+        fieldname="width"
+        object={renderOptions}
         onChange={(e) =>
           setRenderOptions({
             ...renderOptions,
@@ -44,12 +43,9 @@ export const RenderOptionsForm = ({
           })
         }
       />
-
-      <label htmlFor="height">height: </label>
-      <input
-        id="height"
-        type="text"
-        value={renderOptions.height}
+      <Input
+        fieldname="height"
+        object={renderOptions}
         onChange={(e) =>
           setRenderOptions({
             ...renderOptions,
@@ -57,12 +53,9 @@ export const RenderOptionsForm = ({
           })
         }
       />
-
-      <label htmlFor="samples">samples: </label>
-      <input
-        id="samples"
-        type="text"
-        value={renderOptions.samples}
+      <Input
+        fieldname="samples"
+        object={renderOptions}
         onChange={(e) =>
           setRenderOptions({
             ...renderOptions,
