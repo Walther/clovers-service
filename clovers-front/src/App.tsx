@@ -9,10 +9,12 @@ import {
   defaultRenderOptions,
 } from "./RenderOptions";
 import {
-  defaultScene,
+  defaultSceneObjects,
+  defaultScenePriorityObjects,
   implicitSceneSettings,
-  Scene,
   SceneForm,
+  SceneObjects,
+  ScenePriorityObjects,
 } from "./SceneForm";
 import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
 
@@ -53,7 +55,10 @@ function App() {
     useState<RenderOptions>(defaultRenderOptions);
   const [cameraOptions, setCameraOptions] =
     useState<CameraOptions>(defaultCameraOptions);
-  const [scene, setScene] = useState<Scene>(defaultScene);
+  const [sceneObjects, setSceneObjects] =
+    useState<SceneObjects>(defaultSceneObjects);
+  const [scenePriorityObjects, setScenePriorityObjects] =
+    useState<ScenePriorityObjects>(defaultScenePriorityObjects);
   const [queue, setQueue] = useState<Array<String>>([]);
   const [renders, setRenders] = useState<Array<String>>([]);
   const [message, setMessage] = useState<String>("Ready.");
@@ -72,11 +77,11 @@ function App() {
     // parse the json inputs
     try {
       opts = renderOptions;
-      scene_file = scene;
       scene_file = {
         ...implicitSceneSettings,
-        ...scene_file,
         camera: cameraOptions,
+        objects: sceneObjects,
+        priority_objects: scenePriorityObjects,
       };
     } catch (error: any) {
       setMessage(error.message);
@@ -147,7 +152,12 @@ function App() {
             setCameraOptions={setCameraOptions}
           />
         </div>
-        <SceneForm scene={scene} setScene={setScene} />
+        <SceneForm
+          sceneObjects={sceneObjects}
+          setSceneObjects={setSceneObjects}
+          scenePriorityObjects={scenePriorityObjects}
+          setScenePriorityObjects={setScenePriorityObjects}
+        />
         <h2>render</h2>
         <Button handleClick={() => handleSubmit()} text="render" />
         <MessageBox message={message} />

@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
+import * as R from "ramda";
 
 export type Boxy = {
   comment?: string;
@@ -9,11 +10,24 @@ export type Boxy = {
   material: Material;
 };
 
-export const BoxyForm = ({ object }: { object: Boxy }): ReactElement => {
+export const BoxyForm = ({
+  object,
+  index,
+  setState,
+}: {
+  object: Boxy;
+  index: number;
+  setState: Function;
+}): ReactElement => {
+  const commentLens = R.lensPath([index, "Boxy", "comment"]);
   return (
     <div className="OptionsForm">
       <h3>boxy</h3>
-      <Input fieldname="comment" object={object} />
+      <Input
+        fieldname="comment"
+        object={object}
+        onChange={(e) => setState(R.set(commentLens, e.target.value))}
+      />
       <TripleNumberInput fieldname="corner_0" object={object} />
       <TripleNumberInput fieldname="corner_1" object={object} />
       <MaterialForm material={object.material} />

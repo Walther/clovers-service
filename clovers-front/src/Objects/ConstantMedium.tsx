@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { Input } from "../Input";
+import * as R from "ramda";
 
 export type ConstantMedium = {
   comment?: string;
@@ -10,13 +11,22 @@ export type ConstantMedium = {
 
 export const ConstantMediumForm = ({
   object,
+  index,
+  setState,
 }: {
   object: ConstantMedium;
+  index: number;
+  setState: Function;
 }): ReactElement => {
+  const commentLens = R.lensPath([index, "ConstantMedium", "comment"]);
   return (
     <div className="OptionsForm">
       <h3>constant medium</h3>
-      <Input fieldname="comment" object={object} />
+      <Input
+        fieldname="comment"
+        object={object}
+        onChange={(e) => setState(R.set(commentLens, e.target.value))}
+      />
       <Input fieldname="density" object={object} />
       <Input fieldname="boundary" object={object} stringify={true} />
       <Input fieldname="texture" object={object} stringify={true} />

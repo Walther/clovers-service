@@ -39,32 +39,96 @@ const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
 
 export const ObjectForm = ({
   object,
+  index,
+  setState,
 }: {
   object: SceneObject;
+  index: number;
+  setState: Function;
 }): ReactElement => {
   // TODO: can this be done better somehow?
   let kind = Object.keys(object)[0];
   switch (kind) {
     case "Boxy":
-      return <BoxyForm object={object[kind] as Boxy} />;
+      return (
+        <BoxyForm
+          object={object[kind] as Boxy}
+          index={index}
+          setState={setState}
+        />
+      );
     case "ConstantMedium":
-      return <ConstantMediumForm object={object[kind] as ConstantMedium} />;
+      return (
+        <ConstantMediumForm
+          object={object[kind] as ConstantMedium}
+          index={index}
+          setState={setState}
+        />
+      );
     case "FlipFace":
-      return <FlipFaceForm object={object[kind] as FlipFace} />;
+      return (
+        <FlipFaceForm
+          object={object[kind] as FlipFace}
+          index={index}
+          setState={setState}
+        />
+      );
     case "MovingSphere":
-      return <MovingSphereForm object={object[kind] as MovingSphere} />;
+      return (
+        <MovingSphereForm
+          object={object[kind] as MovingSphere}
+          index={index}
+          setState={setState}
+        />
+      );
     case "Quad":
-      return <QuadForm object={object[kind] as Quad} />;
+      return (
+        <QuadForm
+          object={object[kind] as Quad}
+          index={index}
+          setState={setState}
+        />
+      );
     case "RotateY":
-      return <RotateYForm object={object[kind] as Rotate} />;
+      return (
+        <RotateYForm
+          object={object[kind] as Rotate}
+          index={index}
+          setState={setState}
+        />
+      );
     case "Sphere":
-      return <SphereForm object={object[kind] as Sphere} />;
+      return (
+        <SphereForm
+          object={object[kind] as Sphere}
+          index={index}
+          setState={setState}
+        />
+      );
     case "STL":
-      return <STLForm object={object[kind] as STL} />;
+      return (
+        <STLForm
+          object={object[kind] as STL}
+          index={index}
+          setState={setState}
+        />
+      );
     case "Translate":
-      return <TranslateForm object={object[kind] as Translate} />;
+      return (
+        <TranslateForm
+          object={object[kind] as Translate}
+          index={index}
+          setState={setState}
+        />
+      );
     case "Triangle":
-      return <TriangleForm object={object[kind] as Triangle} />;
+      return (
+        <TriangleForm
+          object={object[kind] as Triangle}
+          index={index}
+          setState={setState}
+        />
+      );
     default:
       return <DebugForm object={object} />;
   }

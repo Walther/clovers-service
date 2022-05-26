@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
+import * as R from "ramda";
 
 export type MovingSphere = {
   comment?: string;
@@ -15,13 +16,22 @@ export type MovingSphere = {
 
 export const MovingSphereForm = ({
   object,
+  index,
+  setState,
 }: {
   object: MovingSphere;
+  index: number;
+  setState: Function;
 }): ReactElement => {
+  const commentLens = R.lensPath([index, "MovingSphere", "comment"]);
   return (
     <div className="OptionsForm">
       <h3>moving sphere</h3>
-      <Input fieldname="comment" object={object} />
+      <Input
+        fieldname="comment"
+        object={object}
+        onChange={(e) => setState(R.set(commentLens, e.target.value))}
+      />
       <Input fieldname="radius" object={object} />
       <TripleNumberInput fieldname="center_0" object={object} />
       <TripleNumberInput fieldname="center_1" object={object} />
