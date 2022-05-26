@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleNumberInput } from "../Input";
+import { TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Quad = {
@@ -22,7 +22,7 @@ export const QuadForm = ({
   return (
     <div className="OptionsForm">
       <h3>quad</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}

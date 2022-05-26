@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input } from "../Input";
+import { TextInput, NumberInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 import { TextureForm } from "../Textures/Texture";
 
@@ -22,13 +22,13 @@ export const ConstantMediumForm = ({
   return (
     <div className="OptionsForm">
       <h3>constant medium</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="density"
         object={object}
         path={path}

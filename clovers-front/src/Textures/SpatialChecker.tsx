@@ -1,5 +1,5 @@
 import { ReactElement, useId } from "react";
-import { Input, TripleNumberInput } from "../Input";
+import { NumberInput, TripleNumberInput } from "../Input";
 
 export type SpatialChecker = {
   even: [number, number, number];
@@ -24,7 +24,7 @@ export const SpatialCheckerForm = ({
       <select id={id}>
         <option>SpatialChecker</option>
       </select>
-      <Input
+      <NumberInput
         fieldname="density"
         object={texture}
         path={[...path, "density"]}

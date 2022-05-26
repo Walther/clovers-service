@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleNumberInput } from "../Input";
+import { TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Triangle = {
@@ -22,7 +22,7 @@ export const TriangleForm = ({
   return (
     <div className="OptionsForm">
       <h3>triangle</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}

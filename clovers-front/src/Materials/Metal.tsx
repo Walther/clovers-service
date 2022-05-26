@@ -1,5 +1,5 @@
 import { ReactElement, useId } from "react";
-import { Input } from "../Input";
+import { NumberInput } from "../Input";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Metal = {
@@ -25,7 +25,7 @@ export const MetalForm = ({
       <select id={id}>
         <option>{mat}</option>
       </select>
-      <Input
+      <NumberInput
         fieldname="fuzz"
         object={material}
         path={[...path, "fuzz"]}

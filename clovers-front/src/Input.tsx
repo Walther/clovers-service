@@ -2,7 +2,7 @@ import { ReactElement, useId } from "react";
 import { SceneObject } from "./Objects/SceneObject";
 import * as R from "ramda";
 
-export const Input = ({
+export const TextInput = ({
   fieldname,
   object,
   path,
@@ -25,6 +25,34 @@ export const Input = ({
         type="text"
         value={value}
         onChange={(e) => setState(R.set(lensPath, e.target.value))}
+      />
+    </>
+  );
+};
+
+export const NumberInput = ({
+  fieldname,
+  object,
+  path,
+  setState,
+}: {
+  fieldname: string;
+  object: SceneObject;
+  path: any; // TODO: ramda path type
+  setState: Function;
+}): ReactElement => {
+  const id = useId();
+  const lensPath: any = R.lensPath(path);
+  let value: any = object[fieldname];
+
+  return (
+    <>
+      <label htmlFor={id}>{fieldname}: </label>
+      <input
+        id={id}
+        type="text"
+        value={value}
+        onChange={(e) => setState(R.set(lensPath, Number(e.target.value)))}
       />
     </>
   );

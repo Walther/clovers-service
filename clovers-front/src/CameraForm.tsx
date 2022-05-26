@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
-import { Input, TripleNumberInput } from "./Input";
+import { NumberInput, TripleNumberInput } from "./Input";
 
 export type CameraOptions = {
   look_from: [number, number, number];
@@ -60,19 +60,19 @@ export const CameraForm = ({
           key: "up",
         }}
       />
-      <Input
+      <NumberInput
         fieldname="vertical_fov"
         object={object}
         path={[...path, "vertical_fov"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="aperture"
         object={object}
         path={[...path, "aperture"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="focus_distance"
         object={object}
         path={[...path, "focus_distance"]}

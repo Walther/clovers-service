@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleNumberInput } from "../Input";
+import { TextInput, NumberInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Sphere = {
@@ -21,13 +21,13 @@ export const SphereForm = ({
   return (
     <div className="OptionsForm">
       <h3>sphere</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="radius"
         object={object}
         path={[...path, "radius"]}

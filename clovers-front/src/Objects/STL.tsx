@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleNumberInput } from "../Input";
+import { TextInput, NumberInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
@@ -23,19 +23,19 @@ export const STLForm = ({
   return (
     <div className="OptionsForm">
       <h3>stl</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="path"
         object={object}
         path={[...path, "path"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="scale"
         object={object}
         path={[...path, "scale"]}

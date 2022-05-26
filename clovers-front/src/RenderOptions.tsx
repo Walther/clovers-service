@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
-import { Input } from "./Input";
+import { NumberInput } from "./Input";
 import "./OptionsForm.scss";
 
 export type RenderOptions = {
@@ -35,19 +35,19 @@ export const RenderOptionsForm = ({
     <div className="OptionsForm">
       <h3>render</h3>
 
-      <Input
+      <NumberInput
         fieldname="width"
         object={object}
         path={[...path, "width"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="height"
         object={object}
         path={[...path, "height"]}
         setState={setState}
       />
-      <Input
+      <NumberInput
         fieldname="samples"
         object={object}
         path={[...path, "samples"]}

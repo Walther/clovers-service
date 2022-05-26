@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input } from "../Input";
+import { TextInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 
 export type FlipFace = {
@@ -19,7 +19,7 @@ export const FlipFaceForm = ({
   return (
     <div className="OptionsForm">
       <h3>flip face</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}

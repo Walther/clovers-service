@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleNumberInput } from "../Input";
+import { TextInput, TripleNumberInput } from "../Input";
 import { ObjectForm, SceneObject } from "./SceneObject";
 
 export type Translate = {
@@ -20,7 +20,7 @@ export const TranslateForm = ({
   return (
     <div className="OptionsForm">
       <h3>translate</h3>
-      <Input
+      <TextInput
         fieldname="comment"
         object={object}
         path={[...path, "comment"]}
