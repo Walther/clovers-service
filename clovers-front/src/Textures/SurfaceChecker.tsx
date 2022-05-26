@@ -1,5 +1,5 @@
 import { ReactElement, useId } from "react";
-import { Input, TripleInput } from "../Input";
+import { Input, TripleNumberInput } from "../Input";
 
 export type SurfaceChecker = {
   even: [number, number, number];
@@ -20,8 +20,8 @@ export const SurfaceCheckerForm = ({
         <option>SurfaceChecker</option>
       </select>
       <Input fieldname="density" object={texture} />
-      <TripleInput fieldname="even" object={texture} />
-      <TripleInput fieldname="odd" object={texture} />
+      <TripleNumberInput fieldname="even" object={texture} />
+      <TripleNumberInput fieldname="odd" object={texture} />
     </div>
   );
 };

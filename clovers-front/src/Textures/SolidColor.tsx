@@ -1,5 +1,5 @@
 import { ReactElement, useId } from "react";
-import { TripleInput } from "../Input";
+import { TripleNumberInput } from "../Input";
 
 export type SolidColor = {
   color: [number, number, number];
@@ -17,7 +17,7 @@ export const SolidColorForm = ({
       <select id={id}>
         <option>SolidColor</option>
       </select>
-      <TripleInput fieldname="color" object={texture} />
+      <TripleNumberInput fieldname="color" object={texture} />
     </div>
   );
 };

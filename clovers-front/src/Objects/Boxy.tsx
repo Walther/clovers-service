@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleInput } from "../Input";
+import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Boxy = {
@@ -14,8 +14,8 @@ export const BoxyForm = ({ object }: { object: Boxy }): ReactElement => {
     <div className="OptionsForm">
       <h3>boxy</h3>
       <Input fieldname="comment" object={object} />
-      <TripleInput fieldname="corner_0" object={object} />
-      <TripleInput fieldname="corner_1" object={object} />
+      <TripleNumberInput fieldname="corner_0" object={object} />
+      <TripleNumberInput fieldname="corner_1" object={object} />
       <MaterialForm material={object.material} />
     </div>
   );

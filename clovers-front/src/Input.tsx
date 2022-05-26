@@ -27,21 +27,50 @@ export const Input = ({
   );
 };
 
-export const TripleInput = ({
+/** Returns a component with three number input fields. Note that this calls `Number()` for the event.target.value. */
+export const TripleNumberInput = ({
   fieldname,
   object,
-  onChangeX,
-  onChangeY,
-  onChangeZ,
+  tripleOnChange,
 }: {
   fieldname: string;
   object: SceneObject;
-  onChangeX?: ChangeEventHandler<HTMLInputElement>;
-  onChangeY?: ChangeEventHandler<HTMLInputElement>;
-  onChangeZ?: ChangeEventHandler<HTMLInputElement>;
+  tripleOnChange?: { setter: Function; state: object; key: string };
 }): ReactElement => {
   const id = useId();
   const value = object[fieldname] ? object[fieldname] : [];
+  // TODO: this feels a bit unergonomic. How to make this better?
+  let onChangeX, onChangeY, onChangeZ;
+  if (tripleOnChange) {
+    onChangeX = (e: any) => {
+      const newState = replaceTriple(
+        tripleOnChange.state,
+        tripleOnChange.key,
+        Number(e.target.value),
+        0
+      );
+      tripleOnChange.setter(newState);
+    };
+    onChangeY = (e: any) => {
+      const newState = replaceTriple(
+        tripleOnChange.state,
+        tripleOnChange.key,
+        Number(e.target.value),
+        1
+      );
+      tripleOnChange.setter(newState);
+    };
+    onChangeZ = (e: any) => {
+      const newState = replaceTriple(
+        tripleOnChange.state,
+        tripleOnChange.key,
+        Number(e.target.value),
+        2
+      );
+      tripleOnChange.setter(newState);
+    };
+  }
+
   return (
     <>
       <label htmlFor={id + "_x"}>{fieldname}: </label>
@@ -67,4 +96,33 @@ export const TripleInput = ({
       </div>
     </>
   );
+};
+
+const replaceTriple = (
+  original: any,
+  key: string,
+  value: any,
+  index: number
+) => {
+  switch (index) {
+    case 0:
+      return {
+        ...original,
+        [key]: [value, original[key][1], original[key][2]],
+      };
+    case 1:
+      return {
+        ...original,
+        [key]: [original[key][0], value, original[key][2]],
+      };
+    case 2:
+      return {
+        ...original,
+        [key]: [original[key][0], original[key][1], value],
+      };
+    default:
+      return {
+        original,
+      };
+  }
 };

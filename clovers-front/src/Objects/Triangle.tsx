@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleInput } from "../Input";
+import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Triangle = {
@@ -19,9 +19,9 @@ export const TriangleForm = ({
     <div className="OptionsForm">
       <h3>triangle</h3>
       <Input fieldname="comment" object={object} />
-      <TripleInput fieldname="q" object={object} />
-      <TripleInput fieldname="u" object={object} />
-      <TripleInput fieldname="v" object={object} />
+      <TripleNumberInput fieldname="q" object={object} />
+      <TripleNumberInput fieldname="u" object={object} />
+      <TripleNumberInput fieldname="v" object={object} />
       <MaterialForm material={object.material} />
     </div>
   );

@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleInput } from "../Input";
+import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
@@ -23,8 +23,8 @@ export const MovingSphereForm = ({
       <h3>moving sphere</h3>
       <Input fieldname="comment" object={object} />
       <Input fieldname="radius" object={object} />
-      <TripleInput fieldname="center_0" object={object} />
-      <TripleInput fieldname="center_1" object={object} />
+      <TripleNumberInput fieldname="center_0" object={object} />
+      <TripleNumberInput fieldname="center_1" object={object} />
       <Input fieldname="time_0" object={object} />
       <Input fieldname="time_1" object={object} />
       <MaterialForm material={object.material} />

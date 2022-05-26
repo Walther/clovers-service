@@ -1,5 +1,5 @@
 import { ReactElement, useId } from "react";
-import { Input, TripleInput } from "../Input";
+import { Input, TripleNumberInput } from "../Input";
 
 export type Dielectric = {
   color: [number, number, number];
@@ -21,7 +21,7 @@ export const DielectricForm = ({
         <option>{mat}</option>
       </select>
       <Input fieldname="refractive_index" object={material} />
-      <TripleInput fieldname="color" object={material} />
+      <TripleNumberInput fieldname="color" object={material} />
     </div>
   );
 };

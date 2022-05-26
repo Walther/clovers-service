@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, TripleInput } from "../Input";
+import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
@@ -18,8 +18,8 @@ export const STLForm = ({ object }: { object: STL }): ReactElement => {
       <Input fieldname="comment" object={object} />
       <Input fieldname="path" object={object} />
       <Input fieldname="scale" object={object} />
-      <TripleInput fieldname="center" object={object} />
-      <TripleInput fieldname="rotation" object={object} />
+      <TripleNumberInput fieldname="center" object={object} />
+      <TripleNumberInput fieldname="rotation" object={object} />
       <MaterialForm material={object.material} />
     </div>
   );
