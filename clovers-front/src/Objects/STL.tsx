@@ -26,23 +26,33 @@ export const STLForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="path"
         object={object}
-        path={[...path, "path"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="scale"
         object={object}
-        path={[...path, "scale"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="center" object={object} />
-      <TripleNumberInput fieldname="rotation" object={object} />
+      <TripleNumberInput
+        fieldname="center"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <TripleNumberInput
+        fieldname="rotation"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <MaterialForm
         material={object.material}
         path={[...path, "material"]}

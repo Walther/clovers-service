@@ -23,13 +23,13 @@ export const RotateYForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="angle"
         object={object}
-        path={[...path, "angle"]}
+        path={path}
         setState={setState}
       />
       <ObjectForm

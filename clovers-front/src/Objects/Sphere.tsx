@@ -24,16 +24,21 @@ export const SphereForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="radius"
         object={object}
-        path={[...path, "radius"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="center" object={object} />
+      <TripleNumberInput
+        fieldname="center"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <MaterialForm
         material={object.material}
         path={[...path, "material"]}

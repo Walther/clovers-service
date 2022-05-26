@@ -25,12 +25,27 @@ export const QuadForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="q" object={object} />
-      <TripleNumberInput fieldname="u" object={object} />
-      <TripleNumberInput fieldname="v" object={object} />
+      <TripleNumberInput
+        fieldname="q"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <TripleNumberInput
+        fieldname="u"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <TripleNumberInput
+        fieldname="v"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <MaterialForm
         material={object.material}
         path={[...path, "material"]}

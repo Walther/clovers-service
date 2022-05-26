@@ -14,7 +14,7 @@ export const TextInput = ({
   setState: Function;
 }): ReactElement => {
   const id = useId();
-  const lensPath: any = R.lensPath(path);
+  const lensPath: any = R.lensPath([...path, fieldname]);
   let value: any = object[fieldname];
 
   return (
@@ -42,7 +42,7 @@ export const NumberInput = ({
   setState: Function;
 }): ReactElement => {
   const id = useId();
-  const lensPath: any = R.lensPath(path);
+  const lensPath: any = R.lensPath([...path, fieldname]);
   let value: any = object[fieldname];
 
   return (
@@ -62,45 +62,28 @@ export const NumberInput = ({
 export const TripleNumberInput = ({
   fieldname,
   object,
-  tripleOnChange,
+  path,
+  setState,
 }: {
   fieldname: string;
   object: SceneObject;
-  tripleOnChange?: { setter: Function; state: object; key: string };
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   const value = object[fieldname] ? object[fieldname] : [];
-  // TODO: this feels a bit unergonomic. How to make this better?
-  let onChangeX, onChangeY, onChangeZ;
-  if (tripleOnChange) {
-    onChangeX = (e: any) => {
-      const newState = replaceTriple(
-        tripleOnChange.state,
-        tripleOnChange.key,
-        Number(e.target.value),
-        0
-      );
-      tripleOnChange.setter(newState);
-    };
-    onChangeY = (e: any) => {
-      const newState = replaceTriple(
-        tripleOnChange.state,
-        tripleOnChange.key,
-        Number(e.target.value),
-        1
-      );
-      tripleOnChange.setter(newState);
-    };
-    onChangeZ = (e: any) => {
-      const newState = replaceTriple(
-        tripleOnChange.state,
-        tripleOnChange.key,
-        Number(e.target.value),
-        2
-      );
-      tripleOnChange.setter(newState);
-    };
-  }
+  const lensPathX: any = R.lensPath([...path, fieldname, 0]);
+  const lensPathY: any = R.lensPath([...path, fieldname, 1]);
+  const lensPathZ: any = R.lensPath([...path, fieldname, 2]);
+  const onChangeX = (e: any) => {
+    setState(R.set(lensPathX, Number(e.target.value)));
+  };
+  const onChangeY = (e: any) => {
+    setState(R.set(lensPathY, Number(e.target.value)));
+  };
+  const onChangeZ = (e: any) => {
+    setState(R.set(lensPathZ, Number(e.target.value)));
+  };
 
   return (
     <>
@@ -127,33 +110,4 @@ export const TripleNumberInput = ({
       </div>
     </>
   );
-};
-
-const replaceTriple = (
-  original: any,
-  key: string,
-  value: any,
-  index: number
-) => {
-  switch (index) {
-    case 0:
-      return {
-        ...original,
-        [key]: [value, original[key][1], original[key][2]],
-      };
-    case 1:
-      return {
-        ...original,
-        [key]: [original[key][0], value, original[key][2]],
-      };
-    case 2:
-      return {
-        ...original,
-        [key]: [original[key][0], original[key][1], value],
-      };
-    default:
-      return {
-        original,
-      };
-  }
 };

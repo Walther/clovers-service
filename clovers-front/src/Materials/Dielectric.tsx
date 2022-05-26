@@ -27,10 +27,15 @@ export const DielectricForm = ({
       <NumberInput
         fieldname="refractive_index"
         object={material}
-        path={[...path, "refractive_index"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="color" object={material} />
+      <TripleNumberInput
+        fieldname="color"
+        object={material}
+        path={path}
+        setState={setState}
+      />
     </div>
   );
 };

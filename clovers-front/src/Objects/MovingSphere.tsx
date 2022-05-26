@@ -28,17 +28,27 @@ export const MovingSphereForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="radius"
         object={object}
-        path={[...path, "radius"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="center_0" object={object} />
-      <TripleNumberInput fieldname="center_1" object={object} />
+      <TripleNumberInput
+        fieldname="center_0"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <TripleNumberInput
+        fieldname="center_1"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <NumberInput
         fieldname="time_0"
         object={object}

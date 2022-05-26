@@ -25,7 +25,7 @@ export const ConstantMediumForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
       <NumberInput

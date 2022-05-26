@@ -23,10 +23,15 @@ export const TranslateForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="offset" object={object} />
+      <TripleNumberInput
+        fieldname="offset"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <ObjectForm
         object={object.object}
         setState={setState}

@@ -21,7 +21,12 @@ export const SolidColorForm = ({
       <select id={id}>
         <option>SolidColor</option>
       </select>
-      <TripleNumberInput fieldname="color" object={texture} />
+      <TripleNumberInput
+        fieldname="color"
+        object={texture}
+        path={path}
+        setState={setState}
+      />
     </div>
   );
 };

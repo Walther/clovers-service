@@ -26,11 +26,21 @@ export const SurfaceCheckerForm = ({
       <NumberInput
         fieldname="density"
         object={texture}
-        path={[...path, "density"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="even" object={texture} />
-      <TripleNumberInput fieldname="odd" object={texture} />
+      <TripleNumberInput
+        fieldname="even"
+        object={texture}
+        path={path}
+        setState={setState}
+      />
+      <TripleNumberInput
+        fieldname="odd"
+        object={texture}
+        path={path}
+        setState={setState}
+      />
     </div>
   );
 };

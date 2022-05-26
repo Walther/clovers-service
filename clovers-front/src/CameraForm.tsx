@@ -36,46 +36,37 @@ export const CameraForm = ({
       <TripleNumberInput
         fieldname="look_from"
         object={object}
-        tripleOnChange={{
-          setter: setState,
-          state: object,
-          key: "look_from",
-        }}
+        path={path}
+        setState={setState}
       />
       <TripleNumberInput
         fieldname="look_at"
         object={object}
-        tripleOnChange={{
-          setter: setState,
-          state: object,
-          key: "look_at",
-        }}
+        path={path}
+        setState={setState}
       />
       <TripleNumberInput
         fieldname="up"
         object={object}
-        tripleOnChange={{
-          setter: setState,
-          state: object,
-          key: "up",
-        }}
+        path={path}
+        setState={setState}
       />
       <NumberInput
         fieldname="vertical_fov"
         object={object}
-        path={[...path, "vertical_fov"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="aperture"
         object={object}
-        path={[...path, "aperture"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="focus_distance"
         object={object}
-        path={[...path, "focus_distance"]}
+        path={path}
         setState={setState}
       />
       <Button

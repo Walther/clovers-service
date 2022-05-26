@@ -24,11 +24,21 @@ export const BoxyForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
-      <TripleNumberInput fieldname="corner_0" object={object} />
-      <TripleNumberInput fieldname="corner_1" object={object} />
+      <TripleNumberInput
+        fieldname="corner_0"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <TripleNumberInput
+        fieldname="corner_1"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <MaterialForm
         material={object.material}
         path={[...path, "material"]}

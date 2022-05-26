@@ -38,19 +38,19 @@ export const RenderOptionsForm = ({
       <NumberInput
         fieldname="width"
         object={object}
-        path={[...path, "width"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="height"
         object={object}
-        path={[...path, "height"]}
+        path={path}
         setState={setState}
       />
       <NumberInput
         fieldname="samples"
         object={object}
-        path={[...path, "samples"]}
+        path={path}
         setState={setState}
       />
 

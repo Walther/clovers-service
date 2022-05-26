@@ -28,7 +28,7 @@ export const MetalForm = ({
       <NumberInput
         fieldname="fuzz"
         object={material}
-        path={[...path, "fuzz"]}
+        path={path}
         setState={setState}
       />
       <TextureForm

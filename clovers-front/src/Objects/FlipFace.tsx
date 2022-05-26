@@ -22,14 +22,10 @@ export const FlipFaceForm = ({
       <TextInput
         fieldname="comment"
         object={object}
-        path={[...path, "comment"]}
+        path={path}
         setState={setState}
       />
-      <ObjectForm
-        path={[...path, "object"]}
-        object={object.object}
-        setState={setState}
-      />
+      <ObjectForm path={path} object={object.object} setState={setState} />
     </div>
   );
 };
