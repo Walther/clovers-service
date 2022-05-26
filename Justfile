@@ -13,3 +13,7 @@ up:
 # Clean up the services. Run build afterwards before up.
 down:
   docker-compose down --rmi local -v
+
+# Calculate the lines of code count in this repository
+lines:
+  tokei --exclude package*.json
