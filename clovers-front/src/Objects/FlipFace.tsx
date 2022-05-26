@@ -9,14 +9,14 @@ export type FlipFace = {
 
 export const FlipFaceForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: FlipFace;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "FlipFace", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>flip face</h3>

@@ -13,14 +13,14 @@ export type Triangle = {
 
 export const TriangleForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: Triangle;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "Triangle", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>triangle</h3>

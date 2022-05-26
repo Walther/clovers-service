@@ -14,14 +14,14 @@ export type STL = {
 
 export const STLForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: STL;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "STL", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>stl</h3>

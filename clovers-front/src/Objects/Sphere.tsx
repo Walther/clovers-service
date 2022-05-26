@@ -12,14 +12,14 @@ export type Sphere = {
 
 export const SphereForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: Sphere;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "Sphere", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>sphere</h3>

@@ -13,14 +13,14 @@ export type Quad = {
 
 export const QuadForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: Quad;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "Quad", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>quad</h3>

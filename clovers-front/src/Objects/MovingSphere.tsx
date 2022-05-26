@@ -16,14 +16,14 @@ export type MovingSphere = {
 
 export const MovingSphereForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: MovingSphere;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "MovingSphere", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>moving sphere</h3>

@@ -11,14 +11,14 @@ export type Translate = {
 
 export const TranslateForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: Translate;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "Translate", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>translate</h3>
@@ -28,7 +28,11 @@ export const TranslateForm = ({
         onChange={(e) => setState(R.set(commentLens, e.target.value))}
       />
       <TripleNumberInput fieldname="offset" object={object} />
-      {/* <ObjectForm object={object.object} /> */}
+      <ObjectForm
+        object={object.object}
+        setState={setState}
+        path={[...path, "object"]}
+      />
     </div>
   );
 };

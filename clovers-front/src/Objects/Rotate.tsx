@@ -11,14 +11,14 @@ export type Rotate = {
 
 export const RotateYForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: Rotate;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "RotateY", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>rotate y</h3>
@@ -28,7 +28,11 @@ export const RotateYForm = ({
         onChange={(e) => setState(R.set(commentLens, e.target.value))}
       />
       <Input fieldname="angle" object={object} />
-      {/* <ObjectForm object={object.object} /> */}
+      <ObjectForm
+        object={object.object}
+        setState={setState}
+        path={[...path, "object"]}
+      />
     </div>
   );
 };

@@ -39,12 +39,12 @@ const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
 
 export const ObjectForm = ({
   object,
-  index,
   setState,
+  path,
 }: {
   object: SceneObject;
-  index: number;
   setState: Function;
+  path: any; // TODO: type for ramda path
 }): ReactElement => {
   // TODO: can this be done better somehow?
   let kind = Object.keys(object)[0];
@@ -53,80 +53,80 @@ export const ObjectForm = ({
       return (
         <BoxyForm
           object={object[kind] as Boxy}
-          index={index}
           setState={setState}
+          path={[...path, "Boxy"]}
         />
       );
     case "ConstantMedium":
       return (
         <ConstantMediumForm
           object={object[kind] as ConstantMedium}
-          index={index}
           setState={setState}
+          path={[...path, "ConstantMedium"]}
         />
       );
     case "FlipFace":
       return (
         <FlipFaceForm
           object={object[kind] as FlipFace}
-          index={index}
           setState={setState}
+          path={[...path, "FlipFace"]}
         />
       );
     case "MovingSphere":
       return (
         <MovingSphereForm
           object={object[kind] as MovingSphere}
-          index={index}
           setState={setState}
+          path={[...path, "MovingSphere"]}
         />
       );
     case "Quad":
       return (
         <QuadForm
           object={object[kind] as Quad}
-          index={index}
           setState={setState}
+          path={[...path, "Quad"]}
         />
       );
     case "RotateY":
       return (
         <RotateYForm
           object={object[kind] as Rotate}
-          index={index}
           setState={setState}
+          path={[...path, "RotateY"]}
         />
       );
     case "Sphere":
       return (
         <SphereForm
           object={object[kind] as Sphere}
-          index={index}
           setState={setState}
+          path={[...path, "Sphere"]}
         />
       );
     case "STL":
       return (
         <STLForm
           object={object[kind] as STL}
-          index={index}
           setState={setState}
+          path={[...path, "STL"]}
         />
       );
     case "Translate":
       return (
         <TranslateForm
           object={object[kind] as Translate}
-          index={index}
           setState={setState}
+          path={[...path, "Translate"]}
         />
       );
     case "Triangle":
       return (
         <TriangleForm
           object={object[kind] as Triangle}
-          index={index}
           setState={setState}
+          path={[...path, "Triangle"]}
         />
       );
     default:

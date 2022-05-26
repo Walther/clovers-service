@@ -205,8 +205,8 @@ export const SceneForm = ({
         {sceneObjects.map((obj, index) => (
           <ObjectForm
             object={obj}
+            path={[index]}
             key={index}
-            index={index}
             setState={setSceneObjects}
           />
         ))}
@@ -229,8 +229,8 @@ export const SceneForm = ({
         {scenePriorityObjects.map((obj, index) => (
           <ObjectForm
             object={obj}
+            path={[index]}
             key={index}
-            index={index}
             setState={setScenePriorityObjects}
           />
         ))}

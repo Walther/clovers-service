@@ -11,14 +11,14 @@ export type ConstantMedium = {
 
 export const ConstantMediumForm = ({
   object,
-  index,
+  path,
   setState,
 }: {
   object: ConstantMedium;
-  index: number;
+  path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([index, "ConstantMedium", "comment"]);
+  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>constant medium</h3>
