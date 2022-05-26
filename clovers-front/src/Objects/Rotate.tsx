@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
 import { Input } from "../Input";
 import { ObjectForm } from "./SceneObject";
-import * as R from "ramda";
 
 export type Rotate = {
   comment?: string;
@@ -18,16 +17,21 @@ export const RotateYForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>rotate y</h3>
       <Input
         fieldname="comment"
         object={object}
-        onChange={(e) => setState(R.set(commentLens, e.target.value))}
+        path={[...path, "comment"]}
+        setState={setState}
       />
-      <Input fieldname="angle" object={object} />
+      <Input
+        fieldname="angle"
+        object={object}
+        path={[...path, "angle"]}
+        setState={setState}
+      />
       <ObjectForm
         object={object.object}
         setState={setState}

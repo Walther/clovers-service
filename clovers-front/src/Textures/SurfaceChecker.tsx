@@ -8,8 +8,12 @@ export type SurfaceChecker = {
 };
 export const SurfaceCheckerForm = ({
   texture,
+  path,
+  setState,
 }: {
   texture: SurfaceChecker;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   return (
@@ -19,7 +23,12 @@ export const SurfaceCheckerForm = ({
       <select id={id}>
         <option>SurfaceChecker</option>
       </select>
-      <Input fieldname="density" object={texture} />
+      <Input
+        fieldname="density"
+        object={texture}
+        path={[...path, "density"]}
+        setState={setState}
+      />
       <TripleNumberInput fieldname="even" object={texture} />
       <TripleNumberInput fieldname="odd" object={texture} />
     </div>

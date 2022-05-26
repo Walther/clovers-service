@@ -7,8 +7,12 @@ export type Isotropic = {
 
 export const IsotropicForm = ({
   material,
+  path,
+  setState,
 }: {
   material: Isotropic;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   const mat = "Isotropic";
@@ -19,7 +23,11 @@ export const IsotropicForm = ({
       <select id={id}>
         <option>{mat}</option>
       </select>
-      <TextureForm texture={material.albedo} />
+      <TextureForm
+        texture={material.albedo}
+        path={[...path, "albedo"]}
+        setState={setState}
+      />
     </div>
   );
 };

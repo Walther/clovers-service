@@ -21,11 +21,13 @@ export const defaultCameraOptions: CameraOptions = {
 };
 
 export const CameraForm = ({
-  cameraOptions,
-  setCameraOptions,
+  object,
+  path,
+  setState,
 }: {
-  cameraOptions: CameraOptions;
-  setCameraOptions: Function;
+  object: CameraOptions;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   return (
     <div className="OptionsForm">
@@ -33,63 +35,51 @@ export const CameraForm = ({
 
       <TripleNumberInput
         fieldname="look_from"
-        object={cameraOptions}
+        object={object}
         tripleOnChange={{
-          setter: setCameraOptions,
-          state: cameraOptions,
+          setter: setState,
+          state: object,
           key: "look_from",
         }}
       />
       <TripleNumberInput
         fieldname="look_at"
-        object={cameraOptions}
+        object={object}
         tripleOnChange={{
-          setter: setCameraOptions,
-          state: cameraOptions,
+          setter: setState,
+          state: object,
           key: "look_at",
         }}
       />
       <TripleNumberInput
         fieldname="up"
-        object={cameraOptions}
+        object={object}
         tripleOnChange={{
-          setter: setCameraOptions,
-          state: cameraOptions,
+          setter: setState,
+          state: object,
           key: "up",
         }}
       />
       <Input
         fieldname="vertical_fov"
-        object={cameraOptions}
-        onChange={(e) =>
-          setCameraOptions({
-            ...cameraOptions,
-            vertical_fov: Number(e.target.value),
-          })
-        }
+        object={object}
+        path={[...path, "vertical_fov"]}
+        setState={setState}
       />
       <Input
         fieldname="aperture"
-        object={cameraOptions}
-        onChange={(e) =>
-          setCameraOptions({
-            ...cameraOptions,
-            aperture: Number(e.target.value),
-          })
-        }
+        object={object}
+        path={[...path, "aperture"]}
+        setState={setState}
       />
       <Input
         fieldname="focus_distance"
-        object={cameraOptions}
-        onChange={(e) =>
-          setCameraOptions({
-            ...cameraOptions,
-            focus_distance: Number(e.target.value),
-          })
-        }
+        object={object}
+        path={[...path, "focus_distance"]}
+        setState={setState}
       />
       <Button
-        handleClick={() => setCameraOptions(defaultCameraOptions)}
+        handleClick={() => setState(defaultCameraOptions)}
         text={"defaults"}
       />
     </div>

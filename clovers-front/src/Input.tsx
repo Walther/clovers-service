@@ -1,28 +1,31 @@
-import { ChangeEventHandler, ReactElement, useId } from "react";
+import { ReactElement, useId } from "react";
 import { SceneObject } from "./Objects/SceneObject";
+import * as R from "ramda";
 
 export const Input = ({
   fieldname,
   object,
-  stringify,
-  onChange,
+  path,
+  setState,
 }: {
   fieldname: string;
   object: SceneObject;
-  stringify?: boolean;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
-
-  // TODO: remove this temporary debug aid
-  const value = stringify
-    ? JSON.stringify(object[fieldname])
-    : object[fieldname];
+  const lensPath: any = R.lensPath(path);
+  let value: any = object[fieldname];
 
   return (
     <>
       <label htmlFor={id}>{fieldname}: </label>
-      <input id={id} type="text" value={value} onChange={onChange} />
+      <input
+        id={id}
+        type="text"
+        value={value}
+        onChange={(e) => setState(R.set(lensPath, e.target.value))}
+      />
     </>
   );
 };

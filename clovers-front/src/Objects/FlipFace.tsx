@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Input } from "../Input";
-import * as R from "ramda";
+import { ObjectForm } from "./SceneObject";
 
 export type FlipFace = {
   comment?: string;
@@ -16,16 +16,20 @@ export const FlipFaceForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>flip face</h3>
       <Input
         fieldname="comment"
         object={object}
-        onChange={(e) => setState(R.set(commentLens, e.target.value))}
+        path={[...path, "comment"]}
+        setState={setState}
       />
-      <Input fieldname="object" object={object} stringify={true} />
+      <ObjectForm
+        path={[...path, "object"]}
+        object={object.object}
+        setState={setState}
+      />
     </div>
   );
 };

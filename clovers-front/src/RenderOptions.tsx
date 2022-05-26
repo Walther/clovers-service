@@ -23,11 +23,13 @@ export const defaultRenderOptions: RenderOptions = {
 };
 
 export const RenderOptionsForm = ({
-  renderOptions,
-  setRenderOptions,
+  object,
+  setState,
+  path,
 }: {
-  renderOptions: RenderOptions;
-  setRenderOptions: Function;
+  object: RenderOptions;
+  setState: Function;
+  path: any; // TODO: ramda path type
 }): ReactElement => {
   return (
     <div className="OptionsForm">
@@ -35,37 +37,25 @@ export const RenderOptionsForm = ({
 
       <Input
         fieldname="width"
-        object={renderOptions}
-        onChange={(e) =>
-          setRenderOptions({
-            ...renderOptions,
-            width: Number(e.target.value),
-          })
-        }
+        object={object}
+        path={[...path, "width"]}
+        setState={setState}
       />
       <Input
         fieldname="height"
-        object={renderOptions}
-        onChange={(e) =>
-          setRenderOptions({
-            ...renderOptions,
-            height: Number(e.target.value),
-          })
-        }
+        object={object}
+        path={[...path, "height"]}
+        setState={setState}
       />
       <Input
         fieldname="samples"
-        object={renderOptions}
-        onChange={(e) =>
-          setRenderOptions({
-            ...renderOptions,
-            samples: Number(e.target.value),
-          })
-        }
+        object={object}
+        path={[...path, "samples"]}
+        setState={setState}
       />
 
       <Button
-        handleClick={(_e) => setRenderOptions(defaultRenderOptions)}
+        handleClick={(_e) => setState(defaultRenderOptions)}
         text={"defaults"}
       />
     </div>

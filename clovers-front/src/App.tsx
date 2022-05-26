@@ -144,12 +144,14 @@ function App() {
         <h2>options</h2>
         <div className="OptionsGroup">
           <RenderOptionsForm
-            renderOptions={renderOptions}
-            setRenderOptions={setRenderOptions}
+            object={renderOptions}
+            setState={setRenderOptions}
+            path={[]}
           />
           <CameraForm
-            cameraOptions={cameraOptions}
-            setCameraOptions={setCameraOptions}
+            object={cameraOptions}
+            setState={setCameraOptions}
+            path={[]}
           />
         </div>
         <SceneForm

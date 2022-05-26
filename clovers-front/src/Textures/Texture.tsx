@@ -1,5 +1,6 @@
 import { ReactElement, useId } from "react";
 import { SolidColorForm } from "./SolidColor";
+import { SpatialCheckerForm } from "./SpatialChecker";
 import { SurfaceCheckerForm } from "./SurfaceChecker";
 
 // TODO: proper type
@@ -18,17 +19,41 @@ const DebugForm = ({ texture }: { texture: Texture }): ReactElement => {
 
 export const TextureForm = ({
   texture,
+  path,
+  setState,
 }: {
   texture: Texture;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   // TODO: can this be done better somehow?
   let kind = Object.keys(texture)[0];
   let txt = texture[kind];
   switch (kind) {
     case "SolidColor":
-      return <SolidColorForm texture={txt} />;
+      return (
+        <SolidColorForm
+          texture={txt}
+          path={[...path, "SolidColor"]}
+          setState={setState}
+        />
+      );
     case "SurfaceChecker":
-      return <SurfaceCheckerForm texture={txt} />;
+      return (
+        <SurfaceCheckerForm
+          texture={txt}
+          path={[...path, "SurfaceChecker"]}
+          setState={setState}
+        />
+      );
+    case "SpatialChecker":
+      return (
+        <SpatialCheckerForm
+          texture={txt}
+          path={[...path, "SpatialChecker"]}
+          setState={setState}
+        />
+      );
     default:
       return <DebugForm texture={txt} />;
   }

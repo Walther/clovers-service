@@ -8,8 +8,12 @@ export type Dielectric = {
 
 export const DielectricForm = ({
   material,
+  path,
+  setState,
 }: {
   material: Dielectric;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   const mat = "Dielectric";
@@ -20,7 +24,12 @@ export const DielectricForm = ({
       <select id={id}>
         <option>{mat}</option>
       </select>
-      <Input fieldname="refractive_index" object={material} />
+      <Input
+        fieldname="refractive_index"
+        object={material}
+        path={[...path, "refractive_index"]}
+        setState={setState}
+      />
       <TripleNumberInput fieldname="color" object={material} />
     </div>
   );

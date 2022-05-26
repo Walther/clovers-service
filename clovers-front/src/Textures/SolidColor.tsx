@@ -6,8 +6,12 @@ export type SolidColor = {
 };
 export const SolidColorForm = ({
   texture,
+  path,
+  setState,
 }: {
   texture: SolidColor;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   return (

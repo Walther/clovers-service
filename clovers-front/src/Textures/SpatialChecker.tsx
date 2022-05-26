@@ -9,8 +9,12 @@ export type SpatialChecker = {
 
 export const SpatialCheckerForm = ({
   texture,
+  path,
+  setState,
 }: {
   texture: SpatialChecker;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   return (
@@ -20,9 +24,14 @@ export const SpatialCheckerForm = ({
       <select id={id}>
         <option>SpatialChecker</option>
       </select>
-      <Input fieldname="density" object={texture} />
-      {/* <TripleNumberInput fieldname="even" object={texture} />
-      <TripleNumberInput fieldname="odd" object={texture} /> */}
+      <Input
+        fieldname="density"
+        object={texture}
+        path={[...path, "density"]}
+        setState={setState}
+      />
+      <TripleNumberInput fieldname="even" object={texture} />
+      <TripleNumberInput fieldname="odd" object={texture} />
     </div>
   );
 };

@@ -7,7 +7,15 @@ export type Metal = {
   fuzz: number;
 };
 
-export const MetalForm = ({ material }: { material: Metal }): ReactElement => {
+export const MetalForm = ({
+  material,
+  path,
+  setState,
+}: {
+  material: Metal;
+  path: any; // TODO: ramda path type
+  setState: Function;
+}): ReactElement => {
   const id = useId();
   const mat = "Metal";
   return (
@@ -17,8 +25,17 @@ export const MetalForm = ({ material }: { material: Metal }): ReactElement => {
       <select id={id}>
         <option>{mat}</option>
       </select>
-      <Input fieldname="fuzz" object={material} />
-      <TextureForm texture={material.albedo} />
+      <Input
+        fieldname="fuzz"
+        object={material}
+        path={[...path, "fuzz"]}
+        setState={setState}
+      />
+      <TextureForm
+        texture={material.albedo}
+        path={[...path, "albedo"]}
+        setState={setState}
+      />
     </div>
   );
 };

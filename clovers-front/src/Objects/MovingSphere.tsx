@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
 import { Input, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
-import * as R from "ramda";
 
 export type MovingSphere = {
   comment?: string;
@@ -23,21 +22,40 @@ export const MovingSphereForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const commentLens = R.lensPath([...path, "comment"]);
   return (
     <div className="OptionsForm">
       <h3>moving sphere</h3>
       <Input
         fieldname="comment"
         object={object}
-        onChange={(e) => setState(R.set(commentLens, e.target.value))}
+        path={[...path, "comment"]}
+        setState={setState}
       />
-      <Input fieldname="radius" object={object} />
+      <Input
+        fieldname="radius"
+        object={object}
+        path={[...path, "radius"]}
+        setState={setState}
+      />
       <TripleNumberInput fieldname="center_0" object={object} />
       <TripleNumberInput fieldname="center_1" object={object} />
-      <Input fieldname="time_0" object={object} />
-      <Input fieldname="time_1" object={object} />
-      <MaterialForm material={object.material} />
+      <Input
+        fieldname="time_0"
+        object={object}
+        path={[...path, "time_0"]}
+        setState={setState}
+      />
+      <Input
+        fieldname="time_1"
+        object={object}
+        path={[...path, "time_1"]}
+        setState={setState}
+      />
+      <MaterialForm
+        material={object.material}
+        path={[...path, "material"]}
+        setState={setState}
+      />
     </div>
   );
 };

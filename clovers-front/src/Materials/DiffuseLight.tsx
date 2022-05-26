@@ -7,8 +7,12 @@ export type DiffuseLight = {
 
 export const DiffuseLightForm = ({
   material,
+  path,
+  setState,
 }: {
   material: DiffuseLight;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   const mat = "DiffuseLight";
@@ -19,7 +23,11 @@ export const DiffuseLightForm = ({
       <select id={id}>
         <option>{mat}</option>
       </select>
-      <TextureForm texture={material.emit} />
+      <TextureForm
+        texture={material.emit}
+        path={[...path, "emit"]}
+        setState={setState}
+      />
     </div>
   );
 };

@@ -7,8 +7,12 @@ export type Lambertian = {
 
 export const LambertianForm = ({
   material,
+  path,
+  setState,
 }: {
   material: Lambertian;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   const id = useId();
   const mat = "Lambertian";
@@ -19,7 +23,11 @@ export const LambertianForm = ({
       <select id={id}>
         <option>{mat}</option>
       </select>
-      <TextureForm texture={material.albedo} />
+      <TextureForm
+        texture={material.albedo}
+        path={[...path, "albedo"]}
+        setState={setState}
+      />
     </div>
   );
 };

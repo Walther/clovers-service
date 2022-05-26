@@ -28,23 +28,57 @@ const DebugForm = ({ material }: { material: Material }): ReactElement => {
 
 export const MaterialForm = ({
   material,
+  path,
+  setState,
 }: {
   material: Material;
+  path: any; // TODO: ramda path type
+  setState: Function;
 }): ReactElement => {
   // TODO: can this be done better somehow?
   let kind = Object.keys(material)[0];
   let mat = material[kind];
   switch (kind) {
     case "Dielectric":
-      return <DielectricForm material={mat} />;
+      return (
+        <DielectricForm
+          material={mat}
+          path={[...path, "Dielectric"]}
+          setState={setState}
+        />
+      );
     case "DiffuseLight":
-      return <DiffuseLightForm material={mat} />;
+      return (
+        <DiffuseLightForm
+          material={mat}
+          path={[...path, "DiffuseLight"]}
+          setState={setState}
+        />
+      );
     case "Isotropic":
-      return <IsotropicForm material={mat} />;
+      return (
+        <IsotropicForm
+          material={mat}
+          path={[...path, "Isotropic"]}
+          setState={setState}
+        />
+      );
     case "Lambertian":
-      return <LambertianForm material={mat} />;
+      return (
+        <LambertianForm
+          material={mat}
+          path={[...path, "Lambertian"]}
+          setState={setState}
+        />
+      );
     case "Metal":
-      return <MetalForm material={mat} />;
+      return (
+        <MetalForm
+          material={mat}
+          path={[...path, "Metal"]}
+          setState={setState}
+        />
+      );
     default:
       return <DebugForm material={mat} />;
   }
