@@ -46,6 +46,24 @@ export const ObjectForm = ({
   setState: Function;
   path: any; // TODO: type for ramda path
 }): ReactElement => {
+  const id = useId();
+  // TODO: possibly better handling?
+  if (!object) {
+    return (
+      <div className="OptionsForm">
+        <h3>object</h3>
+        <label htmlFor={id}>not set: </label>
+        {/* Note: this should in theory only appear as part of a metaobject, hence the message */}
+        <input
+          id={id}
+          type="text"
+          value="needs a subobject"
+          readOnly
+          className="inputError"
+        />
+      </div>
+    );
+  }
   // TODO: can this be done better somehow?
   let kind = Object.keys(object)[0];
   switch (kind) {

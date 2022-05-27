@@ -1,6 +1,7 @@
 import { ReactElement, useId } from "react";
 import { SceneObject } from "./Objects/SceneObject";
 import * as R from "ramda";
+import "./Input.scss";
 
 export const TextInput = ({
   fieldname,
@@ -15,7 +16,7 @@ export const TextInput = ({
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
-  let value: any = object[fieldname];
+  let value: string = object[fieldname] ? object[fieldname] : "";
 
   return (
     <>
@@ -52,6 +53,7 @@ export const NumberInput = ({
         id={id}
         type="text"
         value={value}
+        className={isNaN(value) ? "inputError" : ""}
         onChange={(e) => setState(R.set(lensPath, Number(e.target.value)))}
       />
     </>
@@ -93,18 +95,21 @@ export const TripleNumberInput = ({
           id={id + "_x"}
           type="text"
           value={value[0]}
+          className={isNaN(value[0]) ? "inputError" : ""}
           onChange={onChangeX}
         />
         <input
           id={id + "_y"}
           type="text"
           value={value[1]}
+          className={isNaN(value[1]) ? "inputError" : ""}
           onChange={onChangeY}
         />
         <input
           id={id + "_z"}
           type="text"
           value={value[2]}
+          className={isNaN(value[2]) ? "inputError" : ""}
           onChange={onChangeZ}
         />
       </div>

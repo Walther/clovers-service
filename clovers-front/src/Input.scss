@@ -1,0 +1,7 @@
+.inputError,
+.OptionsForm .inputError,
+.inputError:focus,
+.OptionsForm .inputError:focus {
+  accent-color: var(--pink);
+  border: 2px solid var(--pink);
+}

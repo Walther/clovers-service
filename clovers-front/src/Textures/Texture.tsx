@@ -26,6 +26,16 @@ export const TextureForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
+  const id = useId();
+  if (!texture) {
+    return (
+      <div className="OptionsForm">
+        <h3>texture</h3>
+        <label htmlFor={id}>not set: </label>
+        <input id={id} type="text" value="default will be used" readOnly />
+      </div>
+    );
+  }
   // TODO: can this be done better somehow?
   let kind = Object.keys(texture)[0];
   let txt = texture[kind];

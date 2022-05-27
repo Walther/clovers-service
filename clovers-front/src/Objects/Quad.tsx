@@ -25,7 +25,7 @@ export const QuadForm = ({
   return (
     <div className="OptionsForm">
       <h3>quad</h3>
-      <DeleteButton object={object} path={deletePath} setState={setState} />
+      <DeleteButton path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"
         object={object}

@@ -35,6 +35,16 @@ export const MaterialForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
+  const id = useId();
+  if (!material) {
+    return (
+      <div className="OptionsForm">
+        <h3>material</h3>
+        <label htmlFor={id}>not set: </label>
+        <input id={id} type="text" value="default will be used" readOnly />
+      </div>
+    );
+  }
   // TODO: can this be done better somehow?
   let kind = Object.keys(material)[0];
   let mat = material[kind];
