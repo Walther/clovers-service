@@ -57,6 +57,11 @@
     box-sizing: border-box;
   }
 
+  input::selection,
+  select::selection {
+    background-color: var(--whiteish);
+  }
+
   input:active,
   input:focus,
   select:active,
