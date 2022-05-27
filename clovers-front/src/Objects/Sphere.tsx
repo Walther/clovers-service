@@ -23,7 +23,7 @@ export const SphereForm = ({
   const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
-      <h3>sphere</h3>
+      <h3>Sphere</h3>
       <DeleteButton path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"

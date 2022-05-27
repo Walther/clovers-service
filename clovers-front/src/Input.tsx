@@ -77,18 +77,6 @@ export const TripleNumberInput = ({
 }): ReactElement => {
   const id = useId();
   const value = object[fieldname] ? object[fieldname] : [];
-  const lensPathX: any = R.lensPath([...path, fieldname, 0]);
-  const lensPathY: any = R.lensPath([...path, fieldname, 1]);
-  const lensPathZ: any = R.lensPath([...path, fieldname, 2]);
-  const onChangeX = (e: any) => {
-    maybeSetStateNumber(lensPathX, setState, e.target.value);
-  };
-  const onChangeY = (e: any) => {
-    maybeSetStateNumber(lensPathY, setState, e.target.value);
-  };
-  const onChangeZ = (e: any) => {
-    maybeSetStateNumber(lensPathZ, setState, e.target.value);
-  };
 
   return (
     <>
@@ -99,21 +87,39 @@ export const TripleNumberInput = ({
           type="text"
           value={value[0]}
           className={isValidNumber(value[0]) ? "Input" : "InputError"}
-          onChange={onChangeX}
+          onChange={(e) =>
+            maybeSetStateNumber(
+              R.lensPath([...path, fieldname, 0]),
+              setState,
+              e.target.value
+            )
+          }
         />
         <input
           id={id + "_y"}
           type="text"
           value={value[1]}
           className={isValidNumber(value[1]) ? "Input" : "InputError"}
-          onChange={onChangeY}
+          onChange={(e) =>
+            maybeSetStateNumber(
+              R.lensPath([...path, fieldname, 1]),
+              setState,
+              e.target.value
+            )
+          }
         />
         <input
           id={id + "_z"}
           type="text"
           value={value[2]}
           className={isValidNumber(value[2]) ? "Input" : "InputError"}
-          onChange={onChangeZ}
+          onChange={(e) =>
+            maybeSetStateNumber(
+              R.lensPath([...path, fieldname, 2]),
+              setState,
+              e.target.value
+            )
+          }
         />
       </div>
     </>

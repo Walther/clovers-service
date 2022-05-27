@@ -24,7 +24,7 @@ export const TriangleForm = ({
   const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
-      <h3>triangle</h3>
+      <h3>Triangle</h3>
       <DeleteButton path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"

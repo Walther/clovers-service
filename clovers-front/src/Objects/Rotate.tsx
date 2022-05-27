@@ -22,7 +22,7 @@ export const RotateYForm = ({
   const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
-      <h3>rotate y</h3>
+      <h3>RotateY</h3>
       <DeleteButton path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"

@@ -21,7 +21,7 @@ export const FlipFaceForm = ({
   const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
-      <h3>flip face</h3>
+      <h3>FlipFace</h3>
       <DeleteButton path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"

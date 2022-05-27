@@ -37,7 +37,7 @@
 
   h2,
   h3 {
-    grid-column: header-start;
+    grid-column: header-start / header-end;
   }
 
   label {

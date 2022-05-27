@@ -25,7 +25,7 @@ export const STLForm = ({
   const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
-      <h3>stl</h3>
+      <h3>STL</h3>
       <DeleteButton path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"

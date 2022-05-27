@@ -46,7 +46,7 @@ const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
     <div className="OptionsForm">
       <h3>other object: {name}</h3>
       <label htmlFor={id}>json: </label>
-      <input id={id} type="text" value={JSON.stringify(object)} />
+      <input id={id} type="text" value={JSON.stringify(object)} readOnly />
     </div>
   );
 };
@@ -199,7 +199,6 @@ export const NewObjectForm = ({
       <Button
         handleClick={() =>
           setState((prevState: any) => {
-            console.log("path: ", path);
             const lens: any = R.lensPath(path);
             const value: any = R.view(lens, prevState);
             const valueType = R.type(value);
@@ -209,7 +208,7 @@ export const NewObjectForm = ({
               case "Undefined":
                 return R.assocPath(path, { [selected]: {} }, prevState);
               default:
-                console.log("unexpected value type: ", value);
+                console.error("unexpected value type: ", value);
                 return prevState;
             }
           })

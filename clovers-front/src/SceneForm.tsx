@@ -115,10 +115,25 @@ export const defaultSceneObjects: SceneObjects = [
     },
   },
   {
+    Sphere: {
+      center: [190.0, 90.0, 190.0],
+      radius: 90.0,
+      material: {
+        Dielectric: {
+          refractive_index: 1.5,
+          color: [1.0, 1.0, 1.0],
+        },
+      },
+      comment: "glass sphere",
+    },
+  },
+  {
     Translate: {
+      comment: "moved rotated tall box",
       offset: [265.0, 0.0, 295.0],
       object: {
         RotateY: {
+          comment: "rotated tall box",
           angle: 15.0,
           object: {
             Boxy: {
@@ -133,24 +148,11 @@ export const defaultSceneObjects: SceneObjects = [
                   },
                 },
               },
-              comment: "rotated tall box",
+              comment: "tall box",
             },
           },
         },
       },
-    },
-  },
-  {
-    Sphere: {
-      center: [190.0, 90.0, 190.0],
-      radius: 90.0,
-      material: {
-        Dielectric: {
-          refractive_index: 1.5,
-          color: [1.0, 1.0, 1.0],
-        },
-      },
-      comment: "glass sphere",
     },
   },
 ];
@@ -183,6 +185,7 @@ export const defaultScenePriorityObjects: SceneObjects = [
           color: [1.0, 1.0, 1.0],
         },
       },
+      comment: "glass sphere",
     },
   },
 ];

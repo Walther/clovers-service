@@ -1,4 +1,6 @@
-import { ReactElement, useId } from "react";
+import * as R from "ramda";
+import { ReactElement, useId, useState } from "react";
+import { Button } from "../Button";
 import { DielectricForm } from "./Dielectric";
 import { DiffuseLightForm } from "./DiffuseLight";
 import { IsotropicForm } from "./Isotropic";
@@ -15,11 +17,19 @@ import { MetalForm } from "./Metal";
 // TODO: proper material type
 export type Material = any;
 
+export const MaterialNames = [
+  "Dielectric",
+  "DiffuseLight",
+  "Isotropic",
+  "Lambertian",
+  "Metal",
+];
+
 const DebugForm = ({ material }: { material: Material }): ReactElement => {
   const id = useId();
   return (
     <div className="OptionsForm">
-      <h3>material</h3>
+      <h3>other material</h3>
       <label htmlFor={id}>json: </label>
       <input id={id} type="text" value={JSON.stringify(material)} />
     </div>
@@ -35,13 +45,11 @@ export const MaterialForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
-  const id = useId();
   if (!material) {
     return (
       <div className="OptionsForm">
-        <h3>material</h3>
-        <label htmlFor={id}>not set: </label>
-        <input id={id} type="text" value="default will be used" readOnly />
+        <h3>default material</h3>
+        <NewMaterialForm setState={setState} path={path} />
       </div>
     );
   }
@@ -92,4 +100,66 @@ export const MaterialForm = ({
     default:
       return <DebugForm material={mat} />;
   }
+};
+
+export const MaterialSelect = ({
+  id,
+  selected,
+  setSelected,
+}: {
+  id: any;
+  selected: any;
+  setSelected: any;
+}): ReactElement => {
+  const options = MaterialNames.map((name, index) => (
+    <option value={name} key={index}>
+      {name}
+    </option>
+  ));
+  return (
+    <select
+      id={id}
+      value={selected}
+      onChange={(e) => setSelected(e.target.value)}
+    >
+      {options}
+    </select>
+  );
+};
+
+export const NewMaterialForm = ({
+  setState,
+  path,
+}: {
+  setState: Function;
+  path: any; // TODO: type for ramda path
+}): ReactElement => {
+  const id = useId();
+  const [selected, setSelected] = useState("Lambertian");
+
+  return (
+    <>
+      <label htmlFor={id}>new material: </label>
+      <MaterialSelect id={id} selected={selected} setSelected={setSelected} />
+      <Button
+        handleClick={() =>
+          setState((prevState: any) => {
+            const lens: any = R.lensPath(path);
+            const value: any = R.view(lens, prevState);
+            const valueType = R.type(value);
+            switch (valueType) {
+              case "Array":
+                return R.prepend({ [selected]: {} }, prevState);
+              case "Undefined":
+                return R.assocPath(path, { [selected]: {} }, prevState);
+              default:
+                console.error("unexpected value type: ", value);
+                return prevState;
+            }
+          })
+        }
+        text={"add"}
+      />
+    </>
+  );
 };

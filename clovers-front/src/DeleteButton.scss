@@ -1,6 +1,15 @@
+.OptionsForm {
+  position: relative;
+}
+
 .DeleteButton {
   grid-column: header-end;
-  justify-self: end;
+  position: absolute; // TODO: remove hacky fix. Do this properly with grid etc
+  top: 0;
+  right: 0;
+  margin: 0.25rem 0;
+  padding: 0.25rem 0;
+  font-size: 1.25rem;
   background: none;
   border: none;
   width: auto;
