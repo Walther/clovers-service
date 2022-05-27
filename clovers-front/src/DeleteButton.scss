@@ -1,0 +1,16 @@
+.DeleteButton {
+  grid-column: header-end;
+  justify-self: end;
+  background: none;
+  border: none;
+  width: auto;
+}
+
+.DeleteButton:hover {
+  background: var(--grey-lightened);
+  cursor: pointer;
+}
+
+.DeleteButton:active {
+  background: var(--grey-darkened);
+}

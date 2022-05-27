@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { DeleteButton } from "../DeleteButton";
 import { TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
@@ -19,9 +20,12 @@ export const QuadForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
+  // removing the title from the path for deleting; TODO: remove when adding `kind` to objects and reducing nesting in upstream
+  const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
       <h3>quad</h3>
+      <DeleteButton object={object} path={deletePath} setState={setState} />
       <TextInput
         fieldname="comment"
         object={object}

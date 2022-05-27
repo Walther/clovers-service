@@ -1,13 +1,14 @@
-button {
+.Button {
   border: none;
   padding: 0.5rem;
   background: var(--grey-baseline);
 }
 
-button:hover {
+.Button:hover {
   background: var(--grey-lightened);
+  cursor: pointer;
 }
 
-button:active {
+.Button:active {
   background: var(--grey-darkened);
 }
