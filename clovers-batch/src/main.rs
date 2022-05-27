@@ -8,13 +8,13 @@ use sqlx::postgres::PgPoolOptions;
 use sqlx::types::Uuid;
 use sqlx::{Pool, Postgres};
 use tokio::time::{sleep, Duration};
-use tracing::{debug, error, info};
+use tracing::{error, info};
 use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod draw_cpu;
 
-const POLL_DELAY_MS: u64 = 10_000;
+const POLL_DELAY_MS: u64 = 1_000;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -44,7 +44,6 @@ async fn main() -> anyhow::Result<()> {
                 render(render_task_id, &postgres_pool).await;
             }
             Err(_e) => {
-                debug!("no tasks in queue, sleeping");
                 sleep(Duration::from_millis(POLL_DELAY_MS)).await;
             }
         }
