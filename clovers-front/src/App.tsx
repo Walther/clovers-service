@@ -17,6 +17,7 @@ import {
   ScenePriorityObjects,
 } from "./SceneForm";
 import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
+import { FileInput } from "./Input";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
@@ -68,34 +69,29 @@ function App() {
     refreshRenders();
   }, []);
 
+  const collectFile = () => {
+    const opts = renderOptions;
+    const scene_file = {
+      ...implicitSceneSettings,
+      camera: cameraOptions,
+      objects: sceneObjects,
+      priority_objects: scenePriorityObjects,
+    };
+    return {
+      opts,
+      scene_file,
+    };
+  };
+
   const handleSubmit = async () => {
     setMessage("Ready.");
-
-    let opts;
-    let scene_file;
-
-    // parse the json inputs
-    try {
-      opts = renderOptions;
-      scene_file = {
-        ...implicitSceneSettings,
-        camera: cameraOptions,
-        objects: sceneObjects,
-        priority_objects: scenePriorityObjects,
-      };
-    } catch (error: any) {
-      setMessage(error.message);
-      return;
-    }
+    const body = collectFile();
 
     try {
       const response = await axios.post(
         `${REACT_APP_BACKEND}/queue`,
         // body
-        {
-          opts,
-          scene_file,
-        },
+        body,
         // config
         {
           headers: { "Content-Type": "application/json" },
@@ -134,6 +130,54 @@ function App() {
     }
   };
 
+  const handleImport = () => {
+    // TODO: this is extremely hacky, fix later, possibly with https://caniuse.com/native-filesystem-api
+    const reader = new FileReader();
+    const importElement: any = document.getElementById("importFileInput");
+    const importFile = importElement.files[0];
+    if (importFile) {
+      console.log(importFile);
+      reader.readAsText(importFile);
+      reader.addEventListener("load", (event) => {
+        const data: any = event?.target?.result;
+        try {
+          const json = JSON.parse(data);
+          console.log(json);
+          const {
+            // Ignoring a couple of fields for now that are handled in implicit / hidden settings.
+            // time_0,
+            // time_1,
+            // background_color,
+            camera,
+            objects,
+            priority_objects,
+          } = json;
+          setCameraOptions(camera);
+          setSceneObjects(objects);
+          setScenePriorityObjects(priority_objects);
+        } catch (e) {
+          setMessage(`cannot import; could not parse scene file: ${e}`);
+          return;
+        }
+      });
+    } else {
+      setMessage("cannot import; file is null");
+      return;
+    }
+    setMessage("scene file imported");
+  };
+
+  const handleExport = () => {
+    // TODO: https://caniuse.com/native-filesystem-api
+    const body = collectFile();
+    const stringified = JSON.stringify(body);
+    const blob = new Blob([stringified], { type: "text/json" });
+    const downloadLink = document.createElement("a");
+    downloadLink.download = `scene-${new Date().toISOString()}.json`;
+    downloadLink.href = window.URL.createObjectURL(blob);
+    downloadLink.click();
+  };
+
   return (
     <div className="App">
       <header>
@@ -160,8 +204,13 @@ function App() {
           scenePriorityObjects={scenePriorityObjects}
           setScenePriorityObjects={setScenePriorityObjects}
         />
-        <h2>render</h2>
-        <Button handleClick={() => handleSubmit()} text="render" />
+        <h2>actions</h2>
+        <div className="actionsMenu">
+          <Button handleClick={() => handleSubmit()} text="render" />
+          <Button handleClick={() => handleExport()} text="export" />
+          <Button handleClick={() => handleImport()} text="import" />
+          <FileInput id="importFileInput" />
+        </div>
         <MessageBox message={message} />
         <h2>queue</h2>
         <Button handleClick={() => refreshQueue()} text="refresh queue" />

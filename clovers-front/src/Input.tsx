@@ -3,6 +3,10 @@ import { SceneObject } from "./Objects/SceneObject";
 import * as R from "ramda";
 import "./Input.scss";
 
+export const FileInput = ({ id }: { id: any }): ReactElement => {
+  return <input id={id} type="file" className="Input" />;
+};
+
 export const TextInput = ({
   fieldname,
   object,

@@ -216,7 +216,7 @@ export const SceneForm = ({
         ))}
       </div>
       <details>
-        <summary>objects json import</summary>
+        <summary>objects json debug</summary>
         <p>select all &amp; paste json here</p>
         <textarea
           id="objects"
@@ -242,7 +242,7 @@ export const SceneForm = ({
         ))}
       </div>
       <details>
-        <summary>priority objects json import</summary>
+        <summary>priority objects json debug</summary>
         <p>select all &amp; paste json here</p>
         <textarea
           id="priority_objects"
