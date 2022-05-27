@@ -1,4 +1,6 @@
-import { ReactElement, useId } from "react";
+import * as R from "ramda";
+import { ReactElement, useId, useState } from "react";
+import { Button } from "../Button";
 import { Boxy, BoxyForm } from "./Boxy";
 import { ConstantMedium, ConstantMediumForm } from "./ConstantMedium";
 import { FlipFace, FlipFaceForm } from "./FlipFace";
@@ -24,6 +26,18 @@ export type SceneObject =
   | Triangle
 */
 export type SceneObject = any; // TODO: proper types
+export const SceneObjectNames = [
+  "Boxy",
+  "ConstantMedium",
+  "FlipFace",
+  "MovingSphere",
+  "Quad",
+  "Rotate",
+  "Sphere",
+  "STL",
+  "Translate",
+  "Triangle",
+];
 
 const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
   const id = useId();
@@ -46,21 +60,12 @@ export const ObjectForm = ({
   setState: Function;
   path: any; // TODO: type for ramda path
 }): ReactElement => {
-  const id = useId();
   // TODO: possibly better handling?
   if (!object) {
     return (
       <div className="OptionsForm">
-        <h3>object</h3>
-        <label htmlFor={id}>not set: </label>
-        {/* Note: this should in theory only appear as part of a metaobject, hence the message */}
-        <input
-          id={id}
-          type="text"
-          value="needs a subobject"
-          readOnly
-          className="inputError"
-        />
+        <h3>object not set</h3>
+        <NewObjectForm setState={setState} path={path} />
       </div>
     );
   }
@@ -150,4 +155,67 @@ export const ObjectForm = ({
     default:
       return <DebugForm object={object} />;
   }
+};
+
+export const ObjectSelect = ({
+  id,
+  selected,
+  setSelected,
+}: {
+  id: any;
+  selected: any;
+  setSelected: any;
+}): ReactElement => {
+  const options = SceneObjectNames.map((name, index) => (
+    <option value={name} key={index}>
+      {name}
+    </option>
+  ));
+  return (
+    <select
+      id={id}
+      value={selected}
+      onChange={(e) => setSelected(e.target.value)}
+    >
+      {options}
+    </select>
+  );
+};
+
+export const NewObjectForm = ({
+  setState,
+  path,
+}: {
+  setState: Function;
+  path: any; // TODO: type for ramda path
+}): ReactElement => {
+  const id = useId();
+  const [selected, setSelected] = useState("Boxy");
+
+  return (
+    <div className="OptionsForm">
+      <label htmlFor={id}>new object: </label>
+      <ObjectSelect id={id} selected={selected} setSelected={setSelected} />
+      <Button
+        handleClick={() =>
+          setState((prevState: any) => {
+            console.log("path: ", path);
+            const lens: any = R.lensPath(path);
+            const value: any = R.view(lens, prevState);
+            const valueType = R.type(value);
+            switch (valueType) {
+              case "Array":
+                return R.prepend({ [selected]: {} }, prevState);
+              case "Undefined":
+                return R.assocPath(path, { [selected]: {} }, prevState);
+              default:
+                console.log("unexpected value type: ", value);
+                return prevState;
+            }
+          })
+        }
+        text={"add"}
+      />
+    </div>
+  );
 };

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
-import { ObjectForm, SceneObject } from "./Objects/SceneObject";
+import { NewObjectForm, ObjectForm, SceneObject } from "./Objects/SceneObject";
 
 export const implicitSceneSettings = {
   time_0: 0,
@@ -202,6 +202,7 @@ export const SceneForm = ({
     <div>
       <h2>objects</h2>
       <div className="OptionsGroup">
+        <NewObjectForm setState={setSceneObjects} path={[]} />
         {sceneObjects.map((obj, index) => (
           <ObjectForm
             object={obj}
@@ -213,19 +214,21 @@ export const SceneForm = ({
       </div>
       <details>
         <summary>objects json import</summary>
+        <p>select all &amp; paste json here</p>
         <textarea
           id="objects"
           value={JSON.stringify(sceneObjects, null, 2)}
           onChange={(e) => setSceneObjects(JSON.parse(e.target.value))}
           className="json_input"
         />
+        <Button
+          handleClick={(_e) => setSceneObjects(defaultSceneObjects)}
+          text="or reset to default"
+        />
       </details>
-      <Button
-        handleClick={(_e) => setSceneObjects(defaultSceneObjects)}
-        text={"defaults"}
-      />
       <h2>priority objects</h2>
       <div className="OptionsGroup">
+        <NewObjectForm setState={setScenePriorityObjects} path={[]} />
         {scenePriorityObjects.map((obj, index) => (
           <ObjectForm
             object={obj}
@@ -237,19 +240,20 @@ export const SceneForm = ({
       </div>
       <details>
         <summary>priority objects json import</summary>
+        <p>select all &amp; paste json here</p>
         <textarea
           id="priority_objects"
           value={JSON.stringify(scenePriorityObjects, null, 2)}
           onChange={(e) => setScenePriorityObjects(JSON.parse(e.target.value))}
           className="json_input"
         />
+        <Button
+          handleClick={(_e) =>
+            setScenePriorityObjects(defaultScenePriorityObjects)
+          }
+          text="or reset to default"
+        />
       </details>
-      <Button
-        handleClick={(_e) =>
-          setScenePriorityObjects(defaultScenePriorityObjects)
-        }
-        text={"defaults"}
-      />
     </div>
   );
 };

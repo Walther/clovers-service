@@ -45,7 +45,7 @@ export const NumberInput = ({
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
-  let value: any = object[fieldname];
+  let value: any = object[fieldname] ? object[fieldname] : 0;
 
   return (
     <>
@@ -129,7 +129,7 @@ const maybeSetStateNumber = (
   setState: Function,
   value: string
 ) => {
-  const parsed = parseInt(value);
+  const parsed = Number(value);
   if (!isNaN(parsed)) {
     setState(R.set(lensPath, parsed));
   } else {

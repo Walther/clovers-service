@@ -5,3 +5,28 @@
   accent-color: var(--pink);
   border: 2px solid var(--pink);
 }
+
+input,
+select {
+  background: var(--grey-baseline);
+  box-shadow: none;
+  border: none;
+  grid-column-start: input;
+  height: 2rem;
+  margin: 0;
+  padding: 0.25rem;
+  box-sizing: border-box;
+}
+
+input::selection,
+select::selection {
+  background-color: var(--whiteish);
+}
+
+input:active,
+input:focus,
+select:active,
+select:focus {
+  box-shadow: none;
+  border: none;
+}
