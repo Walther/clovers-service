@@ -177,8 +177,8 @@ function App() {
 
   const handleExport = () => {
     // TODO: https://caniuse.com/native-filesystem-api
-    const body = collectFile();
-    const stringified = JSON.stringify(body);
+    const { scene_file } = collectFile();
+    const stringified = JSON.stringify(scene_file);
     const blob = new Blob([stringified], { type: "text/json" });
     const downloadLink = document.createElement("a");
     downloadLink.download = `scene-${new Date().toISOString()}.json`;
