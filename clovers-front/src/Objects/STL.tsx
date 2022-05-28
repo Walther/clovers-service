@@ -1,4 +1,5 @@
-import { ReactElement } from "react";
+import * as R from "ramda";
+import { ReactElement, useId } from "react";
 import { DeleteButton } from "../DeleteButton";
 import { TextInput, NumberInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
@@ -21,6 +22,12 @@ export const STLForm = ({
   path: any; // TODO: ramda path type
   setState: Function;
 }): ReactElement => {
+  const id = useId();
+  // TODO: fix this select hackery :x
+  const stlLens = R.lensPath([...path, "path"]);
+  const selected = object.path ? object.path : ""; // TODO: fix ugly workaround for the new object case
+  const setSelected = (value: any) => setState(R.set(stlLens, value));
+
   // removing the title from the path for deleting; TODO: remove when adding `kind` to objects and reducing nesting in upstream
   const deletePath = path.slice(0, -1);
   return (
@@ -33,12 +40,7 @@ export const STLForm = ({
         path={path}
         setState={setState}
       />
-      <NumberInput
-        fieldname="path"
-        object={object}
-        path={path}
-        setState={setState}
-      />
+      <STLSelect id={id} selected={selected} setSelected={setSelected} />
       <NumberInput
         fieldname="scale"
         object={object}
@@ -63,5 +65,33 @@ export const STLForm = ({
         setState={setState}
       />
     </div>
+  );
+};
+
+// TODO: user file upload
+const STLPaths = ["", "bunny.stl", "dragon.stl", "teapot.stl"];
+export const STLSelect = ({
+  id,
+  selected,
+  setSelected,
+}: {
+  id: any;
+  selected: any;
+  setSelected: any;
+}): ReactElement => {
+  const options = STLPaths.map((name, index) => (
+    <option value={name} key={index}>
+      {name}
+    </option>
+  ));
+  return (
+    <select
+      id={id}
+      value={selected}
+      className={selected === "" ? "InputError" : ""} // TODO: fix ugly workaround for the new object case
+      onChange={(e) => setSelected(e.target.value)}
+    >
+      {options}
+    </select>
   );
 };

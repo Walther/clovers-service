@@ -18,5 +18,6 @@ RUN cargo build --release --bin clovers-batch
 # We do not need the Rust toolchain to run the binary!
 FROM debian:bullseye-slim AS runtime
 WORKDIR /app
+COPY ./stl/ .
 COPY --from=builder /app/target/release/clovers-batch /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/clovers-batch"]
