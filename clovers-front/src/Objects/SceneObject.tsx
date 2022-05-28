@@ -32,7 +32,7 @@ export const SceneObjectNames = [
   "FlipFace",
   "MovingSphere",
   "Quad",
-  "Rotate",
+  "RotateY",
   "Sphere",
   "STL",
   "Translate",

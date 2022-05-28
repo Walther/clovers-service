@@ -37,13 +37,21 @@ const RenderRenders = ({
   renders: Array<String>;
 }): ReactElement => {
   return (
-    <ul>
-      {renders.map((task_id: String, index) => (
-        <li key={index}>
-          <a href={`${REACT_APP_BACKEND}/render/${task_id}`}>{task_id}</a>
-        </li>
-      ))}
-    </ul>
+    <div className="RenderResults">
+      <ul>
+        {renders.map((task_id: String, index) => (
+          <li key={index}>
+            <a
+              href={`${REACT_APP_BACKEND}/render/${task_id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {task_id}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

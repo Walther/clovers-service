@@ -71,3 +71,18 @@ footer {
 .actionsMenu .Button {
   margin-right: 0.5rem;
 }
+
+.RenderResults {
+  // using a 350px minimum per
+  @media only screen and (min-width: 700px) {
+    columns: 2;
+  }
+
+  @media only screen and (min-width: 1050px) {
+    columns: 3;
+  }
+
+  @media only screen and (min-width: 1400px) {
+    columns: 4;
+  }
+}
