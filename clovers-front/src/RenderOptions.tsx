@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
-import { NumberInput } from "./Input";
+import { CheckboxInput, NumberInput } from "./Input";
 import "./OptionsForm.scss";
 
 export type RenderOptions = {
@@ -31,6 +31,12 @@ export const RenderOptionsForm = ({
   setState: Function;
   path: any; // TODO: ramda path type
 }): ReactElement => {
+  const max_rays = (
+    object.normalmap
+      ? object.width * object.height
+      : object.width * object.height * object.samples * object.max_depth
+  ).toPrecision(3);
+
   return (
     <div className="OptionsForm">
       <h3>render</h3>
@@ -53,7 +59,26 @@ export const RenderOptionsForm = ({
         path={path}
         setState={setState}
       />
-
+      <NumberInput
+        fieldname="max_depth"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <NumberInput
+        fieldname="gamma"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="normalmap"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <label htmlFor="est_rays">estimated upper bound for rays:</label>
+      <input id="est_rays" readOnly value={max_rays}></input>
       <Button
         handleClick={(_e) => setState(defaultRenderOptions)}
         text={"defaults"}

@@ -42,7 +42,7 @@
 
   label {
     grid-column-start: label;
-    overflow-x: scroll; // TODO: better fix
+    overflow-x: auto;
   }
 
   button {

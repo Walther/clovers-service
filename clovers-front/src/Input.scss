@@ -7,15 +7,21 @@
 }
 
 input,
-select {
+select,
+input[type="checkbox"] {
   background: var(--grey-baseline);
   box-shadow: none;
   border: none;
+  border-radius: none;
   grid-column: input;
   height: 2rem;
   margin: 0;
   padding: 0.25rem;
   box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+  justify-self: end;
 }
 
 input::selection,

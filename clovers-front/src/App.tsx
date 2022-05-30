@@ -144,13 +144,11 @@ function App() {
     const importElement: any = document.getElementById("importFileInput");
     const importFile = importElement.files[0];
     if (importFile) {
-      console.log(importFile);
       reader.readAsText(importFile);
       reader.addEventListener("load", (event) => {
         const data: any = event?.target?.result;
         try {
           const json = JSON.parse(data);
-          console.log(json);
           const {
             // Ignoring a couple of fields for now that are handled in implicit / hidden settings.
             // time_0,
