@@ -1,7 +1,9 @@
 .Button {
+  appearance: none;
   border: none;
   padding: 0.5rem;
   background: var(--grey-baseline);
+  color: var(--blackish);
 }
 
 .Button:hover {
