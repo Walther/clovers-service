@@ -70,86 +70,67 @@ export const ObjectForm = ({
     );
   }
   // TODO: can this be done better somehow?
-  let kind = Object.keys(object)[0];
-  switch (kind) {
+  switch (object.kind) {
     case "Boxy":
       return (
-        <BoxyForm
-          object={object[kind] as Boxy}
-          setState={setState}
-          path={[...path, "Boxy"]}
-        />
+        <BoxyForm object={object as Boxy} setState={setState} path={path} />
       );
     case "ConstantMedium":
       return (
         <ConstantMediumForm
-          object={object[kind] as ConstantMedium}
+          object={object as ConstantMedium}
           setState={setState}
-          path={[...path, "ConstantMedium"]}
+          path={path}
         />
       );
     case "FlipFace":
       return (
         <FlipFaceForm
-          object={object[kind] as FlipFace}
+          object={object as FlipFace}
           setState={setState}
-          path={[...path, "FlipFace"]}
+          path={path}
         />
       );
     case "MovingSphere":
       return (
         <MovingSphereForm
-          object={object[kind] as MovingSphere}
+          object={object as MovingSphere}
           setState={setState}
-          path={[...path, "MovingSphere"]}
+          path={path}
         />
       );
     case "Quad":
       return (
-        <QuadForm
-          object={object[kind] as Quad}
-          setState={setState}
-          path={[...path, "Quad"]}
-        />
+        <QuadForm object={object as Quad} setState={setState} path={path} />
       );
     case "RotateY":
       return (
         <RotateYForm
-          object={object[kind] as Rotate}
+          object={object as Rotate}
           setState={setState}
-          path={[...path, "RotateY"]}
+          path={path}
         />
       );
     case "Sphere":
       return (
-        <SphereForm
-          object={object[kind] as Sphere}
-          setState={setState}
-          path={[...path, "Sphere"]}
-        />
+        <SphereForm object={object as Sphere} setState={setState} path={path} />
       );
     case "STL":
-      return (
-        <STLForm
-          object={object[kind] as STL}
-          setState={setState}
-          path={[...path, "STL"]}
-        />
-      );
+      return <STLForm object={object as STL} setState={setState} path={path} />;
     case "Translate":
       return (
         <TranslateForm
-          object={object[kind] as Translate}
+          object={object as Translate}
           setState={setState}
-          path={[...path, "Translate"]}
+          path={path}
         />
       );
     case "Triangle":
       return (
         <TriangleForm
-          object={object[kind] as Triangle}
+          object={object as Triangle}
           setState={setState}
-          path={[...path, "Triangle"]}
+          path={path}
         />
       );
     default:
@@ -204,9 +185,9 @@ export const NewObjectForm = ({
             const valueType = R.type(value);
             switch (valueType) {
               case "Array":
-                return R.prepend({ [selected]: {} }, prevState);
+                return R.prepend({ kind: selected }, prevState);
               case "Undefined":
-                return R.assocPath(path, { [selected]: {} }, prevState);
+                return R.assocPath(path, { kind: selected }, prevState);
               default:
                 console.error("unexpected value type: ", value);
                 return prevState;

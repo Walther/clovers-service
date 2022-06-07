@@ -13,180 +13,150 @@ export type ScenePriorityObjects = Array<SceneObject>;
 
 export const defaultSceneObjects: SceneObjects = [
   {
-    Quad: {
-      q: [555.0, 0.0, 0.0],
-      u: [0.0, 0.0, 555.0],
-      v: [0.0, 555.0, 0.0],
-      material: {
-        Lambertian: {
-          albedo: {
-            SolidColor: {
-              color: [0.12, 0.45, 0.15],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [555, 0, 0],
+    u: [0, 0, 555],
+    v: [0, 555, 0],
+    material: {
+      kind: "Lambertian",
+      albedo: {
+        kind: "SolidColor",
+        color: [0.12, 0.45, 0.15],
       },
-      comment: "green wall, left",
     },
+    comment: "green wall, left",
   },
   {
-    Quad: {
-      q: [0.0, 0.0, 555.0],
-      u: [0.0, 0.0, -555.0],
-      v: [0.0, 555.0, 0.0],
-      material: {
-        Lambertian: {
-          albedo: {
-            SolidColor: {
-              color: [0.65, 0.05, 0.05],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [0, 0, 555],
+    u: [0, 0, -555],
+    v: [0, 555, 0],
+    material: {
+      kind: "Lambertian",
+      albedo: {
+        kind: "SolidColor",
+        color: [0.65, 0.05, 0.05],
       },
-      comment: "red wall, right",
     },
+    comment: "red wall, right",
   },
   {
-    Quad: {
-      q: [0.0, 0.0, 0.0],
-      u: [555.0, 0.0, 0.0],
-      v: [0.0, 0.0, 555.0],
-      material: {
-        Lambertian: {
-          albedo: {
-            SolidColor: {
-              color: [0.73, 0.73, 0.73],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [0, 0, 0],
+    u: [555, 0, 0],
+    v: [0, 0, 555],
+    material: {
+      kind: "Lambertian",
+      albedo: {
+        kind: "SolidColor",
+        color: [0.73, 0.73, 0.73],
       },
-      comment: "floor",
     },
+    comment: "floor",
   },
   {
-    Quad: {
-      q: [0.0, 555.0, 0.0],
-      u: [555.0, 0.0, 0.0],
-      v: [0.0, 0.0, 555.0],
-      material: {
-        Lambertian: {
-          albedo: {
-            SolidColor: {
-              color: [0.73, 0.73, 0.73],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [0, 555, 0],
+    u: [555, 0, 0],
+    v: [0, 0, 555],
+    material: {
+      kind: "Lambertian",
+      albedo: {
+        kind: "SolidColor",
+        color: [0.73, 0.73, 0.73],
       },
-      comment: "ceiling",
     },
+    comment: "ceiling",
   },
   {
-    Quad: {
-      q: [0.0, 0.0, 555.0],
-      u: [555.0, 0.0, 0.0],
-      v: [0.0, 555.0, 0.0],
-      material: {
-        Lambertian: {
-          albedo: {
-            SolidColor: {
-              color: [0.73, 0.73, 0.73],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [0, 0, 555],
+    u: [555, 0, 0],
+    v: [0, 555, 0],
+    material: {
+      kind: "Lambertian",
+      albedo: {
+        kind: "SolidColor",
+        color: [0.73, 0.73, 0.73],
       },
-      comment: "back wall",
     },
+    comment: "back wall",
   },
   {
-    Quad: {
-      q: [113.0, 554.0, 127.0],
-      u: [330.0, 0.0, 0.0],
-      v: [0.0, 0.0, 305.0],
-      material: {
-        DiffuseLight: {
-          emit: {
-            SolidColor: {
-              color: [7.0, 7.0, 7.0],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [113, 554, 127],
+    u: [330, 0, 0],
+    v: [0, 0, 305],
+    material: {
+      kind: "DiffuseLight",
+      emit: {
+        kind: "SolidColor",
+        color: [7, 7, 7],
       },
-      comment: "big ceiling light",
     },
+    comment: "big ceiling light",
   },
   {
-    Sphere: {
-      center: [190.0, 90.0, 190.0],
-      radius: 90.0,
-      material: {
-        Dielectric: {
-          refractive_index: 1.5,
-          color: [1.0, 1.0, 1.0],
-        },
-      },
-      comment: "glass sphere",
-    },
-  },
-  {
-    Translate: {
-      comment: "moved rotated tall box",
-      offset: [265.0, 0.0, 295.0],
+    kind: "Translate",
+    offset: [265, 0, 295],
+    comment: "moved tall box",
+    object: {
+      kind: "RotateY",
+      angle: 15,
+      comment: "rotated tall box",
       object: {
-        RotateY: {
-          comment: "rotated tall box",
-          angle: 15.0,
-          object: {
-            Boxy: {
-              corner_0: [0.0, 0.0, 0.0],
-              corner_1: [165.0, 330.0, 165.0],
-              material: {
-                Lambertian: {
-                  albedo: {
-                    SolidColor: {
-                      color: [0.73, 0.73, 0.73],
-                    },
-                  },
-                },
-              },
-              comment: "tall box",
-            },
+        kind: "Boxy",
+        corner_0: [0, 0, 0],
+        corner_1: [165, 330, 165],
+        material: {
+          kind: "Lambertian",
+          albedo: {
+            kind: "SolidColor",
+            color: [0.73, 0.73, 0.73],
           },
         },
+        comment: "tall box",
       },
     },
+  },
+  {
+    kind: "Sphere",
+    center: [190, 90, 190],
+    radius: 90,
+    material: {
+      kind: "Dielectric",
+      refractive_index: 1.5,
+      color: [1, 1, 1],
+    },
+    comment: "glass sphere",
   },
 ];
 
 export const defaultScenePriorityObjects: SceneObjects = [
   {
-    Quad: {
-      q: [113.0, 554.0, 127.0],
-      u: [330.0, 0.0, 0.0],
-      v: [0.0, 0.0, 305.0],
-      material: {
-        DiffuseLight: {
-          emit: {
-            SolidColor: {
-              color: [7.0, 7.0, 7.0],
-            },
-          },
-        },
+    kind: "Quad",
+    q: [113, 554, 127],
+    u: [330, 0, 0],
+    v: [0, 0, 305],
+    material: {
+      kind: "DiffuseLight",
+      emit: {
+        kind: "SolidColor",
+        color: [7, 7, 7],
       },
-      comment: "big ceiling light",
     },
+    comment: "big ceiling light",
   },
   {
-    Sphere: {
-      center: [190.0, 90.0, 190.0],
-      radius: 90.0,
-      material: {
-        Dielectric: {
-          refractive_index: 1.5,
-          color: [1.0, 1.0, 1.0],
-        },
-      },
-      comment: "glass sphere",
+    kind: "Sphere",
+    center: [190, 90, 190],
+    radius: 90,
+    material: {
+      kind: "Dielectric",
+      refractive_index: 1.5,
+      color: [1, 1, 1],
     },
+    comment: "glass sphere",
   },
 ];
 

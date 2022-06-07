@@ -54,51 +54,27 @@ export const MaterialForm = ({
     );
   }
   // TODO: can this be done better somehow?
-  let kind = Object.keys(material)[0];
-  let mat = material[kind];
-  switch (kind) {
+  switch (material.kind) {
     case "Dielectric":
       return (
-        <DielectricForm
-          material={mat}
-          path={[...path, "Dielectric"]}
-          setState={setState}
-        />
+        <DielectricForm material={material} path={path} setState={setState} />
       );
     case "DiffuseLight":
       return (
-        <DiffuseLightForm
-          material={mat}
-          path={[...path, "DiffuseLight"]}
-          setState={setState}
-        />
+        <DiffuseLightForm material={material} path={path} setState={setState} />
       );
     case "Isotropic":
       return (
-        <IsotropicForm
-          material={mat}
-          path={[...path, "Isotropic"]}
-          setState={setState}
-        />
+        <IsotropicForm material={material} path={path} setState={setState} />
       );
     case "Lambertian":
       return (
-        <LambertianForm
-          material={mat}
-          path={[...path, "Lambertian"]}
-          setState={setState}
-        />
+        <LambertianForm material={material} path={path} setState={setState} />
       );
     case "Metal":
-      return (
-        <MetalForm
-          material={mat}
-          path={[...path, "Metal"]}
-          setState={setState}
-        />
-      );
+      return <MetalForm material={material} path={path} setState={setState} />;
     default:
-      return <DebugForm material={mat} />;
+      return <DebugForm material={material} />;
   }
 };
 
@@ -149,9 +125,9 @@ export const NewMaterialForm = ({
             const valueType = R.type(value);
             switch (valueType) {
               case "Array":
-                return R.prepend({ [selected]: {} }, prevState);
+                return R.prepend({ kind: selected }, prevState);
               case "Undefined":
-                return R.assocPath(path, { [selected]: {} }, prevState);
+                return R.assocPath(path, { kind: selected }, prevState);
               default:
                 console.error("unexpected value type: ", value);
                 return prevState;

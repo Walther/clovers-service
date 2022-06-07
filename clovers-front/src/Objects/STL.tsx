@@ -28,12 +28,10 @@ export const STLForm = ({
   const selected = object.path ? object.path : ""; // TODO: fix ugly workaround for the new object case
   const setSelected = (value: any) => setState(R.set(stlLens, value));
 
-  // removing the title from the path for deleting; TODO: remove when adding `kind` to objects and reducing nesting in upstream
-  const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
       <h3>STL</h3>
-      <DeleteButton path={deletePath} setState={setState} />
+      <DeleteButton path={path} setState={setState} />
       <TextInput
         fieldname="comment"
         object={object}

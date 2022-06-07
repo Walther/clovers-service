@@ -39,35 +39,21 @@ export const TextureForm = ({
     );
   }
   // TODO: can this be done better somehow?
-  let kind = Object.keys(texture)[0];
-  let txt = texture[kind];
-  switch (kind) {
+  switch (texture.kind) {
     case "SolidColor":
       return (
-        <SolidColorForm
-          texture={txt}
-          path={[...path, "SolidColor"]}
-          setState={setState}
-        />
+        <SolidColorForm texture={texture} path={path} setState={setState} />
       );
     case "SurfaceChecker":
       return (
-        <SurfaceCheckerForm
-          texture={txt}
-          path={[...path, "SurfaceChecker"]}
-          setState={setState}
-        />
+        <SurfaceCheckerForm texture={texture} path={path} setState={setState} />
       );
     case "SpatialChecker":
       return (
-        <SpatialCheckerForm
-          texture={txt}
-          path={[...path, "SpatialChecker"]}
-          setState={setState}
-        />
+        <SpatialCheckerForm texture={texture} path={path} setState={setState} />
       );
     default:
-      return <DebugForm texture={txt} />;
+      return <DebugForm texture={texture} />;
   }
 };
 
@@ -118,9 +104,9 @@ export const NewTextureForm = ({
             const valueType = R.type(value);
             switch (valueType) {
               case "Array":
-                return R.prepend({ [selected]: {} }, prevState);
+                return R.prepend({ kind: selected }, prevState);
               case "Undefined":
-                return R.assocPath(path, { [selected]: {} }, prevState);
+                return R.assocPath(path, { kind: selected }, prevState);
               default:
                 console.error("unexpected value type: ", value);
                 return prevState;

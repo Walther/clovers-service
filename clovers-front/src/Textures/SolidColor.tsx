@@ -15,12 +15,10 @@ export const SolidColorForm = ({
   setState: Function;
 }): ReactElement => {
   const mat = "SolidColor";
-  // removing the title from the path for deleting; TODO: remove when adding `kind` to objects and reducing nesting in upstream
-  const deletePath = path.slice(0, -1);
   return (
     <div className="OptionsForm">
       <h3>{mat}</h3>
-      <DeleteButton path={deletePath} setState={setState} />
+      <DeleteButton path={path} setState={setState} />
       <TripleNumberInput
         fieldname="color"
         object={texture}
