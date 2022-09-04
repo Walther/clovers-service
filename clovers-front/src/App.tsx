@@ -106,6 +106,7 @@ function App() {
       if (!REACT_APP_BACKEND) {
         // TODO: better handling...
         console.error("REACT_APP_BACKEND not defined");
+        setMessage("not connected to a backend. rendering not available.");
         return;
       }
       const response = await axios.post(
@@ -212,9 +213,7 @@ function App() {
         <h1>clovers web frontend</h1>
         <ThemeToggle />
         {REACT_APP_BACKEND === undefined && (
-          <h2>
-            error: i am not connected to a backend. rendering not available.
-          </h2>
+          <h2>error: not connected to a backend. rendering not available.</h2>
         )}
       </header>
       <main>
