@@ -122,7 +122,7 @@ function App() {
       setQueue(response.data);
     } catch (error: any) {
       // TODO: AxiosError somehow?
-      setMessage(error.response.data.error);
+      setMessage(error?.response?.data?.error);
     }
   };
 
@@ -134,7 +134,7 @@ function App() {
       setRenders(response.data);
     } catch (error: any) {
       // TODO: AxiosError somehow?
-      setMessage(error.response.data.error);
+      setMessage(error?.response?.data?.error);
     }
   };
 
