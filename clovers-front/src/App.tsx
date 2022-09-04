@@ -103,6 +103,11 @@ function App() {
     const body = collectFile();
 
     try {
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        return;
+      }
       const response = await axios.post(
         `${REACT_APP_BACKEND}/queue`,
         // body
@@ -123,6 +128,11 @@ function App() {
 
   const refreshQueue = async () => {
     try {
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        return;
+      }
       const response = await axios.get<Array<string>>(
         `${REACT_APP_BACKEND}/queue`
       );
@@ -135,6 +145,11 @@ function App() {
 
   const refreshRenders = async () => {
     try {
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        return;
+      }
       const response = await axios.get<Array<string>>(
         `${REACT_APP_BACKEND}/render`
       );
