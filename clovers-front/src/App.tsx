@@ -189,6 +189,11 @@ function App() {
       <header>
         <h1>clovers web frontend</h1>
         <ThemeToggle />
+        {REACT_APP_BACKEND === undefined && (
+          <h2>
+            error: i am not connected to a backend. rendering not available.
+          </h2>
+        )}
       </header>
       <main>
         <h2>options</h2>
