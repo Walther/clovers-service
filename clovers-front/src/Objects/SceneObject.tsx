@@ -57,7 +57,7 @@ export const ObjectForm = ({
   path,
 }: {
   object: SceneObject;
-  setState: Function;
+  setState: any;
   path: any; // TODO: type for ramda path
 }): ReactElement => {
   // TODO: possibly better handling?
@@ -167,7 +167,7 @@ export const NewObjectForm = ({
   setState,
   path,
 }: {
-  setState: Function;
+  setState: any;
   path: any; // TODO: type for ramda path
 }): ReactElement => {
   const id = useId();

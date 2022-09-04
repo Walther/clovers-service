@@ -21,10 +21,10 @@ import { FileInput } from "./Input";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
-const RenderQueue = ({ queue }: { queue: Array<String> }): ReactElement => {
+const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   return (
     <ul>
-      {queue.map((task_id: String, index) => (
+      {queue.map((task_id: string, index) => (
         <li key={index}>{task_id}</li>
       ))}
     </ul>
@@ -34,12 +34,12 @@ const RenderQueue = ({ queue }: { queue: Array<String> }): ReactElement => {
 const RenderRenders = ({
   renders,
 }: {
-  renders: Array<String>;
+  renders: Array<string>;
 }): ReactElement => {
   return (
     <div className="RenderResults">
       <ul>
-        {renders.map((task_id: String, index) => (
+        {renders.map((task_id: string, index) => (
           <li key={index}>
             <a
               href={`${REACT_APP_BACKEND}/render/${task_id}`}
@@ -55,7 +55,7 @@ const RenderRenders = ({
   );
 };
 
-const MessageBox = ({ message }: { message: String }): ReactElement => {
+const MessageBox = ({ message }: { message: string }): ReactElement => {
   return <p className="MessageBox">{message}</p>;
 };
 
@@ -68,9 +68,9 @@ function App() {
     useState<SceneObjects>(defaultSceneObjects);
   const [scenePriorityObjects, setScenePriorityObjects] =
     useState<ScenePriorityObjects>(defaultScenePriorityObjects);
-  const [queue, setQueue] = useState<Array<String>>([]);
-  const [renders, setRenders] = useState<Array<String>>([]);
-  const [message, setMessage] = useState<String>("Ready.");
+  const [queue, setQueue] = useState<Array<string>>([]);
+  const [renders, setRenders] = useState<Array<string>>([]);
+  const [message, setMessage] = useState<string>("Ready.");
 
   useEffect(() => {
     refreshQueue();
@@ -116,7 +116,7 @@ function App() {
 
   const refreshQueue = async () => {
     try {
-      const response = await axios.get<Array<String>>(
+      const response = await axios.get<Array<string>>(
         `${REACT_APP_BACKEND}/queue`
       );
       setQueue(response.data);
@@ -128,7 +128,7 @@ function App() {
 
   const refreshRenders = async () => {
     try {
-      const response = await axios.get<Array<String>>(
+      const response = await axios.get<Array<string>>(
         `${REACT_APP_BACKEND}/render`
       );
       setRenders(response.data);

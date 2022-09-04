@@ -43,7 +43,7 @@ export const MaterialForm = ({
 }: {
   material: Material;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   if (!material) {
     return (
@@ -107,7 +107,7 @@ export const NewMaterialForm = ({
   setState,
   path,
 }: {
-  setState: Function;
+  setState: any;
   path: any; // TODO: type for ramda path
 }): ReactElement => {
   const id = useId();

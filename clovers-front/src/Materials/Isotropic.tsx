@@ -13,7 +13,7 @@ export const IsotropicForm = ({
 }: {
   material: Isotropic;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const mat = "Isotropic";
   return (

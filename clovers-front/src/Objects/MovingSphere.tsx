@@ -21,7 +21,7 @@ export const MovingSphereForm = ({
 }: {
   object: MovingSphere;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

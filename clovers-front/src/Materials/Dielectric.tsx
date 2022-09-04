@@ -14,7 +14,7 @@ export const DielectricForm = ({
 }: {
   material: Dielectric;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const mat = "Dielectric";
   return (

@@ -167,9 +167,9 @@ export const SceneForm = ({
   setScenePriorityObjects,
 }: {
   sceneObjects: SceneObjects;
-  setSceneObjects: Function;
+  setSceneObjects: any;
   scenePriorityObjects: ScenePriorityObjects;
-  setScenePriorityObjects: Function;
+  setScenePriorityObjects: any;
 }): ReactElement => {
   return (
     <div>

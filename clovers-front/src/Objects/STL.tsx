@@ -20,7 +20,7 @@ export const STLForm = ({
 }: {
   object: STL;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const id = useId();
   // TODO: fix this select hackery :x

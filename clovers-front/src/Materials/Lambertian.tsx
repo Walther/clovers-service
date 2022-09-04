@@ -13,7 +13,7 @@ export const LambertianForm = ({
 }: {
   material: Lambertian;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const mat = "Lambertian";
   return (

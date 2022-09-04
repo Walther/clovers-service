@@ -12,11 +12,11 @@ export const CheckboxInput = ({
   fieldname: string;
   object: SceneObject;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
-  let value: boolean = object[fieldname] ? object[fieldname] : false;
+  const value: boolean = object[fieldname] ? object[fieldname] : false;
 
   return (
     <>
@@ -45,11 +45,11 @@ export const TextInput = ({
   fieldname: string;
   object: SceneObject;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
-  let value: string = object[fieldname] ? object[fieldname] : "";
+  const value: string = object[fieldname] ? object[fieldname] : "";
 
   return (
     <>
@@ -74,11 +74,11 @@ export const NumberInput = ({
   fieldname: string;
   object: SceneObject;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
-  let value: any = object[fieldname] ? object[fieldname] : 0;
+  const value: any = object[fieldname] ? object[fieldname] : 0;
 
   return (
     <>
@@ -106,7 +106,7 @@ export const TripleNumberInput = ({
   fieldname: string;
   object: SceneObject;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   const id = useId();
   const value = object[fieldname] ? object[fieldname] : [];
@@ -163,11 +163,7 @@ const isValidNumber = (value: any) => {
   return typeof value == "number" && !isNaN(value);
 };
 
-const maybeSetStateNumber = (
-  lensPath: any,
-  setState: Function,
-  value: string
-) => {
+const maybeSetStateNumber = (lensPath: any, setState: any, value: string) => {
   const parsed = Number(value);
   if (!isNaN(parsed)) {
     setState(R.set(lensPath, parsed));
