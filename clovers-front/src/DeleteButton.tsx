@@ -8,7 +8,7 @@ export const DeleteButton = ({
   setState,
 }: {
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   return (
     <Button

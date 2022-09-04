@@ -21,10 +21,13 @@ import { FileInput } from "./Input";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
-const RenderQueue = ({ queue }: { queue: Array<String> }): ReactElement => {
+const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
+  if (!queue) {
+    return <p>render queue not available</p>;
+  }
   return (
     <ul>
-      {queue.map((task_id: String, index) => (
+      {queue.map((task_id: string, index) => (
         <li key={index}>{task_id}</li>
       ))}
     </ul>
@@ -34,12 +37,16 @@ const RenderQueue = ({ queue }: { queue: Array<String> }): ReactElement => {
 const RenderRenders = ({
   renders,
 }: {
-  renders: Array<String>;
+  renders: Array<string>;
 }): ReactElement => {
+  if (!renders) {
+    return <p>render results not available</p>;
+  }
+
   return (
     <div className="RenderResults">
       <ul>
-        {renders.map((task_id: String, index) => (
+        {renders.map((task_id: string, index) => (
           <li key={index}>
             <a
               href={`${REACT_APP_BACKEND}/render/${task_id}`}
@@ -55,7 +62,7 @@ const RenderRenders = ({
   );
 };
 
-const MessageBox = ({ message }: { message: String }): ReactElement => {
+const MessageBox = ({ message }: { message: string }): ReactElement => {
   return <p className="MessageBox">{message}</p>;
 };
 
@@ -68,9 +75,9 @@ function App() {
     useState<SceneObjects>(defaultSceneObjects);
   const [scenePriorityObjects, setScenePriorityObjects] =
     useState<ScenePriorityObjects>(defaultScenePriorityObjects);
-  const [queue, setQueue] = useState<Array<String>>([]);
-  const [renders, setRenders] = useState<Array<String>>([]);
-  const [message, setMessage] = useState<String>("Ready.");
+  const [queue, setQueue] = useState<Array<string>>([]);
+  const [renders, setRenders] = useState<Array<string>>([]);
+  const [message, setMessage] = useState<string>("Ready.");
 
   useEffect(() => {
     refreshQueue();
@@ -96,6 +103,12 @@ function App() {
     const body = collectFile();
 
     try {
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        setMessage("not connected to a backend. rendering not available.");
+        return;
+      }
       const response = await axios.post(
         `${REACT_APP_BACKEND}/queue`,
         // body
@@ -116,25 +129,35 @@ function App() {
 
   const refreshQueue = async () => {
     try {
-      const response = await axios.get<Array<String>>(
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        return;
+      }
+      const response = await axios.get<Array<string>>(
         `${REACT_APP_BACKEND}/queue`
       );
       setQueue(response.data);
     } catch (error: any) {
       // TODO: AxiosError somehow?
-      setMessage(error.response.data.error);
+      setMessage(error?.response?.data?.error);
     }
   };
 
   const refreshRenders = async () => {
     try {
-      const response = await axios.get<Array<String>>(
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        return;
+      }
+      const response = await axios.get<Array<string>>(
         `${REACT_APP_BACKEND}/render`
       );
       setRenders(response.data);
     } catch (error: any) {
       // TODO: AxiosError somehow?
-      setMessage(error.response.data.error);
+      setMessage(error?.response?.data?.error);
     }
   };
 
@@ -189,6 +212,9 @@ function App() {
       <header>
         <h1>clovers web frontend</h1>
         <ThemeToggle />
+        {REACT_APP_BACKEND === undefined && (
+          <h2>error: not connected to a backend. rendering not available.</h2>
+        )}
       </header>
       <main>
         <h2>options</h2>

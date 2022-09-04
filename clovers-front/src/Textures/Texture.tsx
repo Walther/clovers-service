@@ -28,7 +28,7 @@ export const TextureForm = ({
 }: {
   texture: Texture;
   path: any; // TODO: ramda path type
-  setState: Function;
+  setState: any;
 }): ReactElement => {
   if (!texture) {
     return (
@@ -86,7 +86,7 @@ export const NewTextureForm = ({
   setState,
   path,
 }: {
-  setState: Function;
+  setState: any;
   path: any; // TODO: type for ramda path
 }): ReactElement => {
   const id = useId();
