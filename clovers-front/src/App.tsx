@@ -22,6 +22,9 @@ import { FileInput } from "./Input";
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
+  if (!queue) {
+    return <p>render queue not available</p>;
+  }
   return (
     <ul>
       {queue.map((task_id: string, index) => (
@@ -36,6 +39,10 @@ const RenderRenders = ({
 }: {
   renders: Array<string>;
 }): ReactElement => {
+  if (!renders) {
+    return <p>render results not available</p>;
+  }
+
   return (
     <div className="RenderResults">
       <ul>

@@ -176,14 +176,15 @@ export const SceneForm = ({
       <h2>objects</h2>
       <div className="OptionsGroup">
         <NewObjectForm setState={setSceneObjects} path={[]} />
-        {sceneObjects.map((obj, index) => (
-          <ObjectForm
-            object={obj}
-            path={[index]}
-            key={index}
-            setState={setSceneObjects}
-          />
-        ))}
+        {sceneObjects &&
+          sceneObjects.map((obj, index) => (
+            <ObjectForm
+              object={obj}
+              path={[index]}
+              key={index}
+              setState={setSceneObjects}
+            />
+          ))}
       </div>
       <details>
         <summary>objects json debug</summary>
@@ -202,14 +203,15 @@ export const SceneForm = ({
       <h2>priority objects</h2>
       <div className="OptionsGroup">
         <NewObjectForm setState={setScenePriorityObjects} path={[]} />
-        {scenePriorityObjects.map((obj, index) => (
-          <ObjectForm
-            object={obj}
-            path={[index]}
-            key={index}
-            setState={setScenePriorityObjects}
-          />
-        ))}
+        {scenePriorityObjects &&
+          scenePriorityObjects.map((obj, index) => (
+            <ObjectForm
+              object={obj}
+              path={[index]}
+              key={index}
+              setState={setScenePriorityObjects}
+            />
+          ))}
       </div>
       <details>
         <summary>priority objects json debug</summary>
