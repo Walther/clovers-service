@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.57"
-clovers-svc-common = { path = "../clovers-svc-common" }
+clovers = { git = "https://github.com/Walther/clovers/", rev = "b49c9c2203b79667ff70ebf6af840bdb492a0875", default-features = false, features = ["serde-derive", "stl"] }
 dotenv = "0.15.0"
 image = "0.24.2"
 rand = { version = "0.8.5", features = ["small_rng"], default-features = false }
@@ -15,7 +15,7 @@ rayon = "1.5.3"
 redis = { version = "0.21.5", features = ["tokio-comp", "connection-manager"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.68"
-sqlx = { version = "0.5", features = [ "postgres", "runtime-tokio-rustls", "json" ] }
+sqlx = { version = "0.5", features = [ "postgres", "runtime-tokio-rustls", "uuid", "json" ] }
 tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3.11", features = ["env-filter", "time"] }

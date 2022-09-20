@@ -1,7 +1,7 @@
 // TODO: refactoring
 // This is mostly copy-pasted from `clovers-cli` at commit 11542fc1cb6728501d66a9d8c7c58847f358c4bc
 
-use crate::clovers::{
+use clovers::{
     color::Color, colorize::colorize, normals::normal_map, ray::Ray, scenes::Scene, Float,
     RenderOpts,
 };

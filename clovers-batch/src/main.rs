@@ -1,7 +1,5 @@
 use std::io::Cursor;
 
-use clovers_svc_common::clovers::scenes::{self, Scene};
-use clovers_svc_common::*;
 use image::{ImageBuffer, Rgb, RgbImage};
 use redis::aio::ConnectionManager;
 use sqlx::postgres::PgPoolOptions;
@@ -13,8 +11,66 @@ use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod draw_cpu;
+mod store;
 
 const POLL_DELAY_MS: u64 = 1_000;
+
+use clovers::{scenes, scenes::Scene, scenes::SceneFile, RenderOpts};
+use dotenv::dotenv;
+use serde::{Deserialize, Serialize};
+use std::net::SocketAddr;
+
+/// Redis list name for the rendering queue
+pub const RENDER_QUEUE_NAME: &str = "render_queue";
+
+/// Main configuration structure for the application
+#[derive(Debug)]
+pub struct Config {
+    /// Address and port to start the server at, eg. `0.0.0.0:8080`.
+    pub listen_address: SocketAddr,
+    /// Log level configuration. Example: `clovers_back=trace,tower_http=trace`.
+    pub rustlog: String,
+    /// Full address string of the redis server to connect to, e.g. `redis://redis:6379/`
+    pub redis_connectioninfo: redis::ConnectionInfo,
+    /// Full address string of the postgres server to connect to, e.g. `postgres://postgres:password@localhost/test`
+    pub postgres_connectioninfo: String,
+    /// Address of the frontend. Used for CORS allow purposes
+    pub frontend_address: String,
+}
+
+/// Loads the configuration from the .env file, erroring if required fields are missing or malformed.
+pub fn load_configs() -> anyhow::Result<Config> {
+    dotenv().ok();
+    let listen_address = dotenv::var("LISTEN_ADDRESS")?.parse()?;
+    let rustlog = dotenv::var("RUST_LOG")?;
+    let redis_connectioninfo = dotenv::var("REDIS_CONNETIONINFO")?.parse()?;
+    let postgres_connectioninfo = dotenv::var("POSTGRES_CONNETIONINFO")?.parse()?;
+    let frontend_address = dotenv::var("FRONTEND_ADDRESS")?.parse()?;
+
+    Ok(Config {
+        listen_address,
+        rustlog,
+        redis_connectioninfo,
+        postgres_connectioninfo,
+        frontend_address,
+    })
+}
+
+/// The main object for a rendering request. Contains all the information necessary for performing a full render of a scene.
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct RenderTask {
+    /// All the details of the scene to be rendered
+    pub scene_file: SceneFile,
+    /// Rendering options for the render
+    pub opts: RenderOpts,
+}
+
+/// The main object for the rendering result. Contains an image and assorted metadata.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RenderResult {
+    /// minimum viable test: vec of bytes
+    pub data: Vec<u8>,
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
