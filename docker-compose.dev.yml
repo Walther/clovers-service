@@ -1,12 +1,14 @@
-# Production-like setup
+# Local development setup with hot reload on all three services
 
 version: "3.9"
 services:
   backend:
-    restart: always
     build:
       context: .
-      dockerfile: ./clovers-back/Dockerfile
+      dockerfile: ./clovers-back/dev.Dockerfile
+    volumes:
+      - ./:/app
+    command: sh -c "cargo watch -x 'run --release --bin clovers-back'"
     ports:
       - 8080:8080
     env_file: ./clovers-back/.env
@@ -14,21 +16,25 @@ services:
       - postgres
       - redis
 
-  clovers-batch:
-    restart: always
+  batch:
     build:
       context: .
-      dockerfile: ./clovers-batch/Dockerfile
+      dockerfile: ./clovers-batch/dev.Dockerfile
+    volumes:
+      - ./:/app
+    command: sh -c "cargo watch -x 'run --release --bin clovers-batch'"
     env_file: ./clovers-batch/.env
     depends_on:
       - postgres
       - redis
       - backend
-
+  
   frontend:
     build:
       context: ./clovers-front
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./clovers-front/:/app
     env_file: ./clovers-front/.env
     ports:
       - 3000:3000
