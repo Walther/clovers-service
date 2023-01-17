@@ -1,23 +1,21 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
 import { Button } from "../Button";
-import { DielectricForm } from "./Dielectric";
-import { DiffuseLightForm } from "./DiffuseLight";
-import { IsotropicForm } from "./Isotropic";
-import { LambertianForm } from "./Lambertian";
-import { MetalForm } from "./Metal";
+import { Dielectric, DielectricForm } from "./Dielectric";
+import { DiffuseLight, DiffuseLightForm } from "./DiffuseLight";
+import { Isotropic, IsotropicForm } from "./Isotropic";
+import { Lambertian, LambertianForm } from "./Lambertian";
+import { Metal, MetalForm } from "./Metal";
 
-/* export type Material =
+export type Material =
   | Dielectric
   | DiffuseLight
   | Isotropic
   | Lambertian
-  | Metal; */
+  | Metal;
 
-// TODO: proper material type
-export type Material = any;
-
-export const MaterialNames = [
+// TODO: can this be cleaner?
+const MaterialNames = [
   "Dielectric",
   "DiffuseLight",
   "Isotropic",

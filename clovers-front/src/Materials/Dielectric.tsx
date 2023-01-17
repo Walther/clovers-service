@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Input";
 
 export type Dielectric = {
+  kind: "Dielectric";
   color: [number, number, number];
   refractive_index: number;
 };

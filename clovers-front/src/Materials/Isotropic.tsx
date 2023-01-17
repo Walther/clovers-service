@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Isotropic = {
+  kind: Isotropic;
   albedo: Texture;
 };
 

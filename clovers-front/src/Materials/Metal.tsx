@@ -4,6 +4,7 @@ import { NumberInput } from "../Input";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Metal = {
+  kind: Metal;
   albedo: Texture;
   fuzz: number;
 };
