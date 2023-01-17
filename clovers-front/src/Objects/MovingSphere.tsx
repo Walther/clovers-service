@@ -1,9 +1,15 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, TripleNumberInput } from "../Input";
+import {
+  TextInput,
+  NumberInput,
+  TripleNumberInput,
+  CheckboxInput,
+} from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
+  kind: "MovingSphere";
   comment?: string;
   center_0: [number, number, number];
   center_1: [number, number, number];
@@ -12,6 +18,7 @@ export type MovingSphere = {
   radius: number;
   material: Material;
   aabb: any; // TODO: remove when fixed in upstream
+  priority: boolean;
 };
 
 export const MovingSphereForm = ({
@@ -20,7 +27,7 @@ export const MovingSphereForm = ({
   setState,
 }: {
   object: MovingSphere;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -61,6 +68,12 @@ export const MovingSphereForm = ({
         fieldname="time_1"
         object={object}
         path={[...path, "time_1"]}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
+        object={object}
+        path={path}
         setState={setState}
       />
       <MaterialForm

@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { TripleNumberInput } from "../Input";
 
 export type SolidColor = {
+  kind: "SolidColor";
   color: [number, number, number];
 };
 export const SolidColorForm = ({
@@ -11,7 +12,7 @@ export const SolidColorForm = ({
   setState,
 }: {
   texture: SolidColor;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "SolidColor";

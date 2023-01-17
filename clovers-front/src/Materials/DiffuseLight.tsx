@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type DiffuseLight = {
+  kind: "DiffuseLight";
   emit: Texture;
 };
 
@@ -12,7 +13,7 @@ export const DiffuseLightForm = ({
   setState,
 }: {
   material: DiffuseLight;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "DiffuseLight";

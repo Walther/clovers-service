@@ -1,14 +1,16 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput } from "../Input";
+import { TextInput, NumberInput, CheckboxInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 import { TextureForm } from "../Textures/Texture";
 
 export type ConstantMedium = {
+  kind: "ConstantMedium";
   comment?: string;
   density: number;
   boundary: any;
   texture: any;
+  priority: boolean;
 };
 
 export const ConstantMediumForm = ({
@@ -17,7 +19,7 @@ export const ConstantMediumForm = ({
   setState,
 }: {
   object: ConstantMedium;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -32,6 +34,12 @@ export const ConstantMediumForm = ({
       />
       <NumberInput
         fieldname="density"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

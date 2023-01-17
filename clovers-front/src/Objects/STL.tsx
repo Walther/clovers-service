@@ -1,16 +1,23 @@
 import * as R from "ramda";
 import { ReactElement, useId } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, TripleNumberInput } from "../Input";
+import {
+  TextInput,
+  NumberInput,
+  TripleNumberInput,
+  CheckboxInput,
+} from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
+  kind: "STL";
   comment?: string;
   path: string;
   scale: number;
   center: [number, number, number];
   rotation: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const STLForm = ({
@@ -19,7 +26,7 @@ export const STLForm = ({
   setState,
 }: {
   object: STL;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const id = useId();
@@ -57,6 +64,12 @@ export const STLForm = ({
         path={path}
         setState={setState}
       />
+      <CheckboxInput
+        fieldname="priority"
+        object={object}
+        path={path}
+        setState={setState}
+      />
       <MaterialForm
         material={object.material}
         path={[...path, "material"]}
@@ -78,7 +91,7 @@ export const STLSelect = ({
   setSelected: any;
 }): ReactElement => {
   const options = STLPaths.map((name, index) => (
-    <option value={name} key={index}>
+    <option value={"stl/" + name} key={index}>
       {name}
     </option>
   ));

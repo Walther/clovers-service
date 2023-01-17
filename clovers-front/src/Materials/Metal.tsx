@@ -4,6 +4,7 @@ import { NumberInput } from "../Input";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Metal = {
+  kind: "Metal";
   albedo: Texture;
   fuzz: number;
 };
@@ -14,7 +15,7 @@ export const MetalForm = ({
   setState,
 }: {
   material: Metal;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

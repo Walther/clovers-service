@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Input";
 
 export type Dielectric = {
+  kind: "Dielectric";
   color: [number, number, number];
   refractive_index: number;
 };
@@ -13,7 +14,7 @@ export const DielectricForm = ({
   setState,
 }: {
   material: Dielectric;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "Dielectric";

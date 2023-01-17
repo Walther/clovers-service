@@ -1,11 +1,13 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput } from "../Input";
+import { CheckboxInput, TextInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 
 export type FlipFace = {
+  kind: "FlipFace";
   comment?: string;
   object: any;
+  priority: boolean;
 };
 
 export const FlipFaceForm = ({
@@ -14,7 +16,7 @@ export const FlipFaceForm = ({
   setState,
 }: {
   object: FlipFace;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -23,6 +25,12 @@ export const FlipFaceForm = ({
       <DeleteButton path={path} setState={setState} />
       <TextInput
         fieldname="comment"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

@@ -22,7 +22,11 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"] {
+  background: var(--grey-baseline);
+  border: none;
   justify-self: end;
+  height: 2rem;
+  width: 2rem;
 }
 
 input::selection,

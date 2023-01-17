@@ -1,13 +1,20 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, TripleNumberInput } from "../Input";
+import {
+  TextInput,
+  NumberInput,
+  TripleNumberInput,
+  CheckboxInput,
+} from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Sphere = {
+  kind: "Sphere";
   comment?: string;
   radius: number;
   center: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const SphereForm = ({
@@ -16,7 +23,7 @@ export const SphereForm = ({
   setState,
 }: {
   object: Sphere;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -37,6 +44,12 @@ export const SphereForm = ({
       />
       <TripleNumberInput
         fieldname="center"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

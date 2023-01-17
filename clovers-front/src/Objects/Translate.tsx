@@ -1,12 +1,14 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, TripleNumberInput } from "../Input";
+import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { ObjectForm, SceneObject } from "./SceneObject";
 
 export type Translate = {
+  kind: "Translate";
   comment?: string;
   object: SceneObject;
   offset: [number, number, number];
+  priority: boolean;
 };
 
 export const TranslateForm = ({
@@ -15,7 +17,7 @@ export const TranslateForm = ({
   setState,
 }: {
   object: Translate;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -30,6 +32,12 @@ export const TranslateForm = ({
       />
       <TripleNumberInput
         fieldname="offset"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

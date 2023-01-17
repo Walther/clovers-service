@@ -1,12 +1,14 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput } from "../Input";
+import { TextInput, NumberInput, CheckboxInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 
-export type Rotate = {
+export type RotateY = {
+  kind: "RotateY";
   comment?: string;
   object: any;
   angle: number;
+  priority: boolean;
 };
 
 export const RotateYForm = ({
@@ -14,8 +16,8 @@ export const RotateYForm = ({
   path,
   setState,
 }: {
-  object: Rotate;
-  path: any; // TODO: ramda path type
+  object: RotateY;
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -30,6 +32,12 @@ export const RotateYForm = ({
       />
       <NumberInput
         fieldname="angle"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

@@ -6,26 +6,24 @@ import { ConstantMedium, ConstantMediumForm } from "./ConstantMedium";
 import { FlipFace, FlipFaceForm } from "./FlipFace";
 import { MovingSphere, MovingSphereForm } from "./MovingSphere";
 import { Quad, QuadForm } from "./Quad";
-import { Rotate, RotateYForm } from "./Rotate";
+import { RotateY, RotateYForm } from "./RotateY";
 import { Sphere, SphereForm } from "./Sphere";
 import { STL, STLForm } from "./STL";
 import { Translate, TranslateForm } from "./Translate";
 import { Triangle, TriangleForm } from "./Triangle";
 
-/*
 export type SceneObject =
   | Boxy
   | ConstantMedium
   | FlipFace
   | MovingSphere
   | Quad
-  | Rotate
+  | RotateY
   | Sphere
   | STL
   | Translate
-  | Triangle
-*/
-export type SceneObject = any; // TODO: proper types
+  | Triangle;
+
 export const SceneObjectNames = [
   "Boxy",
   "ConstantMedium",
@@ -58,7 +56,7 @@ export const ObjectForm = ({
 }: {
   object: SceneObject;
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   // TODO: possibly better handling?
   if (!object) {
@@ -106,7 +104,7 @@ export const ObjectForm = ({
     case "RotateY":
       return (
         <RotateYForm
-          object={object as Rotate}
+          object={object as RotateY}
           setState={setState}
           path={path}
         />
@@ -168,7 +166,7 @@ export const NewObjectForm = ({
   path,
 }: {
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   const id = useId();
   const [selected, setSelected] = useState("Boxy");

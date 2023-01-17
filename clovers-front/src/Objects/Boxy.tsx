@@ -1,13 +1,15 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, TripleNumberInput } from "../Input";
+import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Boxy = {
+  kind: "Boxy";
   comment?: string;
   corner_0: [number, number, number];
   corner_1: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const BoxyForm = ({
@@ -16,7 +18,7 @@ export const BoxyForm = ({
   setState,
 }: {
   object: Boxy;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -37,6 +39,12 @@ export const BoxyForm = ({
       />
       <TripleNumberInput
         fieldname="corner_1"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

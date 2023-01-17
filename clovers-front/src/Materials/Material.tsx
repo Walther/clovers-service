@@ -1,23 +1,21 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
 import { Button } from "../Button";
-import { DielectricForm } from "./Dielectric";
-import { DiffuseLightForm } from "./DiffuseLight";
-import { IsotropicForm } from "./Isotropic";
-import { LambertianForm } from "./Lambertian";
-import { MetalForm } from "./Metal";
+import { Dielectric, DielectricForm } from "./Dielectric";
+import { DiffuseLight, DiffuseLightForm } from "./DiffuseLight";
+import { Isotropic, IsotropicForm } from "./Isotropic";
+import { Lambertian, LambertianForm } from "./Lambertian";
+import { Metal, MetalForm } from "./Metal";
 
-/* export type Material =
+export type Material =
   | Dielectric
   | DiffuseLight
   | Isotropic
   | Lambertian
-  | Metal; */
+  | Metal;
 
-// TODO: proper material type
-export type Material = any;
-
-export const MaterialNames = [
+// TODO: can this be cleaner?
+const MaterialNames = [
   "Dielectric",
   "DiffuseLight",
   "Isotropic",
@@ -42,7 +40,7 @@ export const MaterialForm = ({
   setState,
 }: {
   material: Material;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   if (!material) {
@@ -108,7 +106,7 @@ export const NewMaterialForm = ({
   path,
 }: {
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   const id = useId();
   const [selected, setSelected] = useState("Lambertian");

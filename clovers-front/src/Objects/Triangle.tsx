@@ -1,14 +1,16 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, TripleNumberInput } from "../Input";
+import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Triangle = {
+  kind: "Triangle";
   comment?: string;
   q: [number, number, number];
   u: [number, number, number];
   v: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const TriangleForm = ({
@@ -17,7 +19,7 @@ export const TriangleForm = ({
   setState,
 }: {
   object: Triangle;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (
@@ -44,6 +46,12 @@ export const TriangleForm = ({
       />
       <TripleNumberInput
         fieldname="v"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import { Button } from "./Button";
 import { NewObjectForm, ObjectForm, SceneObject } from "./Objects/SceneObject";
 
 export const implicitSceneSettings = {
@@ -25,6 +24,7 @@ export const defaultSceneObjects: SceneObjects = [
       },
     },
     comment: "green wall, left",
+    priority: false,
   },
   {
     kind: "Quad",
@@ -39,6 +39,7 @@ export const defaultSceneObjects: SceneObjects = [
       },
     },
     comment: "red wall, right",
+    priority: false,
   },
   {
     kind: "Quad",
@@ -53,6 +54,7 @@ export const defaultSceneObjects: SceneObjects = [
       },
     },
     comment: "floor",
+    priority: false,
   },
   {
     kind: "Quad",
@@ -67,6 +69,7 @@ export const defaultSceneObjects: SceneObjects = [
       },
     },
     comment: "ceiling",
+    priority: false,
   },
   {
     kind: "Quad",
@@ -81,6 +84,7 @@ export const defaultSceneObjects: SceneObjects = [
       },
     },
     comment: "back wall",
+    priority: false,
   },
   {
     kind: "Quad",
@@ -95,19 +99,23 @@ export const defaultSceneObjects: SceneObjects = [
       },
     },
     comment: "big ceiling light",
+    priority: true,
   },
   {
     kind: "Translate",
     offset: [265, 0, 295],
     comment: "moved tall box",
+    priority: false,
     object: {
       kind: "RotateY",
       angle: 15,
       comment: "rotated tall box",
+      priority: false,
       object: {
         kind: "Boxy",
         corner_0: [0, 0, 0],
         corner_1: [165, 330, 165],
+        priority: false,
         material: {
           kind: "Lambertian",
           albedo: {
@@ -129,47 +137,16 @@ export const defaultSceneObjects: SceneObjects = [
       color: [1, 1, 1],
     },
     comment: "glass sphere",
-  },
-];
-
-export const defaultScenePriorityObjects: SceneObjects = [
-  {
-    kind: "Quad",
-    q: [113, 554, 127],
-    u: [330, 0, 0],
-    v: [0, 0, 305],
-    material: {
-      kind: "DiffuseLight",
-      emit: {
-        kind: "SolidColor",
-        color: [7, 7, 7],
-      },
-    },
-    comment: "big ceiling light",
-  },
-  {
-    kind: "Sphere",
-    center: [190, 90, 190],
-    radius: 90,
-    material: {
-      kind: "Dielectric",
-      refractive_index: 1.5,
-      color: [1, 1, 1],
-    },
-    comment: "glass sphere",
+    priority: true,
   },
 ];
 
 export const SceneForm = ({
   sceneObjects,
   setSceneObjects,
-  scenePriorityObjects,
-  setScenePriorityObjects,
 }: {
   sceneObjects: SceneObjects;
   setSceneObjects: any;
-  scenePriorityObjects: ScenePriorityObjects;
-  setScenePriorityObjects: any;
 }): ReactElement => {
   return (
     <div>
@@ -186,49 +163,6 @@ export const SceneForm = ({
             />
           ))}
       </div>
-      <details>
-        <summary>objects json debug</summary>
-        <p>select all &amp; paste json here</p>
-        <textarea
-          id="objects"
-          value={JSON.stringify(sceneObjects, null, 2)}
-          onChange={(e) => setSceneObjects(JSON.parse(e.target.value))}
-          className="json_input"
-        />
-        <Button
-          handleClick={(_e) => setSceneObjects(defaultSceneObjects)}
-          text="or reset to default"
-        />
-      </details>
-      <h2>priority objects</h2>
-      <div className="OptionsGroup">
-        <NewObjectForm setState={setScenePriorityObjects} path={[]} />
-        {scenePriorityObjects &&
-          scenePriorityObjects.map((obj, index) => (
-            <ObjectForm
-              object={obj}
-              path={[index]}
-              key={index}
-              setState={setScenePriorityObjects}
-            />
-          ))}
-      </div>
-      <details>
-        <summary>priority objects json debug</summary>
-        <p>select all &amp; paste json here</p>
-        <textarea
-          id="priority_objects"
-          value={JSON.stringify(scenePriorityObjects, null, 2)}
-          onChange={(e) => setScenePriorityObjects(JSON.parse(e.target.value))}
-          className="json_input"
-        />
-        <Button
-          handleClick={(_e) =>
-            setScenePriorityObjects(defaultScenePriorityObjects)
-          }
-          text="or reset to default"
-        />
-      </details>
     </div>
   );
 };

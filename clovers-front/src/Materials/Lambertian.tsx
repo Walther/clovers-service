@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Lambertian = {
+  kind: "Lambertian";
   albedo: Texture;
 };
 
@@ -12,7 +13,7 @@ export const LambertianForm = ({
   setState,
 }: {
   material: Lambertian;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "Lambertian";

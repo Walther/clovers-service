@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Input";
 
 export type SurfaceChecker = {
+  kind: "SurfaceChecker";
   even: [number, number, number];
   odd: [number, number, number];
   density: number;
@@ -13,7 +14,7 @@ export const SurfaceCheckerForm = ({
   setState,
 }: {
   texture: SurfaceChecker;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "SurfaceChecker";

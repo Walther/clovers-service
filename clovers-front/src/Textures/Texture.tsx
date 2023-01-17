@@ -1,12 +1,11 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
 import { Button } from "../Button";
-import { SolidColorForm } from "./SolidColor";
-import { SpatialCheckerForm } from "./SpatialChecker";
-import { SurfaceCheckerForm } from "./SurfaceChecker";
+import { SolidColor, SolidColorForm } from "./SolidColor";
+import { SpatialChecker, SpatialCheckerForm } from "./SpatialChecker";
+import { SurfaceChecker, SurfaceCheckerForm } from "./SurfaceChecker";
 
-// TODO: proper type
-export type Texture = any;
+export type Texture = SolidColor | SpatialChecker | SurfaceChecker;
 
 const SceneTextureNames = ["SolidColor", "SpatialChecker", "SurfaceChecker"];
 
@@ -27,7 +26,7 @@ export const TextureForm = ({
   setState,
 }: {
   texture: Texture;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   if (!texture) {
@@ -87,7 +86,7 @@ export const NewTextureForm = ({
   path,
 }: {
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   const id = useId();
   const [selected, setSelected] = useState("SolidColor");

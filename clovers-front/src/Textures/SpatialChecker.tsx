@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Input";
 
 export type SpatialChecker = {
+  kind: "SpatialChecker";
   even: [number, number, number];
   odd: [number, number, number];
   density: number;
@@ -14,7 +15,7 @@ export const SpatialCheckerForm = ({
   setState,
 }: {
   texture: SpatialChecker;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "SpatialChecker";
