@@ -4,3 +4,7 @@
 # do not copy unnecessary folders from frontend
 **/node_modules
 **/build
+
+# do not copy git stuff
+.git
+.github
