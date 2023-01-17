@@ -14,7 +14,7 @@ export const MetalForm = ({
   setState,
 }: {
   material: Metal;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

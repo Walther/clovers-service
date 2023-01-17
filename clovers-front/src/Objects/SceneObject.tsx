@@ -58,7 +58,7 @@ export const ObjectForm = ({
 }: {
   object: SceneObject;
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   // TODO: possibly better handling?
   if (!object) {
@@ -168,7 +168,7 @@ export const NewObjectForm = ({
   path,
 }: {
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   const id = useId();
   const [selected, setSelected] = useState("Boxy");

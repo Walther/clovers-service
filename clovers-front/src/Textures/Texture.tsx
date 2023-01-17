@@ -27,7 +27,7 @@ export const TextureForm = ({
   setState,
 }: {
   texture: Texture;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   if (!texture) {
@@ -87,7 +87,7 @@ export const NewTextureForm = ({
   path,
 }: {
   setState: any;
-  path: any; // TODO: type for ramda path
+  path: R.Path;
 }): ReactElement => {
   const id = useId();
   const [selected, setSelected] = useState("SolidColor");

@@ -15,7 +15,7 @@ export const RotateYForm = ({
   setState,
 }: {
   object: Rotate;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

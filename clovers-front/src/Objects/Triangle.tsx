@@ -17,7 +17,7 @@ export const TriangleForm = ({
   setState,
 }: {
   object: Triangle;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

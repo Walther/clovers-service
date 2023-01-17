@@ -21,7 +21,7 @@ export const SphereForm = ({
   setState,
 }: {
   object: Sphere;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

@@ -24,7 +24,7 @@ export const STLForm = ({
   setState,
 }: {
   object: STL;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const id = useId();

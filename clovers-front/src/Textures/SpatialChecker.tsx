@@ -14,7 +14,7 @@ export const SpatialCheckerForm = ({
   setState,
 }: {
   texture: SpatialChecker;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const mat = "SpatialChecker";

@@ -17,7 +17,7 @@ export const ConstantMediumForm = ({
   setState,
 }: {
   object: ConstantMedium;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

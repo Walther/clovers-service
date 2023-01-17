@@ -25,7 +25,7 @@ export const MovingSphereForm = ({
   setState,
 }: {
   object: MovingSphere;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   return (

@@ -11,7 +11,7 @@ export const CheckboxInput = ({
 }: {
   fieldname: string;
   object: SceneObject;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const id = useId();
@@ -44,7 +44,7 @@ export const TextInput = ({
 }: {
   fieldname: string;
   object: SceneObject;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const id = useId();
@@ -73,7 +73,7 @@ export const NumberInput = ({
 }: {
   fieldname: string;
   object: SceneObject;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const id = useId();
@@ -105,7 +105,7 @@ export const TripleNumberInput = ({
 }: {
   fieldname: string;
   object: SceneObject;
-  path: any; // TODO: ramda path type
+  path: R.Path;
   setState: any;
 }): ReactElement => {
   const id = useId();

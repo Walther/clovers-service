@@ -29,7 +29,7 @@ export const RenderOptionsForm = ({
 }: {
   object: RenderOptions;
   setState: any;
-  path: any; // TODO: ramda path type
+  path: R.Path;
 }): ReactElement => {
   const max_rays = (
     object.normalmap
