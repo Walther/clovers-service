@@ -1,6 +1,11 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, TripleNumberInput } from "../Input";
+import {
+  TextInput,
+  NumberInput,
+  TripleNumberInput,
+  CheckboxInput,
+} from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
@@ -61,6 +66,12 @@ export const MovingSphereForm = ({
         fieldname="time_1"
         object={object}
         path={[...path, "time_1"]}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
+        object={object}
+        path={path}
         setState={setState}
       />
       <MaterialForm

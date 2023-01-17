@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput } from "../Input";
+import { TextInput, NumberInput, CheckboxInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 
 export type Rotate = {
@@ -30,6 +30,12 @@ export const RotateYForm = ({
       />
       <NumberInput
         fieldname="angle"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

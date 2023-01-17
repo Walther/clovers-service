@@ -7,17 +7,16 @@ import {
   RenderOptions,
   RenderOptionsForm,
   defaultRenderOptions,
-} from "./RenderOptions";
+} from "./RenderOptionsForm";
 import {
   defaultSceneObjects,
-  defaultScenePriorityObjects,
   implicitSceneSettings,
   SceneForm,
   SceneObjects,
-  ScenePriorityObjects,
 } from "./SceneForm";
 import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
 import { FileInput } from "./Input";
+import { SceneObject } from "./Objects/SceneObject";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
@@ -73,8 +72,6 @@ function App() {
     useState<CameraOptions>(defaultCameraOptions);
   const [sceneObjects, setSceneObjects] =
     useState<SceneObjects>(defaultSceneObjects);
-  const [scenePriorityObjects, setScenePriorityObjects] =
-    useState<ScenePriorityObjects>(defaultScenePriorityObjects);
   const [queue, setQueue] = useState<Array<string>>([]);
   const [renders, setRenders] = useState<Array<string>>([]);
   const [message, setMessage] = useState<string>("Ready.");
@@ -90,7 +87,7 @@ function App() {
       ...implicitSceneSettings,
       camera: cameraOptions,
       objects: sceneObjects,
-      priority_objects: scenePriorityObjects,
+      priority_objects: sceneObjects.filter((obj: SceneObject) => obj.priority),
     };
     return {
       opts,
@@ -179,11 +176,10 @@ function App() {
             // background_color,
             camera,
             objects,
-            priority_objects,
+            // priority_objects, // TODO: handle import for priority objects
           } = json;
           setCameraOptions(camera);
           setSceneObjects(objects);
-          setScenePriorityObjects(priority_objects);
         } catch (e) {
           setMessage(`cannot import; could not parse scene file: ${e}`);
           return;
@@ -233,8 +229,6 @@ function App() {
         <SceneForm
           sceneObjects={sceneObjects}
           setSceneObjects={setSceneObjects}
-          scenePriorityObjects={scenePriorityObjects}
-          setScenePriorityObjects={setScenePriorityObjects}
         />
         <h2>actions</h2>
         <div className="actionsMenu">

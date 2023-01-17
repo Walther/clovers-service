@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput } from "../Input";
+import { TextInput, NumberInput, CheckboxInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 import { TextureForm } from "../Textures/Texture";
 
@@ -32,6 +32,12 @@ export const ConstantMediumForm = ({
       />
       <NumberInput
         fieldname="density"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

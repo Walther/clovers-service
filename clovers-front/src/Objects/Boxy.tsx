@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, TripleNumberInput } from "../Input";
+import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Boxy = {
@@ -37,6 +37,12 @@ export const BoxyForm = ({
       />
       <TripleNumberInput
         fieldname="corner_1"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

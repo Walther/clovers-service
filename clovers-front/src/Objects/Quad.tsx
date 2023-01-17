@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, TripleNumberInput } from "../Input";
+import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Quad = {
@@ -44,6 +44,12 @@ export const QuadForm = ({
       />
       <TripleNumberInput
         fieldname="v"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}

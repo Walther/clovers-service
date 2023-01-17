@@ -1,7 +1,12 @@
 import * as R from "ramda";
 import { ReactElement, useId } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, TripleNumberInput } from "../Input";
+import {
+  TextInput,
+  NumberInput,
+  TripleNumberInput,
+  CheckboxInput,
+} from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
@@ -53,6 +58,12 @@ export const STLForm = ({
       />
       <TripleNumberInput
         fieldname="rotation"
+        object={object}
+        path={path}
+        setState={setState}
+      />
+      <CheckboxInput
+        fieldname="priority"
         object={object}
         path={path}
         setState={setState}
