@@ -1,12 +1,11 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
 import { Button } from "../Button";
-import { SolidColorForm } from "./SolidColor";
-import { SpatialCheckerForm } from "./SpatialChecker";
-import { SurfaceCheckerForm } from "./SurfaceChecker";
+import { SolidColor, SolidColorForm } from "./SolidColor";
+import { SpatialChecker, SpatialCheckerForm } from "./SpatialChecker";
+import { SurfaceChecker, SurfaceCheckerForm } from "./SurfaceChecker";
 
-// TODO: proper type
-export type Texture = any;
+export type Texture = SolidColor | SpatialChecker | SurfaceChecker;
 
 const SceneTextureNames = ["SolidColor", "SpatialChecker", "SurfaceChecker"];
 

@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Input";
 
 export type SpatialChecker = {
+  kind: "SpatialChecker";
   even: [number, number, number];
   odd: [number, number, number];
   density: number;

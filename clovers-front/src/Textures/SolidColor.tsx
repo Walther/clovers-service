@@ -3,6 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { TripleNumberInput } from "../Input";
 
 export type SolidColor = {
+  kind: "SolidColor";
   color: [number, number, number];
 };
 export const SolidColorForm = ({
