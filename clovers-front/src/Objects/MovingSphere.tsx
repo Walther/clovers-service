@@ -9,6 +9,7 @@ import {
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
+  kind: "MovingSphere";
   comment?: string;
   center_0: [number, number, number];
   center_1: [number, number, number];
@@ -17,6 +18,7 @@ export type MovingSphere = {
   radius: number;
   material: Material;
   aabb: any; // TODO: remove when fixed in upstream
+  priority: boolean;
 };
 
 export const MovingSphereForm = ({

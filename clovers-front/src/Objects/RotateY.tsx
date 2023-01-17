@@ -3,10 +3,12 @@ import { DeleteButton } from "../DeleteButton";
 import { TextInput, NumberInput, CheckboxInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 
-export type Rotate = {
+export type RotateY = {
+  kind: "RotateY";
   comment?: string;
   object: any;
   angle: number;
+  priority: boolean;
 };
 
 export const RotateYForm = ({
@@ -14,7 +16,7 @@ export const RotateYForm = ({
   path,
   setState,
 }: {
-  object: Rotate;
+  object: RotateY;
   path: R.Path;
   setState: any;
 }): ReactElement => {

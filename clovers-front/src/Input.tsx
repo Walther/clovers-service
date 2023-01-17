@@ -1,5 +1,4 @@
 import { ReactElement, useId } from "react";
-import { SceneObject } from "./Objects/SceneObject";
 import * as R from "ramda";
 import "./Input.scss";
 
@@ -10,7 +9,7 @@ export const CheckboxInput = ({
   setState,
 }: {
   fieldname: string;
-  object: SceneObject;
+  object: any; // TODO:
   path: R.Path;
   setState: any;
 }): ReactElement => {
@@ -43,7 +42,7 @@ export const TextInput = ({
   setState,
 }: {
   fieldname: string;
-  object: SceneObject;
+  object: any; // TODO:
   path: R.Path;
   setState: any;
 }): ReactElement => {
@@ -72,7 +71,7 @@ export const NumberInput = ({
   setState,
 }: {
   fieldname: string;
-  object: SceneObject;
+  object: any; // TODO:
   path: R.Path;
   setState: any;
 }): ReactElement => {
@@ -104,7 +103,7 @@ export const TripleNumberInput = ({
   setState,
 }: {
   fieldname: string;
-  object: SceneObject;
+  object: any; // TODO:
   path: R.Path;
   setState: any;
 }): ReactElement => {

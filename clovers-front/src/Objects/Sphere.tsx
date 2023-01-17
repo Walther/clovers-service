@@ -9,10 +9,12 @@ import {
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Sphere = {
+  kind: "Sphere";
   comment?: string;
   radius: number;
   center: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const SphereForm = ({

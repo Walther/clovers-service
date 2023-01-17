@@ -10,12 +10,14 @@ import {
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
+  kind: "STL";
   comment?: string;
   path: string;
   scale: number;
   center: [number, number, number];
   rotation: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const STLForm = ({
@@ -89,7 +91,7 @@ export const STLSelect = ({
   setSelected: any;
 }): ReactElement => {
   const options = STLPaths.map((name, index) => (
-    <option value={name} key={index}>
+    <option value={"stl/" + name} key={index}>
       {name}
     </option>
   ));

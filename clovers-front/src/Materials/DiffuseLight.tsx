@@ -3,7 +3,7 @@ import { DeleteButton } from "../DeleteButton";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type DiffuseLight = {
-  kind: DiffuseLight;
+  kind: "DiffuseLight";
   emit: Texture;
 };
 

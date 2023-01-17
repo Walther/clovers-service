@@ -5,10 +5,12 @@ import { ObjectForm } from "./SceneObject";
 import { TextureForm } from "../Textures/Texture";
 
 export type ConstantMedium = {
+  kind: "ConstantMedium";
   comment?: string;
   density: number;
   boundary: any;
   texture: any;
+  priority: boolean;
 };
 
 export const ConstantMediumForm = ({

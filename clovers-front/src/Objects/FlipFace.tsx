@@ -4,8 +4,10 @@ import { CheckboxInput, TextInput } from "../Input";
 import { ObjectForm } from "./SceneObject";
 
 export type FlipFace = {
+  kind: "FlipFace";
   comment?: string;
   object: any;
+  priority: boolean;
 };
 
 export const FlipFaceForm = ({

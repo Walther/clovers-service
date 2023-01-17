@@ -4,11 +4,13 @@ import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Triangle = {
+  kind: "Triangle";
   comment?: string;
   q: [number, number, number];
   u: [number, number, number];
   v: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const TriangleForm = ({

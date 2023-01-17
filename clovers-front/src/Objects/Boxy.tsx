@@ -4,10 +4,12 @@ import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type Boxy = {
+  kind: "Boxy";
   comment?: string;
   corner_0: [number, number, number];
   corner_1: [number, number, number];
   material: Material;
+  priority: boolean;
 };
 
 export const BoxyForm = ({

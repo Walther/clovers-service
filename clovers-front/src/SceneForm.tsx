@@ -110,10 +110,12 @@ export const defaultSceneObjects: SceneObjects = [
       kind: "RotateY",
       angle: 15,
       comment: "rotated tall box",
+      priority: false,
       object: {
         kind: "Boxy",
         corner_0: [0, 0, 0],
         corner_1: [165, 330, 165],
+        priority: false,
         material: {
           kind: "Lambertian",
           albedo: {

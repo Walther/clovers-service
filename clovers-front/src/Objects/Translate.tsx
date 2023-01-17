@@ -4,9 +4,11 @@ import { CheckboxInput, TextInput, TripleNumberInput } from "../Input";
 import { ObjectForm, SceneObject } from "./SceneObject";
 
 export type Translate = {
+  kind: "Translate";
   comment?: string;
   object: SceneObject;
   offset: [number, number, number];
+  priority: boolean;
 };
 
 export const TranslateForm = ({
