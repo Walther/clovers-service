@@ -1,13 +1,12 @@
 use axum::{
-    extract::Path,
-    handler::Handler,
+    extract::{FromRef, Path, State},
     http::{
         header::{self, CONTENT_TYPE},
         HeaderValue, Method, StatusCode,
     },
     response::{AppendHeaders, IntoResponse},
     routing::{get, post},
-    Extension, Json, Router,
+    Json, Router,
 };
 use redis::aio::ConnectionManager;
 use sqlx::{postgres::PgPoolOptions, types::Uuid, Pool, Postgres};
@@ -17,10 +16,15 @@ use tower_http::{
     LatencyUnit,
 };
 use tracing::Level;
-use tracing_subscriber::fmt::time;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitExt};
 
 use clovers_svc_common::*;
+
+#[derive(Clone, FromRef)]
+struct AppState {
+    redis: ConnectionManager,
+    postgres: Pool<Postgres>,
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -44,6 +48,11 @@ async fn main() -> anyhow::Result<()> {
     let redis = redis::Client::open(config.redis_connectioninfo).unwrap();
     let redis_connection_manager = ConnectionManager::new(redis).await?;
 
+    let state = AppState {
+        redis: redis_connection_manager,
+        postgres: postgres_pool,
+    };
+
     // assemble the application
     let app = Router::new()
         // `GET /` goes to `hello`
@@ -60,12 +69,10 @@ async fn main() -> anyhow::Result<()> {
         .route("/render", get(render_result_list_all))
         // `GET /render/:id` gets the specific render result by id
         .route("/render/:id", get(render_result_get))
-        // postgres
-        .layer(Extension(postgres_pool))
-        // redis connection
-        .layer(Extension(redis_connection_manager))
+        // redis and postgres
+        .with_state(state)
         // 404 handler
-        .fallback(not_found.into_service())
+        .fallback(not_found)
         // CORS layer
         .layer(
             CorsLayer::new()
@@ -111,9 +118,9 @@ async fn not_found() -> impl IntoResponse {
 
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
 async fn queue_post(
+    State(mut redis_connection): State<ConnectionManager>,
+    State(postgres_pool): State<Pool<Postgres>>,
     Json(render_request): Json<RenderTask>,
-    Extension(mut redis_connection): Extension<ConnectionManager>,
-    Extension(postgres_pool): Extension<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let uuid = match store::queue_rendertask(render_request, &mut redis_connection, &postgres_pool)
         .await
@@ -130,7 +137,7 @@ async fn queue_post(
 
 /// List the task ids currently in the queue
 async fn queue_list_all(
-    Extension(mut redis_connection): Extension<ConnectionManager>,
+    State(mut redis_connection): State<ConnectionManager>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let rendertasks = match store::list_render_tasks(&mut redis_connection).await {
         Ok(data) => data,
@@ -145,7 +152,7 @@ async fn queue_list_all(
 /// Get the task by id in the queue
 async fn queue_get(
     Path(id): Path<String>,
-    Extension(postgres_pool): Extension<Pool<Postgres>>,
+    State(postgres_pool): State<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let id: Uuid = match id.parse() {
         Ok(id) => id,
@@ -168,7 +175,7 @@ async fn queue_get(
 /// Get the render result by id
 async fn render_result_get(
     Path(id): Path<String>,
-    Extension(postgres_pool): Extension<Pool<Postgres>>,
+    State(postgres_pool): State<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let id: Uuid = match id.parse() {
         Ok(id) => id,
@@ -194,7 +201,7 @@ async fn render_result_get(
 
 /// Get a list of all the render results
 async fn render_result_list_all(
-    Extension(postgres_pool): Extension<Pool<Postgres>>,
+    State(postgres_pool): State<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let render_results: Vec<Uuid> = match store::list_render_results(&postgres_pool).await {
         Ok(data) => data,

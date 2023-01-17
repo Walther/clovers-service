@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "clovers-service-pg",
+      "password": "local_development_passphrase",
+      "username": "postgres",
+      "database": "postgres"
+    }
+  ]
+}
