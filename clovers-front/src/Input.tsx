@@ -87,9 +87,8 @@ export const NumberInput = ({
         type="text"
         value={value}
         className={isValidNumber(value) ? "Input" : "InputError"}
-        onChange={(e) =>
-          maybeSetStateNumber(lensPath, setState, e.target.value)
-        }
+        onChange={(e) => setState(R.set(lensPath, e.target.value))}
+        onBlur={(e) => maybeSetStateNumber(lensPath, setState, e.target.value)}
       />
     </>
   );
@@ -109,6 +108,9 @@ export const TripleNumberInput = ({
 }): ReactElement => {
   const id = useId();
   const value = object[fieldname] ? object[fieldname] : [];
+  const path0 = R.lensPath([...path, fieldname, 0]);
+  const path1 = R.lensPath([...path, fieldname, 1]);
+  const path2 = R.lensPath([...path, fieldname, 2]);
 
   return (
     <>
@@ -119,39 +121,24 @@ export const TripleNumberInput = ({
           type="text"
           value={value[0]}
           className={isValidNumber(value[0]) ? "Input" : "InputError"}
-          onChange={(e) =>
-            maybeSetStateNumber(
-              R.lensPath([...path, fieldname, 0]),
-              setState,
-              e.target.value
-            )
-          }
+          onChange={(e) => setState(R.set(path0, e.target.value))}
+          onBlur={(e) => maybeSetStateNumber(path0, setState, e.target.value)}
         />
         <input
           id={id + "_y"}
           type="text"
           value={value[1]}
           className={isValidNumber(value[1]) ? "Input" : "InputError"}
-          onChange={(e) =>
-            maybeSetStateNumber(
-              R.lensPath([...path, fieldname, 1]),
-              setState,
-              e.target.value
-            )
-          }
+          onChange={(e) => setState(R.set(path1, e.target.value))}
+          onBlur={(e) => maybeSetStateNumber(path1, setState, e.target.value)}
         />
         <input
           id={id + "_z"}
           type="text"
           value={value[2]}
           className={isValidNumber(value[2]) ? "Input" : "InputError"}
-          onChange={(e) =>
-            maybeSetStateNumber(
-              R.lensPath([...path, fieldname, 2]),
-              setState,
-              e.target.value
-            )
-          }
+          onChange={(e) => setState(R.set(path2, e.target.value))}
+          onBlur={(e) => maybeSetStateNumber(path2, setState, e.target.value)}
         />
       </div>
     </>
@@ -159,14 +146,13 @@ export const TripleNumberInput = ({
 };
 
 const isValidNumber = (value: any) => {
-  return typeof value == "number" && !isNaN(value);
+  const parsed = Number(value);
+  return typeof parsed == "number" && !isNaN(parsed);
 };
 
 const maybeSetStateNumber = (lensPath: any, setState: any, value: string) => {
   const parsed = Number(value);
   if (!isNaN(parsed)) {
     setState(R.set(lensPath, parsed));
-  } else {
-    setState(R.set(lensPath, value));
   }
 };
