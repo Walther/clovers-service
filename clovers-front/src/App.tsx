@@ -246,7 +246,7 @@ function App() {
         <RenderRenders renders={renders} />
       </main>
       <footer>
-        <p>&copy; clovers 2022</p>
+        <p>&copy; clovers 2023</p>
       </footer>
     </div>
   );
