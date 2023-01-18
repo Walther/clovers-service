@@ -22,3 +22,9 @@ body {
 ::selection {
   background-color: var(--grey-baseline);
 }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--grey-baseline);
+  width: 100%;
+}
