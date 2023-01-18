@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { NewObjectForm, ObjectForm, SceneObject } from "./Objects/SceneObject";
+import { ObjectForm, SceneObject } from "./Objects/SceneObject";
 
 export const implicitSceneSettings = {
   time_0: 0,
@@ -152,7 +152,6 @@ export const SceneForm = ({
     <div>
       <h2>objects</h2>
       <div className="OptionsGroup">
-        <NewObjectForm setState={setSceneObjects} path={[]} />
         {sceneObjects &&
           sceneObjects.map((obj, index) => (
             <ObjectForm

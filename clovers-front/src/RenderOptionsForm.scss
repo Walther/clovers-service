@@ -37,7 +37,8 @@
 
   h2,
   h3,
-  hr {
+  hr,
+  .MessageBox {
     grid-column: header-start / header-end;
   }
 

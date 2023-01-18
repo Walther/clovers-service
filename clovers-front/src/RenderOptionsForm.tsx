@@ -39,7 +39,7 @@ export const RenderOptionsForm = ({
 
   return (
     <div className="OptionsForm">
-      <h3>render</h3>
+      <h3>render options</h3>
 
       <NumberInput
         fieldname="width"

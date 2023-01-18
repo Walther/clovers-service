@@ -31,7 +31,7 @@ export const CameraForm = ({
 }): ReactElement => {
   return (
     <div className="OptionsForm">
-      <h3>camera</h3>
+      <h3>camera options</h3>
 
       <TripleNumberInput
         fieldname="look_from"
