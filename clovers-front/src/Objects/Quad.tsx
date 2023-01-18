@@ -20,7 +20,7 @@ export const QuadForm = ({
 }: {
   object: Quad;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Quad>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

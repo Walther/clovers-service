@@ -55,7 +55,7 @@ export const ObjectForm = ({
   path,
 }: {
   object: SceneObject;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
   path: R.Path;
 }): ReactElement => {
   // TODO: possibly better handling?
@@ -141,9 +141,9 @@ export const ObjectSelect = ({
   selected,
   setSelected,
 }: {
-  id: any;
-  selected: any;
-  setSelected: any;
+  id: string;
+  selected: string;
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
 }): ReactElement => {
   const options = SceneObjectNames.map((name, index) => (
     <option value={name} key={index}>

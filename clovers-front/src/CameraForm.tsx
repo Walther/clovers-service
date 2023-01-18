@@ -27,7 +27,7 @@ export const CameraForm = ({
 }: {
   object: CameraOptions;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<CameraOptions>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

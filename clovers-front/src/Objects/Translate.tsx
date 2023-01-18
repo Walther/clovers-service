@@ -18,7 +18,7 @@ export const TranslateForm = ({
 }: {
   object: Translate;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Translate>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

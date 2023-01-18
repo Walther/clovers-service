@@ -13,7 +13,7 @@ export const SolidColorForm = ({
 }: {
   texture: SolidColor;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<SolidColor>>;
 }): ReactElement => {
   const mat = "SolidColor";
   return (

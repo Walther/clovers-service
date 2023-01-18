@@ -16,7 +16,7 @@ export const MetalForm = ({
 }: {
   material: Metal;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Metal>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

@@ -8,7 +8,7 @@ export const DeleteButton = ({
   setState,
 }: {
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   return (
     <Button

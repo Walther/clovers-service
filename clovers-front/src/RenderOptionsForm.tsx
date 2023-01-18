@@ -28,7 +28,7 @@ export const RenderOptionsForm = ({
   path,
 }: {
   object: RenderOptions;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<RenderOptions>>;
   path: R.Path;
 }): ReactElement => {
   const max_rays = (

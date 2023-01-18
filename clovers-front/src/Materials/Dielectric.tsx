@@ -15,7 +15,7 @@ export const DielectricForm = ({
 }: {
   material: Dielectric;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Dielectric>>;
 }): ReactElement => {
   const mat = "Dielectric";
   return (

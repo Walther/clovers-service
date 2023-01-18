@@ -27,13 +27,13 @@ export const STLForm = ({
 }: {
   object: STL;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<string>>;
 }): ReactElement => {
   const id = useId();
   // TODO: fix this select hackery :x
   const stlLens = R.lensPath([...path, "path"]);
   const selected = object.path ? object.path : ""; // TODO: fix ugly workaround for the new object case
-  const setSelected = (value: any) => setState(R.set(stlLens, value));
+  const setSelected = (value: string) => setState(R.set(stlLens, value));
 
   return (
     <div className="OptionsForm">
@@ -86,9 +86,9 @@ export const STLSelect = ({
   selected,
   setSelected,
 }: {
-  id: any;
-  selected: any;
-  setSelected: any;
+  id: string;
+  selected: string;
+  setSelected: (value: string) => void; // TODO: this is a weird type for this
 }): ReactElement => {
   const options = STLPaths.map((name, index) => (
     <option value={"stl/" + name} key={index}>

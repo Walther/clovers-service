@@ -18,7 +18,7 @@ export const RotateYForm = ({
 }: {
   object: RotateY;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<RotateY>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

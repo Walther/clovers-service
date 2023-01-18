@@ -15,7 +15,7 @@ export const SurfaceCheckerForm = ({
 }: {
   texture: SurfaceChecker;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<SurfaceChecker>>;
 }): ReactElement => {
   const mat = "SurfaceChecker";
   return (

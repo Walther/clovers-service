@@ -14,7 +14,7 @@ export const LambertianForm = ({
 }: {
   material: Lambertian;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Lambertian>>;
 }): ReactElement => {
   const mat = "Lambertian";
   return (

@@ -11,7 +11,7 @@ export const CheckboxInput = ({
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
@@ -44,7 +44,7 @@ export const TextInput = ({
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
@@ -73,7 +73,7 @@ export const NumberInput = ({
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   const id = useId();
   const lensPath: any = R.lensPath([...path, fieldname]);
@@ -104,7 +104,7 @@ export const TripleNumberInput = ({
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   const id = useId();
   const value = object[fieldname] ? object[fieldname] : [];
@@ -145,12 +145,16 @@ export const TripleNumberInput = ({
   );
 };
 
-const isValidNumber = (value: any) => {
+const isValidNumber = (value: string | number) => {
   const parsed = Number(value);
   return typeof parsed == "number" && !isNaN(parsed);
 };
 
-const maybeSetStateNumber = (lensPath: any, setState: any, value: string) => {
+const maybeSetStateNumber = (
+  lensPath: any,
+  setState: React.Dispatch<React.SetStateAction<any>>,
+  value: string | number
+) => {
   const parsed = Number(value);
   if (!isNaN(parsed)) {
     setState(R.set(lensPath, parsed));

@@ -14,7 +14,7 @@ export const DiffuseLightForm = ({
 }: {
   material: DiffuseLight;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<DiffuseLight>>;
 }): ReactElement => {
   const mat = "DiffuseLight";
   return (
