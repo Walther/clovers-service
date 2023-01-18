@@ -1,15 +1,15 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
 import { TextInput, NumberInput, CheckboxInput } from "../Input";
-import { ObjectForm } from "./SceneObject";
-import { TextureForm } from "../Textures/Texture";
+import { ObjectForm, SceneObject } from "./SceneObject";
+import { Texture, TextureForm } from "../Textures/Texture";
 
 export type ConstantMedium = {
   kind: "ConstantMedium";
   comment?: string;
   density: number;
-  boundary: any;
-  texture: any;
+  boundary: SceneObject;
+  texture: Texture;
   priority: boolean;
 };
 
@@ -20,7 +20,7 @@ export const ConstantMediumForm = ({
 }: {
   object: ConstantMedium;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<ConstantMedium>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

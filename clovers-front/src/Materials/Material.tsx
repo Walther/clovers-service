@@ -41,7 +41,7 @@ export const MaterialForm = ({
 }: {
   material: Material;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   if (!material) {
     return (
@@ -81,9 +81,9 @@ export const MaterialSelect = ({
   selected,
   setSelected,
 }: {
-  id: any;
-  selected: any;
-  setSelected: any;
+  id: string;
+  selected: string;
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
 }): ReactElement => {
   const options = MaterialNames.map((name, index) => (
     <option value={name} key={index}>
@@ -105,7 +105,7 @@ export const NewMaterialForm = ({
   setState,
   path,
 }: {
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
   path: R.Path;
 }): ReactElement => {
   const id = useId();

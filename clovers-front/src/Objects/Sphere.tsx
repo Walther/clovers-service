@@ -24,7 +24,7 @@ export const SphereForm = ({
 }: {
   object: Sphere;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Sphere>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

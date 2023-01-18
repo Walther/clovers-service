@@ -28,7 +28,7 @@ export const MovingSphereForm = ({
 }: {
   object: MovingSphere;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<MovingSphere>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

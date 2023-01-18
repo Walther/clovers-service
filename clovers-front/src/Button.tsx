@@ -5,12 +5,18 @@ export const Button = ({
   handleClick,
   text,
   className,
+  id,
 }: {
   handleClick: React.MouseEventHandler;
   text: string;
   className?: string;
+  id?: string;
 }) => (
-  <button className={className ? className : "Button"} onClick={handleClick}>
+  <button
+    id={id}
+    className={className ? className : "Button"}
+    onClick={handleClick}
+  >
     {text}
   </button>
 );

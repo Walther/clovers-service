@@ -20,7 +20,7 @@ export const TriangleForm = ({
 }: {
   object: Triangle;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Triangle>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

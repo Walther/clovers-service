@@ -14,7 +14,7 @@ export const IsotropicForm = ({
 }: {
   material: Isotropic;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Isotropic>>;
 }): ReactElement => {
   const mat = "Isotropic";
   return (

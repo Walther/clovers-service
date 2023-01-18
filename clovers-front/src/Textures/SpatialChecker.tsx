@@ -16,7 +16,7 @@ export const SpatialCheckerForm = ({
 }: {
   texture: SpatialChecker;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<SpatialChecker>>;
 }): ReactElement => {
   const mat = "SpatialChecker";
   return (

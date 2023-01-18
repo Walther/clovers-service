@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
 import { CheckboxInput, TextInput } from "../Input";
-import { ObjectForm } from "./SceneObject";
+import { ObjectForm, SceneObject } from "./SceneObject";
 
 export type FlipFace = {
   kind: "FlipFace";
   comment?: string;
-  object: any;
+  object: SceneObject;
   priority: boolean;
 };
 
@@ -17,7 +17,7 @@ export const FlipFaceForm = ({
 }: {
   object: FlipFace;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<FlipFace>>;
 }): ReactElement => {
   return (
     <div className="OptionsForm">

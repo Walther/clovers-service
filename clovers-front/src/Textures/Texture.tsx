@@ -27,7 +27,7 @@ export const TextureForm = ({
 }: {
   texture: Texture;
   path: R.Path;
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
   if (!texture) {
     return (
@@ -61,9 +61,9 @@ export const TextureSelect = ({
   selected,
   setSelected,
 }: {
-  id: any;
-  selected: any;
-  setSelected: any;
+  id: string;
+  selected: string;
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
 }): ReactElement => {
   const options = SceneTextureNames.map((name, index) => (
     <option value={name} key={index}>
@@ -85,7 +85,7 @@ export const NewTextureForm = ({
   setState,
   path,
 }: {
-  setState: any;
+  setState: React.Dispatch<React.SetStateAction<Texture>>;
   path: R.Path;
 }): ReactElement => {
   const id = useId();

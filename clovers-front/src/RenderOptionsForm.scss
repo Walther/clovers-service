@@ -36,7 +36,9 @@
   }
 
   h2,
-  h3 {
+  h3,
+  hr,
+  .MessageBox {
     grid-column: header-start / header-end;
   }
 
@@ -47,6 +49,10 @@
 
   button {
     grid-column-start: input;
+  }
+
+  #est_rays {
+    place-self: end;
   }
 
   // Nesting rules

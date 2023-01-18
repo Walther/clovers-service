@@ -15,8 +15,8 @@ import {
   SceneObjects,
 } from "./SceneForm";
 import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
-import { FileInput } from "./Input";
-import { SceneObject } from "./Objects/SceneObject";
+import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
+import { ActionForm } from "./ActionForm";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
@@ -59,10 +59,6 @@ const RenderRenders = ({
       </ul>
     </div>
   );
-};
-
-const MessageBox = ({ message }: { message: string }): ReactElement => {
-  return <p className="MessageBox">{message}</p>;
 };
 
 function App() {
@@ -213,7 +209,6 @@ function App() {
         )}
       </header>
       <main>
-        <h2>options</h2>
         <div className="OptionsGroup">
           <RenderOptionsForm
             object={renderOptions}
@@ -225,19 +220,18 @@ function App() {
             setState={setCameraOptions}
             path={[]}
           />
+          <ActionForm
+            message={message}
+            handleSubmit={handleSubmit}
+            handleImport={handleImport}
+            handleExport={handleExport}
+          />
+          <NewObjectForm setState={setSceneObjects} path={[]} />
         </div>
         <SceneForm
           sceneObjects={sceneObjects}
           setSceneObjects={setSceneObjects}
         />
-        <h2>actions</h2>
-        <div className="actionsMenu">
-          <Button handleClick={() => handleSubmit()} text="render" />
-          <Button handleClick={() => handleExport()} text="export" />
-          <Button handleClick={() => handleImport()} text="import" />
-          <FileInput id="importFileInput" />
-        </div>
-        <MessageBox message={message} />
         <h2>queue</h2>
         <Button handleClick={() => refreshQueue()} text="refresh queue" />
         <RenderQueue queue={queue} />
@@ -246,7 +240,7 @@ function App() {
         <RenderRenders renders={renders} />
       </main>
       <footer>
-        <p>&copy; clovers 2022</p>
+        <p>&copy; clovers 2023</p>
       </footer>
     </div>
   );
