@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { NumberInput } from "../Input";
+import { NumberInput } from "../Inputs/NumberInput";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type Metal = {

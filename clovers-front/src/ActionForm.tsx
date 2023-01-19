@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Button } from "./Button";
-import { FileInput } from "./Input";
+import { FileInput } from "./Inputs/FileInput";
 
 const MessageBox = ({ message }: { message: string }): ReactElement => {
   return <p className="MessageBox">{message}</p>;

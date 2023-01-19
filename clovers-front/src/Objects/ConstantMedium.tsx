@@ -1,6 +1,8 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, CheckboxInput } from "../Input";
+import { NumberInput } from "../Inputs/NumberInput";
+import { TextInput } from "../Inputs/TextInput";
+import { CheckboxInput } from "../Inputs/CheckboxInput";
 import { ObjectForm, SceneObject } from "./SceneObject";
 import { Texture, TextureForm } from "../Textures/Texture";
 

@@ -1,12 +1,9 @@
 import * as R from "ramda";
 import { ReactElement, useId } from "react";
 import { DeleteButton } from "../DeleteButton";
-import {
-  TextInput,
-  NumberInput,
-  TripleNumberInput,
-  CheckboxInput,
-} from "../Input";
+import { NumberInput, TripleNumberInput } from "../Inputs/NumberInput";
+import { TextInput } from "../Inputs/TextInput";
+import { CheckboxInput } from "../Inputs/CheckboxInput";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
