@@ -1,16 +1,23 @@
-.Button {
+.Button,
+.fileInputLabel {
   appearance: none;
   border: none;
-  padding: 0.5rem;
+  padding: 0.25rem;
   background: var(--grey-baseline);
   color: var(--blackish);
+  text-align: center;
+  font-size: 0.75rem;
+  height: 2rem;
+  display: block;
 }
 
-.Button:hover {
+.Button:hover,
+.fileInputLabel:hover {
   background: var(--grey-lightened);
   cursor: pointer;
 }
 
-.Button:active {
+.Button:active,
+.fileInputLabel:active {
   background: var(--grey-darkened);
 }

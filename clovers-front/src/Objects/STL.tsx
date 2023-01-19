@@ -93,13 +93,16 @@ export const STLSelect = ({
     </option>
   ));
   return (
-    <select
-      id={id}
-      value={selected}
-      className={selected === "" ? "InputError" : ""} // TODO: fix ugly workaround for the new object case
-      onChange={(e) => setSelected(e.target.value)}
-    >
-      {options}
-    </select>
+    <>
+      <label htmlFor={id}>stl file:</label>
+      <select
+        id={id}
+        value={selected}
+        className={selected === "" ? "InputError" : ""} // TODO: fix ugly workaround for the new object case
+        onChange={(e) => setSelected(e.target.value)}
+      >
+        {options}
+      </select>
+    </>
   );
 };

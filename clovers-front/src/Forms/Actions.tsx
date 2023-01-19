@@ -20,9 +20,15 @@ export const ActionForm = ({
   return (
     <div className="OptionsForm">
       <h3>actions</h3>
-      <label htmlFor="importFileInput">load from file:</label>
+      <label htmlFor="renderButton">render:</label>
+      <Button
+        id="renderButton"
+        handleClick={() => handleSubmit()}
+        text="start"
+      />
+      <hr />
       <FileInput id="importFileInput" />
-      <label htmlFor="importButton">click to load:</label>
+      <label htmlFor="importButton">load selected file:</label>
       <Button
         id="importButton"
         handleClick={() => handleImport()}
@@ -34,13 +40,7 @@ export const ActionForm = ({
         handleClick={() => handleExport()}
         text="export"
       />
-      <hr />
-      <label htmlFor="renderButton">render:</label>
-      <Button
-        id="renderButton"
-        handleClick={() => handleSubmit()}
-        text="start"
-      />
+
       <MessageBox message={message} />
     </div>
   );
