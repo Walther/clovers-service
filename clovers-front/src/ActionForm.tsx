@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Button } from "./Button";
+import { Button } from "./Inputs/Button";
 import { FileInput } from "./Inputs/FileInput";
 
 const MessageBox = ({ message }: { message: string }): ReactElement => {

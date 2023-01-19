@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import { ReactElement, useId } from "react";
-import { DeleteButton } from "../DeleteButton";
+import { DeleteButton } from "../Inputs/DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Inputs/NumberInput";
 import { TextInput } from "../Inputs/TextInput";
 import { CheckboxInput } from "../Inputs/CheckboxInput";

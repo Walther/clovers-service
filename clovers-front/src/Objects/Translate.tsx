@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
+import { DeleteButton } from "../Inputs/DeleteButton";
 import { TripleNumberInput } from "../Inputs/NumberInput";
 import { TextInput } from "../Inputs/TextInput";
 import { CheckboxInput } from "../Inputs/CheckboxInput";

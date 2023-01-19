@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
+import { DeleteButton } from "../Inputs/DeleteButton";
 import { NumberInput } from "../Inputs/NumberInput";
 import { Texture, TextureForm } from "../Textures/Texture";
 
