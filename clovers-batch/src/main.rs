@@ -66,6 +66,9 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
         render_task.opts.width,
         render_task.opts.height,
     );
+    // TODO: memory management! This leaks memory!
+    let scene = Box::leak(Box::new(scene));
+
     let opts = render_task.opts;
     let width = opts.width;
     let height = opts.height;

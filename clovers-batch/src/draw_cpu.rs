@@ -10,7 +10,7 @@ use rand::{Rng, SeedableRng};
 use rayon::prelude::*;
 
 /// The main drawing function, returns a `Vec<Color>` as a pixelbuffer.
-pub fn draw(opts: RenderOpts, scene: Scene) -> Vec<Color> {
+pub fn draw(opts: RenderOpts, scene: &'static Scene) -> Vec<Color> {
     // Progress bar
     let pixels = (opts.width * opts.height) as u64;
 
@@ -67,7 +67,7 @@ pub fn draw(opts: RenderOpts, scene: Scene) -> Vec<Color> {
 
 /// Get a single sample for a single pixel in the scene. Has slight jitter for antialiasing when multisampling.
 fn sample(
-    scene: &Scene,
+    scene: &'static Scene,
     x: Float,
     y: Float,
     width: Float,

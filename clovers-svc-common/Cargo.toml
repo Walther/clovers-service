@@ -13,4 +13,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.91"
 sqlx = { version = "0.6", features = [ "postgres", "uuid", "runtime-tokio-rustls", "json" ] }
 tracing = "0.1"
-clovers = { git = "https://github.com/Walther/clovers/", rev = "b49c9c2203b79667ff70ebf6af840bdb492a0875", default-features = false, features = ["serde-derive", "stl"] }
+clovers = { git = "https://github.com/Walther/clovers/", rev = "b2ac7368111c275ccc767eb75d4b02bc29605363", default-features = false, features = ["serde-derive", "stl"] }
