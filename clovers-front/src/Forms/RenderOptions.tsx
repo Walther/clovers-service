@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { Button } from "../Inputs/Button";
-import { NumberInput } from "../Inputs/NumberInput";
-import { CheckboxInput } from "../Inputs/CheckboxInput";
-import "./RenderOptionsForm.scss";
+import { NumberInput } from "../Inputs/Number";
+import { CheckboxInput } from "../Inputs/Checkbox";
+import "./RenderOptions.scss";
 
 export type RenderOptions = {
   width: number;

@@ -7,20 +7,20 @@ import {
   RenderOptions,
   RenderOptionsForm,
   defaultRenderOptions,
-} from "./Forms/RenderOptionsForm";
+} from "./Forms/RenderOptions";
 import {
   defaultSceneObjects,
   implicitSceneSettings,
   SceneForm,
   SceneObjects,
-} from "./Forms/SceneForm";
+} from "./Forms/Scene";
 import {
   CameraForm,
   CameraOptions,
   defaultCameraOptions,
-} from "./Forms/CameraForm";
+} from "./Forms/Camera";
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
-import { ActionForm } from "./Forms/ActionForm";
+import { ActionForm } from "./Forms/Actions";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 

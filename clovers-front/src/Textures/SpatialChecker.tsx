@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../Inputs/DeleteButton";
-import { NumberInput, TripleNumberInput } from "../Inputs/NumberInput";
+import { NumberInput, TripleNumberInput } from "../Inputs/Number";
 
 export type SpatialChecker = {
   kind: "SpatialChecker";
