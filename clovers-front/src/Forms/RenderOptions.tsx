@@ -32,11 +32,11 @@ export const RenderOptionsForm = ({
   setState: React.Dispatch<React.SetStateAction<RenderOptions>>;
   path: R.Path;
 }): ReactElement => {
-  const max_rays = (
-    object.normalmap
-      ? object.width * object.height
-      : object.width * object.height * object.samples * object.max_depth
-  ).toPrecision(3);
+  const pixels = object.width * object.height;
+  const maxRaysM = Math.round(
+    (object.normalmap ? pixels : pixels * object.samples * object.max_depth) /
+      1000000
+  );
 
   return (
     <div className="OptionsForm">
@@ -80,7 +80,7 @@ export const RenderOptionsForm = ({
       />
       <hr />
       <label htmlFor="est_rays">estimated upper bound for rays:</label>
-      <span id="est_rays">{max_rays}</span>
+      <span id="est_rays">{maxRaysM} M</span>
       <hr />
       <label>presets</label>
       <Button
