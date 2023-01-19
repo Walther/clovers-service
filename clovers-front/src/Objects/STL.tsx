@@ -1,12 +1,9 @@
 import * as R from "ramda";
 import { ReactElement, useId } from "react";
-import { DeleteButton } from "../DeleteButton";
-import {
-  TextInput,
-  NumberInput,
-  TripleNumberInput,
-  CheckboxInput,
-} from "../Input";
+import { DeleteButton } from "../Inputs/DeleteButton";
+import { NumberInput, TripleNumberInput } from "../Inputs/Number";
+import { TextInput } from "../Inputs/Text";
+import { CheckboxInput } from "../Inputs/Checkbox";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
@@ -96,13 +93,16 @@ export const STLSelect = ({
     </option>
   ));
   return (
-    <select
-      id={id}
-      value={selected}
-      className={selected === "" ? "InputError" : ""} // TODO: fix ugly workaround for the new object case
-      onChange={(e) => setSelected(e.target.value)}
-    >
-      {options}
-    </select>
+    <>
+      <label htmlFor={id}>stl file:</label>
+      <select
+        id={id}
+        value={selected}
+        className={selected === "" ? "InputError" : ""} // TODO: fix ugly workaround for the new object case
+        onChange={(e) => setSelected(e.target.value)}
+      >
+        {options}
+      </select>
+    </>
   );
 };

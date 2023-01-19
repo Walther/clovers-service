@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
-import { TripleNumberInput } from "../Input";
+import { DeleteButton } from "../Inputs/DeleteButton";
+import { TripleNumberInput } from "../Inputs/Number";
 
 export type SolidColor = {
   kind: "SolidColor";

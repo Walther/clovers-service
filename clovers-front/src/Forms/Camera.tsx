@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
-import { Button } from "./Button";
-import { NumberInput, TripleNumberInput } from "./Input";
+import { Button } from "../Inputs/Button";
+import { TripleNumberInput } from "../Inputs/Number";
+import { NumberInput } from "../Inputs/Number";
 
 export type CameraOptions = {
   look_from: [number, number, number];

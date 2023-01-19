@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
-import { NumberInput, TripleNumberInput } from "../Input";
+import { DeleteButton } from "../Inputs/DeleteButton";
+import { TripleNumberInput, NumberInput } from "../Inputs/Number";
 
 export type Dielectric = {
   kind: "Dielectric";

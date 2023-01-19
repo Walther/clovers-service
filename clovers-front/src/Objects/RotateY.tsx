@@ -1,6 +1,8 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
-import { TextInput, NumberInput, CheckboxInput } from "../Input";
+import { DeleteButton } from "../Inputs/DeleteButton";
+import { NumberInput } from "../Inputs/Number";
+import { TextInput } from "../Inputs/Text";
+import { CheckboxInput } from "../Inputs/Checkbox";
 import { ObjectForm } from "./SceneObject";
 
 export type RotateY = {

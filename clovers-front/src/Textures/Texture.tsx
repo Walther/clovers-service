@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
-import { Button } from "../Button";
+import { Button } from "../Inputs/Button";
 import { SolidColor, SolidColorForm } from "./SolidColor";
 import { SpatialChecker, SpatialCheckerForm } from "./SpatialChecker";
 import { SurfaceChecker, SurfaceCheckerForm } from "./SurfaceChecker";

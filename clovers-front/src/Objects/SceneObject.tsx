@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
-import { Button } from "../Button";
+import { Button } from "../Inputs/Button";
 import { Boxy, BoxyForm } from "./Boxy";
 import { ConstantMedium, ConstantMediumForm } from "./ConstantMedium";
 import { FlipFace, FlipFaceForm } from "./FlipFace";

@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import { ReactElement, useId, useState } from "react";
-import { Button } from "../Button";
+import { Button } from "../Inputs/Button";
 import { Dielectric, DielectricForm } from "./Dielectric";
 import { DiffuseLight, DiffuseLightForm } from "./DiffuseLight";
 import { Isotropic, IsotropicForm } from "./Isotropic";

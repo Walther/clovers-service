@@ -1,22 +1,26 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import "./App.scss";
 import axios from "axios";
-import { ThemeToggle } from "./ThemeToggle";
-import { Button } from "./Button";
+import { ThemeToggle } from "./Inputs/ThemeToggle";
+import { Button } from "./Inputs/Button";
 import {
   RenderOptions,
   RenderOptionsForm,
   defaultRenderOptions,
-} from "./RenderOptionsForm";
+} from "./Forms/RenderOptions";
 import {
   defaultSceneObjects,
   implicitSceneSettings,
   SceneForm,
   SceneObjects,
-} from "./SceneForm";
-import { CameraForm, CameraOptions, defaultCameraOptions } from "./CameraForm";
+} from "./Forms/Scene";
+import {
+  CameraForm,
+  CameraOptions,
+  defaultCameraOptions,
+} from "./Forms/Camera";
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
-import { ActionForm } from "./ActionForm";
+import { ActionForm } from "./Forms/Actions";
 
 const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 

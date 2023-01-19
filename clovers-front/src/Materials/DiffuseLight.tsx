@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
+import { DeleteButton } from "../Inputs/DeleteButton";
 import { Texture, TextureForm } from "../Textures/Texture";
 
 export type DiffuseLight = {

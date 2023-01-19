@@ -41,3 +41,12 @@ select:focus {
   box-shadow: none;
   border: none;
 }
+
+.fileInput {
+  display: none;
+}
+
+.fileInputLabel,
+.OptionsForm .fileInputLabel {
+  grid-column: label / input;
+}

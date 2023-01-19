@@ -1,11 +1,8 @@
 import { ReactElement } from "react";
-import { DeleteButton } from "../DeleteButton";
-import {
-  TextInput,
-  NumberInput,
-  TripleNumberInput,
-  CheckboxInput,
-} from "../Input";
+import { DeleteButton } from "../Inputs/DeleteButton";
+import { NumberInput, TripleNumberInput } from "../Inputs/Number";
+import { TextInput } from "../Inputs/Text";
+import { CheckboxInput } from "../Inputs/Checkbox";
 import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
