@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { ObjectForm, SceneObject } from "./Objects/SceneObject";
+import { ObjectForm, SceneObject } from "../Objects/SceneObject";
 
 export const implicitSceneSettings = {
   time_0: 0,

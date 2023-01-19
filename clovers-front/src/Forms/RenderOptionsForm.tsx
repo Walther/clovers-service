@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
-import { Button } from "./Inputs/Button";
-import { NumberInput } from "./Inputs/NumberInput";
-import { CheckboxInput } from "./Inputs/CheckboxInput";
+import { Button } from "../Inputs/Button";
+import { NumberInput } from "../Inputs/NumberInput";
+import { CheckboxInput } from "../Inputs/CheckboxInput";
 import "./RenderOptionsForm.scss";
 
 export type RenderOptions = {
