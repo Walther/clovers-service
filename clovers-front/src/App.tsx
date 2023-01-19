@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import "./App.scss";
 import axios from "axios";
-import { ThemeToggle } from "./ThemeToggle";
+import { ThemeToggle } from "./Inputs/ThemeToggle";
 import { Button } from "./Inputs/Button";
 import {
   RenderOptions,

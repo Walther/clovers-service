@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "./Inputs/Button";
+import { Button } from "./Button";
 
 export const ThemeToggle = () => {
   return <Button handleClick={toggleTheme} text="toggle theme" />;
