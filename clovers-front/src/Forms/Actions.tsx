@@ -7,12 +7,14 @@ const MessageBox = ({ message }: { message: string }): ReactElement => {
 };
 
 export const ActionForm = ({
-  handleSubmit,
+  handlePreview,
+  handleRender,
   handleImport,
   handleExport,
   message,
 }: {
-  handleSubmit: any;
+  handlePreview: any;
+  handleRender: any;
   handleImport: any;
   handleExport: any;
   message: string;
@@ -20,10 +22,16 @@ export const ActionForm = ({
   return (
     <div className="OptionsForm">
       <h3>actions</h3>
+      <label htmlFor="previewButton">preview:</label>
+      <Button
+        id="previewButton"
+        handleClick={() => handlePreview()}
+        text="start"
+      />
       <label htmlFor="renderButton">render:</label>
       <Button
         id="renderButton"
-        handleClick={() => handleSubmit()}
+        handleClick={() => handleRender()}
         text="start"
       />
       <hr />

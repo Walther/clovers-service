@@ -1,0 +1,12 @@
+.Preview {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: var(--grey-verydark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+  }
+}

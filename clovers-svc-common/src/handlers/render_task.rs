@@ -1,15 +1,17 @@
-use std::str::FromStr;
+use crate::RENDER_QUEUE_NAME;
 
-use super::RenderTask;
+use super::super::RenderTask;
 use anyhow::{anyhow, Result};
-use redis::{aio::ConnectionManager, AsyncCommands};
+use redis;
+use redis::aio::ConnectionManager;
+use redis::AsyncCommands;
 use serde_json::json;
 use sqlx::{
+    self,
     types::{Json, Uuid},
     Pool, Postgres, Row,
 };
-
-use super::*;
+use std::str::FromStr;
 
 /// Adds a rendering task to the rendering queue.
 ///
@@ -26,7 +28,7 @@ pub async fn queue_rendertask(
 INSERT INTO render_tasks ( data )
 VALUES ( $1 )
 RETURNING id
-        "#,
+      "#,
     )
     .bind(json!(render_task))
     .fetch_one(postgres_pool)
@@ -68,7 +70,7 @@ pub async fn get_render_task(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result
         r#"
 SELECT data FROM render_tasks
 WHERE id = ( $1 )
-        "#,
+      "#,
     )
     .bind(id)
     .fetch_one(postgres_pool)
@@ -93,7 +95,7 @@ pub async fn delete_render_task(id: Uuid, postgres_pool: &Pool<Postgres>) -> Res
 DELETE FROM render_tasks
 WHERE id = ( $1 )
 RETURNING id
-        "#,
+      "#,
     )
     .bind(id)
     .fetch_one(postgres_pool)
@@ -108,86 +110,6 @@ RETURNING id
     };
 
     Ok(id)
-}
-
-/// Saves the full rendering result
-pub async fn save_render_result(
-    render_result: RenderResult,
-    postgres_pool: &Pool<Postgres>,
-) -> Result<Uuid> {
-    let id: Uuid = match sqlx::query(
-        r#"
-INSERT INTO render_results ( data )
-VALUES ( $1 )
-RETURNING id
-        "#,
-    )
-    .bind(render_result.data)
-    .fetch_one(postgres_pool)
-    .await
-    {
-        Ok(row) => row.try_get("id")?,
-        Err(e) => {
-            let error_message = format!("Error saving rendertask to postgres: {e}");
-            tracing::error!("{error_message}");
-            return Err(anyhow!("{error_message}"));
-        }
-    };
-
-    Ok(id)
-}
-
-/// Gets the full rendering result by id.
-pub async fn get_render_result(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result<Vec<u8>> {
-    let data: Vec<u8> = match sqlx::query(
-        r#"
-SELECT data FROM render_results
-WHERE id = ( $1 )
-        "#,
-    )
-    .bind(id)
-    .fetch_one(postgres_pool)
-    .await
-    {
-        Ok(row) => row.try_get("data")?,
-        Err(e) => {
-            let error_message = format!("Error fetching renderresult {id} from postgres: {e}");
-            tracing::error!("{error_message}");
-            return Err(anyhow!("{error_message}"));
-        }
-    };
-
-    Ok(data)
-}
-
-/// Lists all rendering results in the db
-pub async fn list_render_results(postgres_pool: &Pool<Postgres>) -> Result<Vec<Uuid>> {
-    let render_result_ids: Result<Vec<Uuid>, sqlx::Error> = match sqlx::query(
-        r#"
-SELECT id FROM render_results
-        "#,
-    )
-    .fetch_all(postgres_pool)
-    .await
-    {
-        Ok(rows) => rows.iter().map(|row| row.try_get("id")).collect(),
-        Err(e) => {
-            let error_message = format!("Error listing render_results from postgres: {e}");
-            tracing::error!("{error_message}");
-            return Err(anyhow!("{error_message}"));
-        }
-    };
-    // TODO: ergonomics...
-    let render_result_ids = match render_result_ids {
-        Ok(data) => data,
-        Err(e) => {
-            let error_message = format!("Error listing render_results from postgres: {e}");
-            tracing::error!("{error_message}");
-            return Err(anyhow!("{error_message}"));
-        }
-    };
-
-    Ok(render_result_ids)
 }
 
 /// Pops the first rendering task in the rendering queue, returning the id.
