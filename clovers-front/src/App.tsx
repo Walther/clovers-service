@@ -21,8 +21,9 @@ import {
 } from "./Forms/Camera";
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
+import { Preview } from "./Preview";
 
-const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
+export const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
@@ -75,6 +76,7 @@ function App() {
   const [queue, setQueue] = useState<Array<string>>([]);
   const [renders, setRenders] = useState<Array<string>>([]);
   const [message, setMessage] = useState<string>("Ready.");
+  const [previewId, setPreviewId] = useState<string | undefined>();
 
   useEffect(() => {
     refreshQueue();
@@ -95,7 +97,35 @@ function App() {
     };
   };
 
-  const handleSubmit = async () => {
+  const handlePreview = async () => {
+    const body = collectFile();
+
+    try {
+      if (!REACT_APP_BACKEND) {
+        // TODO: better handling...
+        console.error("REACT_APP_BACKEND not defined");
+        setMessage("not connected to a backend. rendering not available.");
+        return;
+      }
+      const response = await axios.post(
+        `${REACT_APP_BACKEND}/preview`,
+        // body
+        body,
+        // config
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.data) {
+        setPreviewId(response.data);
+      }
+    } catch (error: any) {
+      // TODO: AxiosError somehow?
+      setMessage(error.response.data);
+    }
+  };
+
+  const handleRender = async () => {
     setMessage("Ready.");
     const body = collectFile();
 
@@ -213,6 +243,7 @@ function App() {
         )}
       </header>
       <main>
+        <Preview previewId={previewId} />
         <div className="OptionsGroup">
           <RenderOptionsForm
             object={renderOptions}
@@ -226,7 +257,8 @@ function App() {
           />
           <ActionForm
             message={message}
-            handleSubmit={handleSubmit}
+            handlePreview={handlePreview}
+            handleRender={handleRender}
             handleImport={handleImport}
             handleExport={handleExport}
           />

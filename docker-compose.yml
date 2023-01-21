@@ -14,7 +14,7 @@ services:
       - postgres
       - redis
 
-  clovers-batch:
+  batch:
     restart: always
     build:
       context: .
@@ -22,6 +22,18 @@ services:
     env_file: ./clovers-batch/.env
     depends_on:
       - postgres
+      - redis # TODO: remove dependency on redis on batch?
+      - backend
+
+  preview:
+    build:
+      context: .
+      dockerfile: ./clovers-preview/dev.Dockerfile
+    volumes:
+      - ./:/app
+    command: sh -c "cargo watch -x 'run --release --bin clovers-preview'"
+    env_file: ./clovers-preview/.env
+    depends_on:
       - redis
       - backend
 

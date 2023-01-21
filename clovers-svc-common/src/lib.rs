@@ -2,15 +2,25 @@ use clovers::{scenes::SceneFile, RenderOpts};
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
+use uuid::Uuid;
 
 /// Data related operations, postgres & redis
-pub mod store;
+mod handlers;
+pub use handlers::*;
 
 /// Re-export the clovers library for internal use
 pub use clovers;
 
+/// Rendering command for internal use
+mod draw_cpu;
+pub use draw_cpu::draw;
+
 /// Redis list name for the rendering queue
 pub const RENDER_QUEUE_NAME: &str = "render_queue";
+/// Redis list name for the preview queue
+pub const PREVIEW_QUEUE_NAME: &str = "preview_queue";
+/// Redis set name for the preview results
+pub const PREVIEW_RESULTS_NAME: &str = "preview_results";
 
 /// Main configuration structure for the application
 #[derive(Debug)]
@@ -59,4 +69,10 @@ pub struct RenderTask {
 pub struct RenderResult {
     /// minimum viable test: vec of bytes
     pub data: Vec<u8>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PreviewTask {
+    pub preview_id: Uuid,
+    pub render_task: RenderTask,
 }

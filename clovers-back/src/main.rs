@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use axum::{
     extract::{FromRef, Path, State},
     http::{
@@ -18,7 +20,9 @@ use tower_http::{
 use tracing::Level;
 use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitExt};
 
-use clovers_svc_common::*;
+use clovers_svc_common::{
+    preview_result::get_preview_result, preview_task::*, render_result::*, render_task::*, *,
+};
 
 #[derive(Clone, FromRef)]
 struct AppState {
@@ -59,6 +63,10 @@ async fn main() -> anyhow::Result<()> {
         .route("/", get(hello))
         // `GET /healthz` goes to `healthz`
         .route("/healthz", get(healthz))
+        // `POST /preview` goes to preview queue
+        .route("/preview", post(preview_post))
+        // `GET /preview` gets the specific preview by id
+        .route("/preview/:id", get(preview_get))
         // `POST /queue` goes to `queue`
         .route("/queue", post(queue_post))
         // `GET /queue` lists all the tasks in the queue
@@ -116,15 +124,54 @@ async fn not_found() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, Json("not found\n"))
 }
 
+/// Queues a preview task to the Redis preview queue, to be processed by the batch worker.
+async fn preview_post(
+    State(mut redis_connection): State<ConnectionManager>,
+    Json(render_request): Json<RenderTask>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let preview_id = match queue_previewtask(render_request, &mut redis_connection).await {
+        Ok(data) => data,
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+
+    Ok((StatusCode::OK, Json(preview_id.to_string())))
+}
+
+/// Gets a preview result
+async fn preview_get(
+    Path(id): Path<String>,
+    State(mut redis_connection): State<ConnectionManager>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let preview_id = match Uuid::from_str(&id) {
+        Ok(id) => id,
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::BAD_REQUEST, Json(e.to_string())));
+        }
+    };
+    let preview = match get_preview_result(preview_id, &mut redis_connection).await {
+        Ok(data) => data,
+        Err(e) => {
+            tracing::error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+    let mut res = (StatusCode::OK, preview).into_response();
+    res.headers_mut()
+        .insert(CONTENT_TYPE, "image/png".parse().unwrap());
+    Ok(res)
+}
+
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
 async fn queue_post(
     State(mut redis_connection): State<ConnectionManager>,
     State(postgres_pool): State<Pool<Postgres>>,
     Json(render_request): Json<RenderTask>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let uuid = match store::queue_rendertask(render_request, &mut redis_connection, &postgres_pool)
-        .await
-    {
+    let uuid = match queue_rendertask(render_request, &mut redis_connection, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
             tracing::error!("{e}");
@@ -139,7 +186,7 @@ async fn queue_post(
 async fn queue_list_all(
     State(mut redis_connection): State<ConnectionManager>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let rendertasks = match store::list_render_tasks(&mut redis_connection).await {
+    let rendertasks = match list_render_tasks(&mut redis_connection).await {
         Ok(data) => data,
         Err(e) => {
             tracing::error!("{e}");
@@ -161,7 +208,7 @@ async fn queue_get(
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
-    let rendertask = match store::get_render_task(id, &postgres_pool).await {
+    let rendertask = match get_render_task(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
             tracing::error!("{e}");
@@ -184,7 +231,7 @@ async fn render_result_get(
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
-    let render_result: Vec<u8> = match store::get_render_result(id, &postgres_pool).await {
+    let render_result: Vec<u8> = match get_render_result(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
             tracing::error!("{e}");
@@ -203,7 +250,7 @@ async fn render_result_get(
 async fn render_result_list_all(
     State(postgres_pool): State<Pool<Postgres>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let render_results: Vec<Uuid> = match store::list_render_results(&postgres_pool).await {
+    let render_results: Vec<Uuid> = match list_render_results(&postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
             tracing::error!("{e}");
