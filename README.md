@@ -30,7 +30,79 @@ Queue service for the preview rendering tasks and results. Ephemeral data.
 
 Note: first time build times will be slow.
 
-- Production mode: `docker-compose up`
-- Development mode: `docker-compose -f docker-compose.dev.yml up`
+- Development mode: `just dev`
+- Production mode: `just prod`
 
 In development mode, hot reload will be available for all services.
+
+## Sequence diagrams
+
+### Full render flow
+
+```mermaid
+sequenceDiagram
+    participant front
+    participant back
+    participant postgres
+    participant redis
+    participant batch
+    loop
+      batch->>redis: pop render_task queue
+      redis-->>batch: nil
+    end
+    note left of batch: todo: remove redis <br> in full render flow?
+    front->>back: POST /render
+    back->>postgres: save render_task
+    back->>redis: queue render_task id
+    back->>front: render_task id
+    batch->>redis: pop render_task queue
+    redis->>batch: render_task id
+    batch->>postgres: get render_task by id
+    postgres->>batch: ;
+    note over batch: rendering
+    batch->>postgres: delete render_task
+    batch->>postgres: save render_result
+    note left of batch: todo: object storage?
+    front-->batch: ;
+    front->>back: GET /renders
+    back->>postgres: get render_result ids
+    postgres->>back: ;
+    back->>front: ;
+    front->>back: GET /renders/:id
+    back->>postgres: get render_result
+    postgres->>back: ;
+    back->>front: .png;
+```
+
+### Preview render flow
+
+```mermaid
+sequenceDiagram
+    participant front
+    participant back
+    participant redis
+    participant preview
+    loop
+      preview->>redis: pop preview_task queue
+      redis-->>preview: nil
+    end
+    front->>back: POST /preview
+    back->>redis: queue preview
+    back->>front: preview id
+    preview->>redis: pop preview_task queue
+    redis->>preview: preview task
+    note over preview: rendering
+    note right of front: todo: websocket?
+    loop
+      front->>back: GET /preview/:id
+      back->>redis: ;
+      redis-->>back: nil
+      back-->>front: ;
+    end
+    preview->>redis: save preview_result
+    front->>back: GET /preview/:id
+    back->>redis: get preview
+    redis->>back: ;
+    back->>front: .png
+    note right of redis: todo: redis TTL <br> for auto cleanup
+```
