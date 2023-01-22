@@ -1,19 +1,23 @@
+prodyaml := "docker-compose.yml"
+devyaml := "docker-compose.dev.yml"
+
 # List the available recipes
 default:
   @just --list --unsorted
 
-# Build all the container images
-build:
-  docker-compose build --parallel -m 16G
+dev:
+  docker-compose -f {{devyaml}} up --build
 
-# Start the services. Run this after building.
-up:
-  docker-compose up
+prod:
+  docker-compose -f {{prodyaml}} up --build
+
+dev-down:
+  docker-compose -f {{devyaml}} down
+
+prod-down:
+  docker-compose -f {{prodyaml}} down
 
 # Clean up the services. Run build afterwards before up.
-down:
-  docker-compose down --rmi local -v
-
-# Calculate the lines of code count in this repository
-lines:
-  tokei --exclude package*.json
+clean:
+  docker-compose -f {{prodyaml}} down --rmi local -v
+  docker-compose -f {{devyaml}} down --rmi local -v
