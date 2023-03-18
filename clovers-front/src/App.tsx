@@ -25,6 +25,24 @@ import { Preview } from "./Preview";
 
 export const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
 
+// Create WebSocket connection.
+const socket = new WebSocket(`ws://localhost:8080/ws`);
+
+// Connection opened
+socket.addEventListener("open", (_event) => {
+  console.log("WebSocket connection opened");
+});
+
+// Listen for messages
+socket.addEventListener("message", (event) => {
+  console.log("Message from server ", event.data);
+});
+
+// Listen for errors
+socket.addEventListener("error", (event) => {
+  console.log("Error from server ", event);
+});
+
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
     return <p>render queue not available</p>;
@@ -83,6 +101,14 @@ function App() {
     refreshRenders();
   }, []);
 
+  // Listen for preview ids
+  socket.addEventListener("message", (event) => {
+    const json = JSON.parse(event.data);
+    if (json.kind === "preview") {
+      setPreviewId(json.body);
+    }
+  });
+
   const collectFile = () => {
     const opts = renderOptions;
     const scene_file = {
@@ -99,6 +125,10 @@ function App() {
 
   const handlePreview = async () => {
     const body = collectFile();
+    const data = JSON.stringify({
+      kind: "preview",
+      body,
+    });
 
     try {
       if (!REACT_APP_BACKEND) {
@@ -107,18 +137,8 @@ function App() {
         setMessage("not connected to a backend. rendering not available.");
         return;
       }
-      const response = await axios.post(
-        `${REACT_APP_BACKEND}/preview`,
-        // body
-        body,
-        // config
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (response.data) {
-        setPreviewId(response.data);
-      }
+      socket.send(data);
+      console.log("sent preview task");
     } catch (error: any) {
       // TODO: AxiosError somehow?
       setMessage(error.response.data);

@@ -1,7 +1,10 @@
-use std::str::FromStr;
+use std::{net::SocketAddr, str::FromStr, time::Duration};
 
 use axum::{
-    extract::{FromRef, Path, State},
+    extract::{
+        ws::{Message, WebSocket},
+        ConnectInfo, FromRef, Path, State, WebSocketUpgrade,
+    },
     http::{
         header::{self, CONTENT_TYPE},
         HeaderValue, Method, StatusCode,
@@ -11,18 +14,19 @@ use axum::{
     Json, Router,
 };
 use redis::aio::ConnectionManager;
+use serde::{Deserialize, Serialize};
+use serde_json::json;
 use sqlx::{postgres::PgPoolOptions, types::Uuid, Pool, Postgres};
+use tokio::time::sleep;
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
     LatencyUnit,
 };
-use tracing::Level;
+use tracing::{debug, error, info, Level};
 use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitExt};
 
-use clovers_svc_common::{
-    preview_result::get_preview_result, preview_task::*, render_result::*, render_task::*, *,
-};
+use clovers_svc_common::{preview_result::*, preview_task::*, render_result::*, render_task::*, *};
 
 #[derive(Clone, FromRef)]
 struct AppState {
@@ -77,6 +81,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/render", get(render_result_list_all))
         // `GET /render/:id` gets the specific render result by id
         .route("/render/:id", get(render_result_get))
+        // WebSocket
+        .route("/ws", get(ws_handler))
         // redis and postgres
         .with_state(state)
         // 404 handler
@@ -86,7 +92,7 @@ async fn main() -> anyhow::Result<()> {
             CorsLayer::new()
                 .allow_origin(config.frontend_address.parse::<HeaderValue>().unwrap())
                 .allow_headers([header::CONTENT_TYPE])
-                .allow_methods([Method::GET, Method::POST]),
+                .allow_methods([Method::GET, Method::POST, Method::PUT]),
         )
         // tracing layer
         .layer(
@@ -102,7 +108,7 @@ async fn main() -> anyhow::Result<()> {
     // run the app
     tracing::info!("listening on {}", config.listen_address);
     axum::Server::bind(&config.listen_address)
-        .serve(app.into_make_service())
+        .serve(app.into_make_service_with_connect_info::<SocketAddr>())
         .await
         .unwrap();
 
@@ -111,17 +117,18 @@ async fn main() -> anyhow::Result<()> {
 
 /// simple example route handler
 async fn hello() -> &'static str {
+    info!("hello() called");
     "Hello, World!\n"
 }
 
 /// healthcheck endpoint
 async fn healthz() -> impl IntoResponse {
-    (StatusCode::OK, Json("ok\n"))
+    (StatusCode::OK, Json("ok"))
 }
 
 /// 404 not found handler
 async fn not_found() -> impl IntoResponse {
-    (StatusCode::NOT_FOUND, Json("not found\n"))
+    (StatusCode::NOT_FOUND, Json("not found"))
 }
 
 /// Queues a preview task to the Redis preview queue, to be processed by the batch worker.
@@ -132,7 +139,7 @@ async fn preview_post(
     let preview_id = match queue_previewtask(render_request, &mut redis_connection).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -148,14 +155,14 @@ async fn preview_get(
     let preview_id = match Uuid::from_str(&id) {
         Ok(id) => id,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::BAD_REQUEST, Json(e.to_string())));
         }
     };
     let preview = match get_preview_result(preview_id, &mut redis_connection).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -174,7 +181,7 @@ async fn queue_post(
     let uuid = match queue_rendertask(render_request, &mut redis_connection, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -189,7 +196,7 @@ async fn queue_list_all(
     let rendertasks = match list_render_tasks(&mut redis_connection).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -204,14 +211,14 @@ async fn queue_get(
     let id: Uuid = match id.parse() {
         Ok(id) => id,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
     let rendertask = match get_render_task(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -227,14 +234,14 @@ async fn render_result_get(
     let id: Uuid = match id.parse() {
         Ok(id) => id,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
     let render_result: Vec<u8> = match get_render_result(id, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -253,7 +260,7 @@ async fn render_result_list_all(
     let render_results: Vec<Uuid> = match list_render_results(&postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
-            tracing::error!("{e}");
+            error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
@@ -261,4 +268,118 @@ async fn render_result_list_all(
     let render_results: Vec<String> = render_results.iter().map(|id| id.to_string()).collect();
 
     Ok((StatusCode::OK, Json(render_results)))
+}
+
+/// WebSocket connection initiation handler
+async fn ws_handler(
+    ws: WebSocketUpgrade,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    State(redis_connection): State<ConnectionManager>,
+) -> impl IntoResponse {
+    info!("client {addr} connected");
+    ws.on_failed_upgrade(|err| error!("unable to upgrade websocket connection: {err}"))
+        .on_upgrade(move |socket| {
+            handle_socket(socket, addr, axum::extract::State(redis_connection))
+        })
+}
+
+/// Actual websocket statemachine (one will be spawned per connection)
+async fn handle_socket(
+    mut socket: WebSocket,
+    who: SocketAddr,
+    State(mut redis_connection): State<ConnectionManager>,
+) {
+    // TODO: refactor this monstrosity
+    loop {
+        if let Some(msg) = socket.recv().await {
+            match msg {
+                Ok(msg) => {
+                    log_ws(&msg, who);
+
+                    if let Message::Text(t) = msg {
+                        debug!(t);
+                        let parsed: WSMessage = serde_json::from_str(&t).unwrap();
+                        if parsed.kind == "preview" {
+                            let render_task = serde_json::from_value(parsed.body).unwrap();
+                            let preview_id =
+                                match queue_previewtask(render_task, &mut redis_connection).await {
+                                    Ok(id) => id,
+                                    Err(e) => {
+                                        error!("{e}");
+                                        return;
+                                    }
+                                };
+
+                            // TODO: smarter solution than polling?
+                            // 100 retries at 100 ms each = 10 seconds max timeout
+                            let mut retries = 100;
+                            while retries > 0 {
+                                match exists_preview_result(preview_id, &mut redis_connection).await
+                                {
+                                    true => {
+                                        let reply = json!({
+                                            "kind": "preview",
+                                            "body": preview_id,
+                                        })
+                                        .to_string();
+                                        socket.send(reply.into()).await.unwrap();
+                                        break;
+                                    }
+                                    false => {
+                                        retries -= 1;
+                                        sleep(Duration::from_millis(100)).await;
+                                    }
+                                };
+                            }
+
+                            if retries == 0 {
+                                let reply = json!({
+                                    "kind": "error",
+                                    "body": "preview timed out",
+                                })
+                                .to_string();
+                                socket.send(reply.into()).await.unwrap();
+                            }
+                        }
+                    }
+                }
+                Err(e) => error!("{e}"),
+            }
+        }
+    }
+}
+
+/// Helper to print contents of messages to stdout. Has special treatment for Close.
+fn log_ws(msg: &Message, who: SocketAddr) {
+    match msg {
+        Message::Text(t) => {
+            info!(">>> {} sent str: {:?}", who, t);
+        }
+        Message::Binary(d) => {
+            info!(">>> {} sent {} bytes: {:?}", who, d.len(), d);
+        }
+        Message::Close(c) => {
+            if let Some(cf) = c {
+                info!(
+                    ">>> {} sent close with code {} and reason `{}`",
+                    who, cf.code, cf.reason
+                );
+            } else {
+                info!(">>> {} somehow sent close message without CloseFrame", who);
+            }
+        }
+
+        Message::Pong(v) => {
+            info!(">>> {} sent pong with {:?}", who, v);
+        }
+        Message::Ping(v) => {
+            info!(">>> {} sent ping with {:?}", who, v);
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+struct WSMessage {
+    kind: String,
+    body: serde_json::Value,
 }

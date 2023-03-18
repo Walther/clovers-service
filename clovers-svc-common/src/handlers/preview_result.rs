@@ -32,3 +32,12 @@ pub async fn get_preview_result(
     };
     Ok(data)
 }
+
+/// Checks whether an image preview with a given id exists i.e. has been completed
+pub async fn exists_preview_result(
+    preview_id: Uuid,
+    redis_connection: &mut ConnectionManager,
+) -> bool {
+    let key = format!("{PREVIEW_RESULTS_NAME}.{preview_id}");
+    (redis_connection.exists(key).await).unwrap_or(false)
+}
