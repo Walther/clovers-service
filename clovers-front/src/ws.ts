@@ -1,4 +1,6 @@
-export const ws = new WebSocket(`ws://localhost:8080/ws`);
+import { WS_ENDPOINT } from "./config";
+
+export const ws = new WebSocket(WS_ENDPOINT);
 
 ws.addEventListener("open", (_event) => {
   console.log("WebSocket connection opened");

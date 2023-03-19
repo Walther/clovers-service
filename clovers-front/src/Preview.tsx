@@ -1,4 +1,4 @@
-import { REACT_APP_BACKEND } from "./App";
+import { REACT_APP_BACKEND } from "./config";
 import "./Preview.scss";
 
 export const Preview = ({ previewId }: { previewId: string | undefined }) => {

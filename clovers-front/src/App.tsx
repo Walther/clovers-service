@@ -23,8 +23,7 @@ import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
 import { ws } from "./ws";
-
-export const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
+import { REACT_APP_BACKEND } from "./config";
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
