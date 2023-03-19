@@ -52,8 +52,11 @@ pub(crate) async fn handle_socket(
                         }
                     }
                 }
-                Err(e) => send_ws_error(&mut socket, anyhow!(e)).await,
+                Err(e) => error!("{e}"),
             }
+        } else {
+            // Stream has closed, return to drop the socket
+            return;
         }
     }
 }

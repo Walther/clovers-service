@@ -22,8 +22,8 @@ import {
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
-import { getWebsocket } from "./ws";
-import { REACT_APP_BACKEND } from "./config";
+import { REACT_APP_BACKEND, WS_ENDPOINT } from "./config";
+import useWebSocket from "react-use-websocket";
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
@@ -83,19 +83,24 @@ function App() {
     refreshRenders();
   }, []);
 
-  const ws = getWebsocket();
-
-  // Listen for close events
-  ws.addEventListener("close", (_event) => {
-    setMessage("WebSocket connection closed. Please reload the page");
-  });
-
-  // Listen for preview ids
-  ws.addEventListener("message", (event) => {
-    const json = JSON.parse(event.data);
-    if (json.kind === "preview") {
-      setPreviewId(json.body);
-    }
+  const { sendJsonMessage } = useWebSocket(WS_ENDPOINT, {
+    onOpen: (_event) => console.log("WebSocket connection opened"),
+    onMessage: (event) => {
+      console.log("WebSocket message from server ", event.data);
+      const json = JSON.parse(event.data);
+      if (json.kind === "preview") {
+        setPreviewId(json.body);
+      }
+    },
+    onError: (event) => {
+      console.log("WebSocket error from server ", event);
+      setMessage("WebSocket connection closed. Please reload the page");
+    },
+    onClose: (_event) => console.log("WebSocket connection closed"),
+    shouldReconnect: (closeEvent) => {
+      console.log("WebSocket closeEvent ", closeEvent);
+      return true;
+    },
   });
 
   const collectFile = () => {
@@ -114,10 +119,10 @@ function App() {
 
   const handlePreview = async () => {
     const body = collectFile();
-    const data = JSON.stringify({
+    const data = {
       kind: "preview",
       body,
-    });
+    };
 
     try {
       if (!REACT_APP_BACKEND) {
@@ -126,7 +131,7 @@ function App() {
         setMessage("not connected to a backend. rendering not available.");
         return;
       }
-      ws.send(data);
+      sendJsonMessage(data);
       console.log("sent preview task");
     } catch (error: any) {
       setMessage(error.toString());
