@@ -3,7 +3,7 @@ use redis::aio::ConnectionManager;
 use redis::AsyncCommands;
 use uuid::Uuid;
 
-use crate::{RenderResult, PREVIEW_RESULTS_NAME};
+use crate::{RenderResult, PREVIEW_EXPIRY_SECONDS, PREVIEW_RESULTS_NAME};
 
 /// Saves a preview image into the previews set
 pub async fn save_preview_result(
@@ -12,7 +12,9 @@ pub async fn save_preview_result(
     redis_connection: &mut ConnectionManager,
 ) -> Result<Uuid> {
     let key = format!("{PREVIEW_RESULTS_NAME}.{preview_id}");
-    redis_connection.set(key, render_result.data).await?;
+    redis_connection
+        .set_ex(key, render_result.data, PREVIEW_EXPIRY_SECONDS)
+        .await?;
     Ok(preview_id)
 }
 
@@ -31,4 +33,13 @@ pub async fn get_preview_result(
         }
     };
     Ok(data)
+}
+
+/// Checks whether an image preview with a given id exists i.e. has been completed
+pub async fn exists_preview_result(
+    preview_id: Uuid,
+    redis_connection: &mut ConnectionManager,
+) -> bool {
+    let key = format!("{PREVIEW_RESULTS_NAME}.{preview_id}");
+    (redis_connection.exists(key).await).unwrap_or(false)
 }

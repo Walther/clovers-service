@@ -43,14 +43,14 @@ pub fn draw(opts: RenderOpts, scene: &'static Scene) -> Vec<Color> {
                 let u = x / width;
                 let v = y / height;
                 let ray: Ray = scene.camera.get_ray(u, v, &mut rng);
-                color = normal_map(&ray, &scene, &mut rng);
+                color = normal_map(&ray, scene, &mut rng);
                 *pixel = color;
             } else {
                 // Otherwise, do a regular render
 
                 // Multisampling for antialiasing
                 for _sample in 0..opts.samples {
-                    if let Some(s) = sample(&scene, x, y, width, height, &mut rng, opts.max_depth) {
+                    if let Some(s) = sample(scene, x, y, width, height, &mut rng, opts.max_depth) {
                         color += s
                     }
                 }

@@ -22,8 +22,8 @@ import {
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
-
-export const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
+import { REACT_APP_BACKEND, WS_ENDPOINT } from "./config";
+import useWebSocket from "react-use-websocket";
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
@@ -38,7 +38,7 @@ const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   );
 };
 
-const RenderRenders = ({
+const RenderResults = ({
   renders,
 }: {
   renders: Array<string>;
@@ -83,6 +83,29 @@ function App() {
     refreshRenders();
   }, []);
 
+  const { sendJsonMessage } = useWebSocket(WS_ENDPOINT, {
+    onOpen: (_event) => {
+      console.log("WebSocket connection opened");
+      setMessage("Ready.");
+    },
+    onMessage: (event) => {
+      console.log("WebSocket message from server ", event.data);
+      const json = JSON.parse(event.data);
+      if (json.kind === "preview") {
+        setPreviewId(json.body);
+      }
+    },
+    onError: (event) => {
+      console.log("WebSocket error from server ", event);
+      setMessage("WebSocket connection closed. Please reload the page");
+    },
+    onClose: (_event) => console.log("WebSocket connection closed"),
+    shouldReconnect: (closeEvent) => {
+      console.log("WebSocket closeEvent ", closeEvent);
+      return true;
+    },
+  });
+
   const collectFile = () => {
     const opts = renderOptions;
     const scene_file = {
@@ -99,6 +122,10 @@ function App() {
 
   const handlePreview = async () => {
     const body = collectFile();
+    const data = {
+      kind: "preview",
+      body,
+    };
 
     try {
       if (!REACT_APP_BACKEND) {
@@ -107,21 +134,10 @@ function App() {
         setMessage("not connected to a backend. rendering not available.");
         return;
       }
-      const response = await axios.post(
-        `${REACT_APP_BACKEND}/preview`,
-        // body
-        body,
-        // config
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (response.data) {
-        setPreviewId(response.data);
-      }
+      sendJsonMessage(data);
+      console.log("sent preview task");
     } catch (error: any) {
-      // TODO: AxiosError somehow?
-      setMessage(error.response.data);
+      setMessage(error.toString());
     }
   };
 
@@ -233,6 +249,10 @@ function App() {
     downloadLink.click();
   };
 
+  const MessageBox = ({ message }: { message: string }): ReactElement => {
+    return <p className="MessageBox">{message}</p>;
+  };
+
   return (
     <div className="App">
       <header>
@@ -243,37 +263,44 @@ function App() {
         )}
       </header>
       <main>
-        <Preview previewId={previewId} />
-        <div className="OptionsGroup">
-          <RenderOptionsForm
-            object={renderOptions}
-            setState={setRenderOptions}
-            path={[]}
-          />
-          <CameraForm
-            object={cameraOptions}
-            setState={setCameraOptions}
-            path={[]}
-          />
-          <ActionForm
-            message={message}
-            handlePreview={handlePreview}
-            handleRender={handleRender}
-            handleImport={handleImport}
-            handleExport={handleExport}
-          />
-          <NewObjectForm setState={setSceneObjects} path={[]} />
+        <div className="LeftGroup">
+          <Preview previewId={previewId} />
         </div>
-        <SceneForm
-          sceneObjects={sceneObjects}
-          setSceneObjects={setSceneObjects}
-        />
-        <h2>queue</h2>
-        <Button handleClick={() => refreshQueue()} text="refresh queue" />
-        <RenderQueue queue={queue} />
-        <h2>renders</h2>
-        <Button handleClick={() => refreshRenders()} text="refresh renders" />
-        <RenderRenders renders={renders} />
+        <div className="MiddleGroup">
+          <div className="OptionsGroup">
+            <RenderOptionsForm
+              object={renderOptions}
+              setState={setRenderOptions}
+              path={[]}
+            />
+            <CameraForm
+              object={cameraOptions}
+              setState={setCameraOptions}
+              path={[]}
+            />
+            <ActionForm
+              handlePreview={handlePreview}
+              handleRender={handleRender}
+              handleImport={handleImport}
+              handleExport={handleExport}
+            />
+            <NewObjectForm setState={setSceneObjects} path={[]} />
+          </div>
+          <SceneForm
+            sceneObjects={sceneObjects}
+            setSceneObjects={setSceneObjects}
+          />
+        </div>
+        <div className="RightGroup">
+          <h2>status</h2>
+          <MessageBox message={message} />
+          <h2>queue</h2>
+          <Button handleClick={() => refreshQueue()} text="refresh queue" />
+          <RenderQueue queue={queue} />
+          <h2>renders</h2>
+          <Button handleClick={() => refreshRenders()} text="refresh renders" />
+          <RenderResults renders={renders} />
+        </div>
       </main>
       <footer>
         <p>&copy; clovers 2023</p>

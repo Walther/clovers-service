@@ -2,22 +2,16 @@ import { ReactElement } from "react";
 import { Button } from "../Inputs/Button";
 import { FileInput } from "../Inputs/File";
 
-const MessageBox = ({ message }: { message: string }): ReactElement => {
-  return <p className="MessageBox">{message}</p>;
-};
-
 export const ActionForm = ({
   handlePreview,
   handleRender,
   handleImport,
   handleExport,
-  message,
 }: {
   handlePreview: any;
   handleRender: any;
   handleImport: any;
   handleExport: any;
-  message: string;
 }): ReactElement => {
   return (
     <div className="OptionsForm">
@@ -48,8 +42,6 @@ export const ActionForm = ({
         handleClick={() => handleExport()}
         text="export"
       />
-
-      <MessageBox message={message} />
     </div>
   );
 };

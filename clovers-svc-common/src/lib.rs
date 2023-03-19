@@ -21,6 +21,8 @@ pub const RENDER_QUEUE_NAME: &str = "render_queue";
 pub const PREVIEW_QUEUE_NAME: &str = "preview_queue";
 /// Redis set name for the preview results
 pub const PREVIEW_RESULTS_NAME: &str = "preview_results";
+// Redis expiry time for the preview results
+pub const PREVIEW_EXPIRY_SECONDS: usize = 60;
 
 /// Main configuration structure for the application
 #[derive(Debug)]
