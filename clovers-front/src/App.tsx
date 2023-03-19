@@ -22,7 +22,7 @@ import {
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
-import { ws } from "./ws";
+import { getWebsocket } from "./ws";
 import { REACT_APP_BACKEND } from "./config";
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
@@ -83,6 +83,8 @@ function App() {
     refreshRenders();
   }, []);
 
+  const ws = getWebsocket();
+
   // Listen for close events
   ws.addEventListener("close", (_event) => {
     setMessage("WebSocket connection closed. Please reload the page");
@@ -127,8 +129,7 @@ function App() {
       ws.send(data);
       console.log("sent preview task");
     } catch (error: any) {
-      // TODO: AxiosError somehow?
-      setMessage(error.response.data);
+      setMessage(error.toString());
     }
   };
 

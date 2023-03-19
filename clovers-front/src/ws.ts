@@ -1,19 +1,27 @@
 import { WS_ENDPOINT } from "./config";
+let ws: WebSocket | null;
 
-export const ws = new WebSocket(WS_ENDPOINT);
+export const getWebsocket = (): WebSocket => {
+  if (!ws) {
+    ws = new WebSocket(WS_ENDPOINT);
 
-ws.addEventListener("open", (_event) => {
-  console.log("WebSocket connection opened");
-});
+    ws.addEventListener("open", (_event) => {
+      console.log("WebSocket connection opened");
+    });
 
-ws.addEventListener("message", (event) => {
-  console.log("WebSocket message from server ", event.data);
-});
+    ws.addEventListener("message", (event) => {
+      console.log("WebSocket message from server ", event.data);
+    });
 
-ws.addEventListener("error", (event) => {
-  console.log("WebSocket error from server ", event);
-});
+    ws.addEventListener("error", (event) => {
+      console.log("WebSocket error from server ", event);
+    });
 
-ws.addEventListener("close", (_event) => {
-  console.log("WebSocket connection closed");
-});
+    ws.addEventListener("close", (_event) => {
+      console.log("WebSocket connection closed");
+      ws = null;
+    });
+  }
+
+  return ws;
+};
