@@ -84,7 +84,10 @@ function App() {
   }, []);
 
   const { sendJsonMessage } = useWebSocket(WS_ENDPOINT, {
-    onOpen: (_event) => console.log("WebSocket connection opened"),
+    onOpen: (_event) => {
+      console.log("WebSocket connection opened");
+      setMessage("Ready.");
+    },
     onMessage: (event) => {
       console.log("WebSocket message from server ", event.data);
       const json = JSON.parse(event.data);

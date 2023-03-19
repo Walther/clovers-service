@@ -16,6 +16,7 @@ const POLL_DELAY_MS: u64 = 1_000;
 const MAX_WIDTH: u32 = 1920;
 const MAX_HEIGHT: u32 = 1080;
 const MAX_SAMPLES: u32 = 1;
+const MAX_DEPTH: u32 = 10;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -54,10 +55,12 @@ async fn render(preview_task: PreviewTask, redis: &mut ConnectionManager) {
     let width = t.opts.width.min(MAX_WIDTH);
     let height = t.opts.height.min(MAX_HEIGHT);
     let samples = t.opts.samples.min(MAX_SAMPLES);
+    let max_depth = t.opts.max_depth.min(MAX_DEPTH);
     let opts = RenderOpts {
         width,
         height,
         samples,
+        max_depth,
         ..t.opts
     };
 

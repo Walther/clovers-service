@@ -76,8 +76,8 @@ pub(crate) async fn handle_ws_preview(
     };
 
     // TODO: smarter solution than polling?
-    // 100 retries at 100 ms each = 10 seconds max timeout
-    let mut retries = 100;
+    // 300 retries at 100 ms each = 30 seconds max timeout
+    let mut retries = 300;
     while retries > 0 {
         if exists_preview_result(preview_id, redis_connection).await {
             let reply = TypedMessage::new("preview", preview_id.to_string());
