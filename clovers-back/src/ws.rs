@@ -23,7 +23,8 @@ pub(crate) async fn ws_handler(
     State(redis_connection): State<ConnectionManager>,
 ) -> impl IntoResponse {
     info!("client {addr} connected");
-    ws.on_failed_upgrade(|err| error!("unable to upgrade websocket connection: {err}"))
+    ws // load-bearing formatting comment
+        .on_failed_upgrade(|err| error!("unable to upgrade websocket connection: {err}"))
         .on_upgrade(move |socket| {
             handle_socket(socket, addr, axum::extract::State(redis_connection))
         })
@@ -42,7 +43,10 @@ pub(crate) async fn handle_socket(
                     log_ws(&msg, who);
 
                     if let Message::Text(t) = msg {
-                        let parsed: TypedMessage = serde_json::from_str(&t).unwrap();
+                        let parsed: TypedMessage = match serde_json::from_str(&t) {
+                            Ok(tm) => tm,
+                            Err(e) => return send_ws_error(&mut socket, anyhow!(e)).await,
+                        };
                         if parsed.kind == "preview" {
                             handle_ws_preview(parsed, &mut redis_connection, &mut socket).await
                         }

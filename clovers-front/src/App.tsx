@@ -22,26 +22,9 @@ import {
 import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
+import { ws } from "./ws";
 
 export const REACT_APP_BACKEND = process.env.REACT_APP_BACKEND;
-
-// Create WebSocket connection.
-const socket = new WebSocket(`ws://localhost:8080/ws`);
-
-// Connection opened
-socket.addEventListener("open", (_event) => {
-  console.log("WebSocket connection opened");
-});
-
-// Listen for messages
-socket.addEventListener("message", (event) => {
-  console.log("Message from server ", event.data);
-});
-
-// Listen for errors
-socket.addEventListener("error", (event) => {
-  console.log("Error from server ", event);
-});
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
@@ -56,7 +39,7 @@ const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   );
 };
 
-const RenderRenders = ({
+const RenderResults = ({
   renders,
 }: {
   renders: Array<string>;
@@ -101,8 +84,13 @@ function App() {
     refreshRenders();
   }, []);
 
+  // Listen for close events
+  ws.addEventListener("close", (_event) => {
+    setMessage("WebSocket connection closed. Please reload the page");
+  });
+
   // Listen for preview ids
-  socket.addEventListener("message", (event) => {
+  ws.addEventListener("message", (event) => {
     const json = JSON.parse(event.data);
     if (json.kind === "preview") {
       setPreviewId(json.body);
@@ -137,7 +125,7 @@ function App() {
         setMessage("not connected to a backend. rendering not available.");
         return;
       }
-      socket.send(data);
+      ws.send(data);
       console.log("sent preview task");
     } catch (error: any) {
       // TODO: AxiosError somehow?
@@ -293,7 +281,7 @@ function App() {
         <RenderQueue queue={queue} />
         <h2>renders</h2>
         <Button handleClick={() => refreshRenders()} text="refresh renders" />
-        <RenderRenders renders={renders} />
+        <RenderResults renders={renders} />
       </main>
       <footer>
         <p>&copy; clovers 2023</p>
