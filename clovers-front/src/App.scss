@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns:
     [left-column] minmax(1rem, auto)
-    [main-column] minmax(350px, 1600px)
+    [main-column] minmax(350px, auto)
     [right-column] minmax(1rem, auto);
   grid-template-rows: [nav-row] auto [main-row] 1fr [footer-row] auto;
   min-height: 100%;
@@ -19,7 +19,6 @@ h1 {
 
 h2 {
   font-size: 1.5rem;
-  margin-top: 1.5rem;
 }
 
 h3 {
@@ -31,6 +30,14 @@ main {
   grid-row: main-row;
   height: 100%;
   min-width: 0;
+  @media only screen and (min-width: 2048px) {
+    display: grid;
+    grid-template-columns:
+      [left-column] auto
+      [center-column] auto
+      [right-column] 400px;
+    column-gap: 1rem;
+  }
 }
 
 header {
@@ -70,19 +77,4 @@ footer {
 
 .actionsMenu .Button {
   margin-right: 0.5rem;
-}
-
-.RenderResults {
-  // using a 350px minimum per
-  @media only screen and (min-width: 700px) {
-    columns: 2;
-  }
-
-  @media only screen and (min-width: 1050px) {
-    columns: 3;
-  }
-
-  @media only screen and (min-width: 1400px) {
-    columns: 4;
-  }
 }

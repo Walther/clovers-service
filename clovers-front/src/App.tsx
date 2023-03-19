@@ -249,6 +249,10 @@ function App() {
     downloadLink.click();
   };
 
+  const MessageBox = ({ message }: { message: string }): ReactElement => {
+    return <p className="MessageBox">{message}</p>;
+  };
+
   return (
     <div className="App">
       <header>
@@ -259,37 +263,44 @@ function App() {
         )}
       </header>
       <main>
-        <Preview previewId={previewId} />
-        <div className="OptionsGroup">
-          <RenderOptionsForm
-            object={renderOptions}
-            setState={setRenderOptions}
-            path={[]}
-          />
-          <CameraForm
-            object={cameraOptions}
-            setState={setCameraOptions}
-            path={[]}
-          />
-          <ActionForm
-            message={message}
-            handlePreview={handlePreview}
-            handleRender={handleRender}
-            handleImport={handleImport}
-            handleExport={handleExport}
-          />
-          <NewObjectForm setState={setSceneObjects} path={[]} />
+        <div className="LeftGroup">
+          <Preview previewId={previewId} />
         </div>
-        <SceneForm
-          sceneObjects={sceneObjects}
-          setSceneObjects={setSceneObjects}
-        />
-        <h2>queue</h2>
-        <Button handleClick={() => refreshQueue()} text="refresh queue" />
-        <RenderQueue queue={queue} />
-        <h2>renders</h2>
-        <Button handleClick={() => refreshRenders()} text="refresh renders" />
-        <RenderResults renders={renders} />
+        <div className="MiddleGroup">
+          <div className="OptionsGroup">
+            <RenderOptionsForm
+              object={renderOptions}
+              setState={setRenderOptions}
+              path={[]}
+            />
+            <CameraForm
+              object={cameraOptions}
+              setState={setCameraOptions}
+              path={[]}
+            />
+            <ActionForm
+              handlePreview={handlePreview}
+              handleRender={handleRender}
+              handleImport={handleImport}
+              handleExport={handleExport}
+            />
+            <NewObjectForm setState={setSceneObjects} path={[]} />
+          </div>
+          <SceneForm
+            sceneObjects={sceneObjects}
+            setSceneObjects={setSceneObjects}
+          />
+        </div>
+        <div className="RightGroup">
+          <h2>status</h2>
+          <MessageBox message={message} />
+          <h2>queue</h2>
+          <Button handleClick={() => refreshQueue()} text="refresh queue" />
+          <RenderQueue queue={queue} />
+          <h2>renders</h2>
+          <Button handleClick={() => refreshRenders()} text="refresh renders" />
+          <RenderResults renders={renders} />
+        </div>
       </main>
       <footer>
         <p>&copy; clovers 2023</p>
