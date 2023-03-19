@@ -53,10 +53,16 @@ pub(crate) async fn preview_get(
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
-    let mut res = (StatusCode::OK, preview).into_response();
-    res.headers_mut()
-        .insert(CONTENT_TYPE, "image/png".parse().unwrap());
-    Ok(res)
+    // TODO: fix this; a null-check shouldn't be required here
+    if preview.is_empty() {
+        return Err((StatusCode::NOT_FOUND, Json("404".to_string())));
+    }
+
+    Ok((
+        StatusCode::OK,
+        AppendHeaders([(CONTENT_TYPE, "image/png")]),
+        preview,
+    ))
 }
 
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
