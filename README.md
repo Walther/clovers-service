@@ -86,20 +86,21 @@ sequenceDiagram
       preview->>redis: pop preview_task queue
       redis-->>preview: nil
     end
-    front->>back: POST /preview
-    back->>redis: queue preview
-    back->>front: preview id
+    front->>back: WebSocket send <br> preview_task
+    note over back: create preview_id
+    back->>redis: queue preview_task
     preview->>redis: pop preview_task queue
-    redis->>preview: preview task
+    redis->>preview: preview_task
     note over preview: rendering
-    note right of front: todo: websocket?
+    note right of back: todo: smarter polling
     loop
-      front->>back: GET /preview/:id
-      back->>redis: ;
-      redis-->>back: nil
-      back-->>front: ;
+      back->>redis: exists results/preview_id;
+      redis-->>back: false
     end
-    preview->>redis: save preview_result
+    preview->>redis: save results/preview_id
+    back->>redis: exists results/preview_id
+    redis->>back: ;
+    back->>front: WebSocket send <br> preview_id
     front->>back: GET /preview/:id
     back->>redis: get preview
     redis->>back: ;
