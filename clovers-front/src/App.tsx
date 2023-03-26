@@ -8,22 +8,18 @@ import {
   RenderOptionsForm,
   defaultRenderOptions,
 } from "./Forms/RenderOptions";
-import {
-  defaultSceneObjects,
-  implicitSceneSettings,
-  SceneForm,
-  SceneObjects,
-} from "./Forms/Scene";
+import { defaultSceneObjects, SceneForm, SceneObjects } from "./Forms/Scene";
 import {
   CameraForm,
   CameraOptions,
   defaultCameraOptions,
 } from "./Forms/Camera";
-import { NewObjectForm, SceneObject } from "./Objects/SceneObject";
+import { NewObjectForm } from "./Objects/SceneObject";
 import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
 import { REACT_APP_BACKEND, WS_ENDPOINT } from "./config";
 import useWebSocket from "react-use-websocket";
+import { collectFile, handleImport, handleExport } from "./io";
 
 const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
   if (!queue) {
@@ -106,22 +102,8 @@ function App() {
     },
   });
 
-  const collectFile = () => {
-    const opts = renderOptions;
-    const scene_file = {
-      ...implicitSceneSettings,
-      camera: cameraOptions,
-      objects: sceneObjects,
-      priority_objects: sceneObjects.filter((obj: SceneObject) => obj.priority),
-    };
-    return {
-      opts,
-      scene_file,
-    };
-  };
-
   const handlePreview = async () => {
-    const body = collectFile();
+    const body = collectFile(renderOptions, cameraOptions, sceneObjects);
     const data = {
       kind: "preview",
       body,
@@ -143,7 +125,7 @@ function App() {
 
   const handleRender = async () => {
     setMessage("Ready.");
-    const body = collectFile();
+    const body = collectFile(renderOptions, cameraOptions, sceneObjects);
 
     try {
       if (!REACT_APP_BACKEND) {
@@ -202,51 +184,6 @@ function App() {
       // TODO: AxiosError somehow?
       setMessage(error?.response?.data?.error);
     }
-  };
-
-  const handleImport = () => {
-    // TODO: this is extremely hacky, fix later, possibly with https://caniuse.com/native-filesystem-api
-    const reader = new FileReader();
-    const importElement: any = document.getElementById("importFileInput");
-    const importFile = importElement.files[0];
-    if (importFile) {
-      reader.readAsText(importFile);
-      reader.addEventListener("load", (event) => {
-        const data: any = event?.target?.result;
-        try {
-          const json = JSON.parse(data);
-          const {
-            // Ignoring a couple of fields for now that are handled in implicit / hidden settings.
-            // time_0,
-            // time_1,
-            // background_color,
-            camera,
-            objects,
-            // priority_objects, // TODO: handle import for priority objects
-          } = json;
-          setCameraOptions(camera);
-          setSceneObjects(objects);
-        } catch (e) {
-          setMessage(`cannot import; could not parse scene file: ${e}`);
-          return;
-        }
-      });
-    } else {
-      setMessage("cannot import; file is null");
-      return;
-    }
-    setMessage("scene file imported");
-  };
-
-  const handleExport = () => {
-    // TODO: https://caniuse.com/native-filesystem-api
-    const { scene_file } = collectFile();
-    const stringified = JSON.stringify(scene_file);
-    const blob = new Blob([stringified], { type: "text/json" });
-    const downloadLink = document.createElement("a");
-    downloadLink.download = `scene-${new Date().toISOString()}.json`;
-    downloadLink.href = window.URL.createObjectURL(blob);
-    downloadLink.click();
   };
 
   const MessageBox = ({ message }: { message: string }): ReactElement => {
