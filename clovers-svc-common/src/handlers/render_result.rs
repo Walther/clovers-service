@@ -35,18 +35,22 @@ RETURNING id
 }
 
 /// Gets the full rendering result by id.
-pub async fn get_render_result(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result<Vec<u8>> {
-    let data: Vec<u8> = match sqlx::query(
+pub async fn get_render_result(
+    id: Uuid,
+    postgres_pool: &Pool<Postgres>,
+) -> Result<Option<Vec<u8>>> {
+    let data: Option<Vec<u8>> = match sqlx::query(
         r#"
 SELECT data FROM render_results
 WHERE id = ( $1 )
       "#,
     )
     .bind(id)
-    .fetch_one(postgres_pool)
+    .fetch_optional(postgres_pool)
     .await
     {
-        Ok(row) => row.try_get("data")?,
+        Ok(Some(row)) => row.try_get("data")?,
+        Ok(None) => None,
         Err(e) => {
             let error_message = format!("Error fetching render_result {id} from postgres: {e}");
             tracing::error!("{error_message}");

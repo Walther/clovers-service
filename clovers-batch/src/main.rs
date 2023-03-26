@@ -53,7 +53,11 @@ async fn main() -> anyhow::Result<()> {
 async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     info!("fetching rendertask: {id}");
     let render_task: RenderTask = match get_render_task(id, postgres_pool).await {
-        Ok(data) => data,
+        Ok(Some(data)) => data,
+        Ok(None) => {
+            error!("rendertask not found: {id}");
+            return;
+        }
         Err(e) => {
             error!("could not fetch rendertask: {id} - {e}");
             return;

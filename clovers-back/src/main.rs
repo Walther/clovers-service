@@ -1,4 +1,4 @@
-use std::net::SocketAddr;
+use std::{net::SocketAddr, sync::Arc};
 
 mod rest;
 mod ws;
@@ -16,6 +16,7 @@ use axum::{
 use clovers_svc_common::load_configs;
 use redis::aio::ConnectionManager;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use tokio::sync::Mutex;
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
@@ -26,7 +27,7 @@ use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitEx
 
 #[derive(Clone, FromRef)]
 struct AppState {
-    redis: ConnectionManager,
+    redis: Arc<Mutex<ConnectionManager>>,
     postgres: Pool<Postgres>,
 }
 
@@ -53,7 +54,7 @@ async fn main() -> anyhow::Result<()> {
     let redis_connection_manager = ConnectionManager::new(redis).await?;
 
     let state = AppState {
-        redis: redis_connection_manager,
+        redis: Arc::new(Mutex::new(redis_connection_manager)),
         postgres: postgres_pool,
     };
 
