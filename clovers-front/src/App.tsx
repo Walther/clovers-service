@@ -187,8 +187,17 @@ function App() {
             <ActionForm
               handlePreview={handlePreview}
               handleRender={handleRender}
-              handleImport={handleImport}
-              handleExport={handleExport}
+              handleImport={() =>
+                handleImport({ setMessage, setCameraOptions, setSceneObjects })
+              }
+              handleExport={() => {
+                const { scene_file } = collectFile(
+                  renderOptions,
+                  cameraOptions,
+                  sceneObjects
+                );
+                handleExport(scene_file);
+              }}
             />
             <NewObjectForm setState={setSceneObjects} path={[]} />
           </div>

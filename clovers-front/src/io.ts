@@ -3,11 +3,17 @@ import { CameraOptions } from "./Forms/Camera";
 import { RenderOptions } from "./Forms/RenderOptions";
 import { SceneObject } from "./Objects/SceneObject";
 
-export const handleImport = (
-  setMessage: (msg: string) => void,
-  setCameraOptions: (camera: CameraOptions) => void,
-  setSceneObjects: (sceneobjects: SceneObjects) => void
-) => {
+export type handleImportParams = {
+  setMessage: (msg: string) => void;
+  setCameraOptions: (camera: CameraOptions) => void;
+  setSceneObjects: (sceneobjects: SceneObjects) => void;
+};
+
+export const handleImport = ({
+  setMessage,
+  setCameraOptions,
+  setSceneObjects,
+}: handleImportParams) => {
   // TODO: this is extremely hacky, fix later, possibly with https://caniuse.com/native-filesystem-api
   const reader = new FileReader();
   const importElement: any = document.getElementById("importFileInput");
@@ -42,9 +48,8 @@ export const handleImport = (
 };
 
 // TODO: proper return type
-export const handleExport = (collectFile: () => { scene_file: any }) => {
+export const handleExport = (scene_file: any) => {
   // TODO: https://caniuse.com/native-filesystem-api
-  const { scene_file } = collectFile();
   const stringified = JSON.stringify(scene_file);
   const blob = new Blob([stringified], { type: "text/json" });
   const downloadLink = document.createElement("a");
