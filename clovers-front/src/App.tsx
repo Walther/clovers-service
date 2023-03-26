@@ -20,47 +20,8 @@ import { Preview } from "./Preview";
 import { REACT_APP_BACKEND, WS_ENDPOINT } from "./config";
 import useWebSocket from "react-use-websocket";
 import { collectFile, handleImport, handleExport } from "./io";
-
-const RenderQueue = ({ queue }: { queue: Array<string> }): ReactElement => {
-  if (!queue) {
-    return <p>render queue not available</p>;
-  }
-  return (
-    <ul>
-      {queue.map((task_id: string, index) => (
-        <li key={index}>{task_id}</li>
-      ))}
-    </ul>
-  );
-};
-
-const RenderResults = ({
-  renders,
-}: {
-  renders: Array<string>;
-}): ReactElement => {
-  if (!renders) {
-    return <p>render results not available</p>;
-  }
-
-  return (
-    <div className="RenderResults">
-      <ul>
-        {renders.map((task_id: string, index) => (
-          <li key={index}>
-            <a
-              href={`${REACT_APP_BACKEND}/render/${task_id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {task_id}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+import { RenderResults } from "./RenderResults";
+import { RenderQueue } from "./RenderQueue";
 
 function App() {
   const [renderOptions, setRenderOptions] =
