@@ -154,8 +154,7 @@ pub(crate) async fn render_result_list_all(
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
-    // TODO: can this be cleaned up somehow?
-    let render_results: Vec<String> = render_results.iter().map(|id| id.to_string()).collect();
+    let render_results: Vec<Uuid> = render_results;
 
     Ok((StatusCode::OK, Json(render_results)))
 }
