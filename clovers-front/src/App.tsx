@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     refreshQueue();
-    refreshRenders();
+    refreshResults();
   }, []);
 
   const { sendJsonMessage } = useWebSocket(WS_ENDPOINT, {
@@ -48,8 +48,16 @@ function App() {
     onMessage: (event) => {
       console.log("WebSocket message from server ", event.data);
       const json = JSON.parse(event.data);
-      if (json.kind === "preview") {
-        setPreviewId(json.body);
+      switch (json.kind) {
+        case "preview":
+          setPreviewId(json.body);
+          break;
+        case "refreshQueue":
+          refreshQueue();
+          break;
+        case "refreshResults":
+          refreshResults();
+          break;
       }
     },
     onError: (event) => {
@@ -130,7 +138,7 @@ function App() {
     }
   };
 
-  const refreshRenders = async () => {
+  const refreshResults = async () => {
     try {
       if (!REACT_APP_BACKEND) {
         // TODO: better handling...
@@ -196,7 +204,7 @@ function App() {
           <Button handleClick={() => refreshQueue()} text="refresh queue" />
           <RenderQueue queue={queue} />
           <h2>renders</h2>
-          <Button handleClick={() => refreshRenders()} text="refresh renders" />
+          <Button handleClick={() => refreshResults()} text="refresh renders" />
           <RenderResults renders={renders} />
         </div>
       </main>

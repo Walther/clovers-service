@@ -1,4 +1,5 @@
 use std::str::FromStr;
+use std::sync::Arc;
 
 use axum::extract::Path;
 use axum::extract::State;
@@ -16,13 +17,15 @@ use redis::aio::ConnectionManager;
 use sqlx::types::Uuid;
 use sqlx::Pool;
 use sqlx::Postgres;
+use tokio::sync::Mutex;
 use tracing::error;
 
 /// Queues a preview task to the Redis preview queue, to be processed by the batch worker.
 pub(crate) async fn preview_post(
-    State(mut redis_connection): State<ConnectionManager>,
+    State(redis_connection): State<Arc<Mutex<ConnectionManager>>>,
     Json(render_request): Json<RenderTask>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
+    let mut redis_connection = redis_connection.lock().await;
     let preview_id = match queue_previewtask(render_request, &mut redis_connection).await {
         Ok(data) => data,
         Err(e) => {
@@ -37,7 +40,7 @@ pub(crate) async fn preview_post(
 /// Gets a preview result
 pub(crate) async fn preview_get(
     Path(id): Path<String>,
-    State(mut redis_connection): State<ConnectionManager>,
+    State(redis_connection): State<Arc<Mutex<ConnectionManager>>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let preview_id = match Uuid::from_str(&id) {
         Ok(id) => id,
@@ -46,6 +49,7 @@ pub(crate) async fn preview_get(
             return Err((StatusCode::BAD_REQUEST, Json(e.to_string())));
         }
     };
+    let mut redis_connection = redis_connection.lock().await;
     let preview = match get_preview_result(preview_id, &mut redis_connection).await {
         Ok(Some(data)) => data,
         Ok(None) => return Err((StatusCode::NOT_FOUND, Json("not found".to_string()))),
@@ -63,10 +67,11 @@ pub(crate) async fn preview_get(
 
 /// Queues a rendering task to the Redis rendering queue, to be processed by the batch worker.
 pub(crate) async fn queue_post(
-    State(mut redis_connection): State<ConnectionManager>,
+    State(redis_connection): State<Arc<Mutex<ConnectionManager>>>,
     State(postgres_pool): State<Pool<Postgres>>,
     Json(render_request): Json<RenderTask>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
+    let mut redis_connection = redis_connection.lock().await;
     let uuid = match queue_rendertask(render_request, &mut redis_connection, &postgres_pool).await {
         Ok(data) => data,
         Err(e) => {
@@ -80,8 +85,9 @@ pub(crate) async fn queue_post(
 
 /// List the task ids currently in the queue
 pub(crate) async fn queue_list_all(
-    State(mut redis_connection): State<ConnectionManager>,
+    State(redis_connection): State<Arc<Mutex<ConnectionManager>>>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
+    let mut redis_connection = redis_connection.lock().await;
     let rendertasks = match list_render_tasks(&mut redis_connection).await {
         Ok(data) => data,
         Err(e) => {
