@@ -22,10 +22,10 @@ pub async fn save_preview_result(
 pub async fn get_preview_result(
     preview_id: Uuid,
     redis_connection: &mut ConnectionManager,
-) -> Result<Vec<u8>> {
+) -> Result<Option<Vec<u8>>> {
     let key = format!("{PREVIEW_RESULTS_NAME}.{preview_id}");
-    let data = match redis_connection.get(key).await {
-        Ok(data) => data,
+    let data: Option<Vec<u8>> = match redis_connection.get(key).await {
+        Ok(option_data) => option_data,
         Err(e) => {
             let error_message = format!("Error fetching preview_result {preview_id} error {e}");
             tracing::error!("{error_message}");

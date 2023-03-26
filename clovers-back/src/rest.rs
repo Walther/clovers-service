@@ -47,17 +47,13 @@ pub(crate) async fn preview_get(
         }
     };
     let preview = match get_preview_result(preview_id, &mut redis_connection).await {
-        Ok(data) => data,
+        Ok(Some(data)) => data,
+        Ok(None) => return Err((StatusCode::NOT_FOUND, Json("not found".to_string()))),
         Err(e) => {
             error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
-    // TODO: fix this; a null-check shouldn't be required here
-    if preview.is_empty() {
-        return Err((StatusCode::NOT_FOUND, Json("404".to_string())));
-    }
-
     Ok((
         StatusCode::OK,
         AppendHeaders([(CONTENT_TYPE, "image/png")]),
@@ -132,7 +128,8 @@ pub(crate) async fn render_result_get(
         }
     };
     let render_result: Vec<u8> = match get_render_result(id, &postgres_pool).await {
-        Ok(data) => data,
+        Ok(Some(data)) => data,
+        Ok(None) => return Err((StatusCode::NOT_FOUND, Json("not found".to_string()))),
         Err(e) => {
             error!("{e}");
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
