@@ -4,6 +4,7 @@ use clovers_svc_common::clovers::scenes::{self, Scene};
 use clovers_svc_common::render_result::*;
 use clovers_svc_common::render_task::*;
 use clovers_svc_common::*;
+
 use image::{ImageBuffer, Rgb, RgbImage};
 use redis::aio::ConnectionManager;
 use sqlx::postgres::PgPoolOptions;
@@ -70,15 +71,13 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
         render_task.opts.width,
         render_task.opts.height,
     );
-    // TODO: memory management! This leaks memory!
-    let scene = Box::leak(Box::new(scene));
 
     let opts = render_task.opts;
     let width = opts.width;
     let height = opts.height;
 
     info!("rendering scene: {id}");
-    let pixelbuffer = draw(opts, scene);
+    let pixelbuffer = draw(opts, &scene);
 
     info!("converting pixelbuffer to an image");
     let mut img: RgbImage = ImageBuffer::new(width, height);

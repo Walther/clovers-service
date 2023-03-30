@@ -66,11 +66,9 @@ async fn render(preview_task: PreviewTask, redis: &mut ConnectionManager) {
 
     info!("initializing preview {preview_id}");
     let scene: Scene = scenes::initialize(scene_file, width, height);
-    // TODO: memory management! This leaks memory!
-    let scene = Box::leak(Box::new(scene));
 
     info!("rendering preview {preview_id}");
-    let pixelbuffer = draw(opts, scene);
+    let pixelbuffer = draw(opts, &scene);
 
     info!("converting pixelbuffer to an image");
     let mut img: RgbImage = ImageBuffer::new(width, height);
