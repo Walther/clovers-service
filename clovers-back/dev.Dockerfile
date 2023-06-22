@@ -1,4 +1,6 @@
-FROM rust:1.68 as rust-hotreload
+FROM rust:1.70 as rust-hotreload
 WORKDIR /app
 
-RUN cargo install cargo-watch
+RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+RUN export PATH=$PATH:~/.cargo/bin
+RUN cargo binstall -y cargo-watch
