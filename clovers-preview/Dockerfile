@@ -1,6 +1,6 @@
 # Based on https://github.com/LukeMathWalker/cargo-chef
 
-FROM lukemathwalker/cargo-chef:latest-rust-1.70 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.72 AS chef
 WORKDIR /app
 
 FROM chef AS planner
