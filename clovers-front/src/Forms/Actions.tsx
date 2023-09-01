@@ -15,7 +15,7 @@ export const ActionForm = ({
 }): ReactElement => {
   return (
     <div className="OptionsForm">
-      <h3>actions</h3>
+      <h3>raytrace</h3>
       <label htmlFor="previewButton">preview:</label>
       <Button
         id="previewButton"
@@ -29,6 +29,7 @@ export const ActionForm = ({
         text="start"
       />
       <hr />
+      <h3>import</h3>
       <FileInput id="importFileInput" />
       <label htmlFor="importButton">load selected file:</label>
       <Button
@@ -36,6 +37,8 @@ export const ActionForm = ({
         handleClick={() => handleImport()}
         text="import"
       />
+      <hr />
+      <h3>export</h3>
       <label htmlFor="exportButton">save to file:</label>
       <Button
         id="exportButton"

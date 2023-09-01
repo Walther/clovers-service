@@ -170,20 +170,8 @@ function App() {
       </header>
       <main>
         <div className="LeftGroup">
-          <Preview previewId={previewId} />
-        </div>
-        <div className="MiddleGroup">
+          <h2>actions & options</h2>
           <div className="OptionsGroup">
-            <RenderOptionsForm
-              object={renderOptions}
-              setState={setRenderOptions}
-              path={[]}
-            />
-            <CameraForm
-              object={cameraOptions}
-              setState={setCameraOptions}
-              path={[]}
-            />
             <ActionForm
               handlePreview={handlePreview}
               handleRender={handleRender}
@@ -199,22 +187,44 @@ function App() {
                 handleExport(scene_file);
               }}
             />
-            <NewObjectForm setState={setSceneObjects} path={[]} />
+            <RenderOptionsForm
+              object={renderOptions}
+              setState={setRenderOptions}
+              path={[]}
+            />
+            <CameraForm
+              object={cameraOptions}
+              setState={setCameraOptions}
+              path={[]}
+            />
+            <div className="ResultBox">
+              <h3>queue</h3>
+              <Button handleClick={() => refreshQueue()} text="refresh queue" />
+              <RenderQueue queue={queue} />
+            </div>
+            <div className="ResultBox">
+              <h3>renders</h3>
+              <Button
+                handleClick={() => refreshResults()}
+                text="refresh renders"
+              />
+              <RenderResults renders={renders} />
+            </div>
           </div>
+          <h2>status</h2>
+          <MessageBox message={message} />
+          <Preview previewId={previewId} />
+        </div>
+        <div className="MiddleGroup">
+          <h2>objects</h2>
+          <NewObjectForm setState={setSceneObjects} path={[]} />
           <SceneForm
             sceneObjects={sceneObjects}
             setSceneObjects={setSceneObjects}
           />
         </div>
         <div className="RightGroup">
-          <h2>status</h2>
-          <MessageBox message={message} />
-          <h2>queue</h2>
-          <Button handleClick={() => refreshQueue()} text="refresh queue" />
-          <RenderQueue queue={queue} />
-          <h2>renders</h2>
-          <Button handleClick={() => refreshResults()} text="refresh renders" />
-          <RenderResults renders={renders} />
+          <h2>materials tbd</h2>
         </div>
       </main>
       <footer>

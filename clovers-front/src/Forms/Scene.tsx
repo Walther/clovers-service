@@ -150,18 +150,18 @@ export const SceneForm = ({
 }): ReactElement => {
   return (
     <div>
-      <h2>objects</h2>
-      <div className="OptionsGroup">
-        {sceneObjects &&
-          sceneObjects.map((obj, index) => (
+      {sceneObjects &&
+        sceneObjects.map((obj, index) => (
+          <details>
+            <summary>{obj.comment || obj.kind}</summary>
             <ObjectForm
               object={obj}
               path={[index]}
               key={index}
               setState={setSceneObjects}
             />
-          ))}
-      </div>
+          </details>
+        ))}
     </div>
   );
 };

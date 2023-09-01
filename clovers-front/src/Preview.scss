@@ -1,8 +1,18 @@
 .Preview {
   width: 100%;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 
   img {
     max-width: 100%;
+  }
+
+  p {
+    display: block;
+    min-height: 350px;
+    min-width: 350px;
+    background-color: var(--grey-verydark);
+    text-align: center;
+    padding-top: 175px;
+    color: var(--whiteish);
   }
 }
