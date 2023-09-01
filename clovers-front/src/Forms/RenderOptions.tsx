@@ -42,6 +42,26 @@ export const RenderOptionsForm = ({
     <div className="OptionsForm">
       <h3>render options</h3>
 
+      <label>presets</label>
+      <Button
+        handleClick={(_e) => setState(defaultRenderOptions)}
+        text={"1k*1k"}
+      />
+      <Button
+        handleClick={(_e) =>
+          setState({ ...defaultRenderOptions, width: 1920, height: 1080 })
+        }
+        text={"fullhd"}
+      />
+      <Button
+        handleClick={(_e) =>
+          setState({ ...defaultRenderOptions, width: 3840, height: 2160 })
+        }
+        text={"4k"}
+      />
+
+      <hr />
+
       <NumberInput
         fieldname="width"
         object={object}
@@ -81,24 +101,6 @@ export const RenderOptionsForm = ({
       <hr />
       <label htmlFor="est_rays">estimated upper bound for rays:</label>
       <span id="est_rays">{maxRaysM} M</span>
-      <hr />
-      <label>presets</label>
-      <Button
-        handleClick={(_e) => setState(defaultRenderOptions)}
-        text={"1k*1k"}
-      />
-      <Button
-        handleClick={(_e) =>
-          setState({ ...defaultRenderOptions, width: 1920, height: 1080 })
-        }
-        text={"fullhd"}
-      />
-      <Button
-        handleClick={(_e) =>
-          setState({ ...defaultRenderOptions, width: 3840, height: 2160 })
-        }
-        text={"4k"}
-      />
     </div>
   );
 };

@@ -7,7 +7,7 @@ export const Preview = ({ previewId }: { previewId: string | undefined }) => {
   if (!previewId) {
     return (
       <figure className="Preview">
-        <p>Click `preview` to generate a preview</p>
+        <p>Click `preview` to begin</p>
       </figure>
     );
   }
