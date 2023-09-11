@@ -7,9 +7,10 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-clovers = { git = "https://github.com/Walther/clovers/", rev = "d69304066dd538e08439e7a9f0e27e15ba336a5a", default-features = false, features = [
+clovers = { git = "https://github.com/Walther/clovers/", rev = "c3f4db460f9d27ae0c2303ee53dfc0ce45c9e525", default-features = false, features = [
   "serde-derive",
   "stl",
+  "traces",
 ] }
 dotenv = "0.15.0"
 rand = { version = "0.8.5", features = ["small_rng"], default-features = false }
