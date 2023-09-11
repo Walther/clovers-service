@@ -1,10 +1,12 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../Inputs/DeleteButton";
 import { Texture, TextureForm } from "../Textures/Texture";
+import { TextInput } from "../Inputs/Text";
 
 export type DiffuseLight = {
   kind: "DiffuseLight";
   emit: Texture;
+  name: string;
 };
 
 export const DiffuseLightForm = ({
@@ -16,10 +18,16 @@ export const DiffuseLightForm = ({
   path: R.Path;
   setState: React.Dispatch<React.SetStateAction<DiffuseLight>>;
 }): ReactElement => {
-  const mat = "DiffuseLight";
+  const kind = "DiffuseLight";
   return (
     <div className="OptionsForm">
-      <h3>{mat}</h3>
+      <h3>{material.name || kind}</h3>
+      <TextInput
+        fieldname="name"
+        object={material}
+        path={path}
+        setState={setState}
+      />
       <DeleteButton path={path} setState={setState} />
       <TextureForm
         texture={material.emit}

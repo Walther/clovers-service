@@ -15,12 +15,55 @@ export type Material =
   | Metal;
 
 // TODO: can this be cleaner?
-const MaterialNames = [
+const MaterialKinds = [
   "Dielectric",
   "DiffuseLight",
   "Isotropic",
   "Lambertian",
   "Metal",
+];
+
+export type Materials = Array<Material>;
+
+export const defaultMaterials: Array<Material> = [
+  {
+    name: "lamp",
+    kind: "DiffuseLight",
+    emit: {
+      kind: "SolidColor",
+      color: [7, 7, 7],
+    },
+  },
+  {
+    name: "glass",
+    kind: "Dielectric",
+    refractive_index: 1.5,
+    color: [1, 1, 1],
+  },
+  {
+    name: "green wall",
+    kind: "Lambertian",
+    albedo: {
+      kind: "SolidColor",
+      color: [0.12, 0.45, 0.15],
+    },
+  },
+  {
+    name: "red wall",
+    kind: "Lambertian",
+    albedo: {
+      kind: "SolidColor",
+      color: [0.65, 0.05, 0.05],
+    },
+  },
+  {
+    name: "grey wall",
+    kind: "Lambertian",
+    albedo: {
+      kind: "SolidColor",
+      color: [0.73, 0.73, 0.73],
+    },
+  },
 ];
 
 const DebugForm = ({ material }: { material: Material }): ReactElement => {
@@ -76,7 +119,7 @@ export const MaterialForm = ({
   }
 };
 
-export const MaterialSelect = ({
+export const NewMaterialSelect = ({
   id,
   selected,
   setSelected,
@@ -85,7 +128,7 @@ export const MaterialSelect = ({
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
 }): ReactElement => {
-  const options = MaterialNames.map((name, index) => (
+  const options = MaterialKinds.map((name, index) => (
     <option value={name} key={index}>
       {name}
     </option>
@@ -112,9 +155,14 @@ export const NewMaterialForm = ({
   const [selected, setSelected] = useState("Lambertian");
 
   return (
-    <>
-      <label htmlFor={id}>new material: </label>
-      <MaterialSelect id={id} selected={selected} setSelected={setSelected} />
+    <div className="OptionsForm">
+      <h3>new material</h3>
+      <label htmlFor={id}>kind: </label>
+      <NewMaterialSelect
+        id={id}
+        selected={selected}
+        setSelected={setSelected}
+      />
       <Button
         handleClick={() =>
           setState((prevState: any) => {
@@ -134,6 +182,31 @@ export const NewMaterialForm = ({
         }
         text={"add"}
       />
-    </>
+    </div>
+  );
+};
+
+export const MaterialsForm = ({
+  materials,
+  setMaterials,
+}: {
+  materials: Materials;
+  setMaterials: any;
+}): ReactElement => {
+  return (
+    <div>
+      {materials &&
+        materials.map((mat, index) => (
+          <details>
+            <summary>{mat.name || mat.kind}</summary>
+            <MaterialForm
+              material={mat}
+              path={[index]}
+              key={index}
+              setState={setMaterials}
+            />
+          </details>
+        ))}
+    </div>
   );
 };

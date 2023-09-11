@@ -2,17 +2,20 @@ import { implicitSceneSettings, SceneObjects } from "./Forms/Scene";
 import { CameraOptions } from "./Forms/Camera";
 import { RenderOptions } from "./Forms/RenderOptions";
 import { SceneObject } from "./Objects/SceneObject";
+import { Materials } from "./Materials/Material";
 
 export type handleImportParams = {
   setMessage: (msg: string) => void;
   setCameraOptions: (camera: CameraOptions) => void;
   setSceneObjects: (sceneobjects: SceneObjects) => void;
+  setMaterials: (materials: Materials) => void;
 };
 
 export const handleImport = ({
   setMessage,
   setCameraOptions,
   setSceneObjects,
+  setMaterials,
 }: handleImportParams) => {
   // TODO: this is extremely hacky, fix later, possibly with https://caniuse.com/native-filesystem-api
   const reader = new FileReader();
@@ -31,10 +34,12 @@ export const handleImport = ({
           // background_color,
           camera,
           objects,
+          materials,
           // priority_objects, // TODO: handle import for priority objects
         } = json;
         setCameraOptions(camera);
         setSceneObjects(objects);
+        setMaterials(materials);
       } catch (e) {
         setMessage(`cannot import; could not parse scene file: ${e}`);
         return;
@@ -59,17 +64,24 @@ export const handleExport = (scene_file: any) => {
 };
 
 // TODO: proper return type
-export const collectFile = (
-  renderOptions: RenderOptions,
-  cameraOptions: CameraOptions,
-  sceneObjects: SceneObjects
-): any => {
+export const collectFile = ({
+  renderOptions,
+  cameraOptions,
+  sceneObjects,
+  materials,
+}: {
+  renderOptions: RenderOptions;
+  cameraOptions: CameraOptions;
+  sceneObjects: SceneObjects;
+  materials: Materials;
+}): any => {
   const opts = renderOptions;
   const scene_file = {
     ...implicitSceneSettings,
     camera: cameraOptions,
     objects: sceneObjects,
     priority_objects: sceneObjects.filter((obj: SceneObject) => obj.priority),
+    materials: materials,
   };
   return {
     opts,

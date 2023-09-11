@@ -22,6 +22,12 @@ import useWebSocket from "react-use-websocket";
 import { collectFile, handleImport, handleExport } from "./io";
 import { RenderResults } from "./RenderResults";
 import { RenderQueue } from "./RenderQueue";
+import {
+  Materials,
+  MaterialsForm,
+  NewMaterialForm,
+  defaultMaterials,
+} from "./Materials/Material";
 
 function App() {
   const [renderOptions, setRenderOptions] =
@@ -30,6 +36,7 @@ function App() {
     useState<CameraOptions>(defaultCameraOptions);
   const [sceneObjects, setSceneObjects] =
     useState<SceneObjects>(defaultSceneObjects);
+  const [materials, setMaterials] = useState<Materials>(defaultMaterials);
   const [queue, setQueue] = useState<Array<string>>([]);
   const [renders, setRenders] = useState<Array<string>>([]);
   const [message, setMessage] = useState<string>("Ready.");
@@ -72,7 +79,12 @@ function App() {
   });
 
   const handlePreview = async () => {
-    const body = collectFile(renderOptions, cameraOptions, sceneObjects);
+    const body = collectFile({
+      renderOptions,
+      cameraOptions,
+      sceneObjects,
+      materials,
+    });
     const data = {
       kind: "preview",
       body,
@@ -94,7 +106,12 @@ function App() {
 
   const handleRender = async () => {
     setMessage("Ready.");
-    const body = collectFile(renderOptions, cameraOptions, sceneObjects);
+    const body = collectFile({
+      renderOptions,
+      cameraOptions,
+      sceneObjects,
+      materials,
+    });
 
     try {
       if (!REACT_APP_BACKEND) {
@@ -176,14 +193,20 @@ function App() {
               handlePreview={handlePreview}
               handleRender={handleRender}
               handleImport={() =>
-                handleImport({ setMessage, setCameraOptions, setSceneObjects })
+                handleImport({
+                  setMessage,
+                  setCameraOptions,
+                  setSceneObjects,
+                  setMaterials,
+                })
               }
               handleExport={() => {
-                const { scene_file } = collectFile(
+                const { scene_file } = collectFile({
                   renderOptions,
                   cameraOptions,
-                  sceneObjects
-                );
+                  sceneObjects,
+                  materials,
+                });
                 handleExport(scene_file);
               }}
             />
@@ -224,7 +247,9 @@ function App() {
           />
         </div>
         <div className="RightGroup">
-          <h2>materials tbd</h2>
+          <h2>materials</h2>
+          <NewMaterialForm setState={setMaterials} path={[]} />
+          <MaterialsForm materials={materials} setMaterials={setMaterials} />
         </div>
       </main>
       <footer>

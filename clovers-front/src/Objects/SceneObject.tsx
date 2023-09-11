@@ -173,8 +173,8 @@ export const NewObjectForm = ({
 
   return (
     <div className="OptionsForm">
-      <h3>add an object</h3>
-      <label htmlFor={id}>type: </label>
+      <h3>new object</h3>
+      <label htmlFor={id}>kind: </label>
       <ObjectSelect id={id} selected={selected} setSelected={setSelected} />
       <Button
         handleClick={() =>
