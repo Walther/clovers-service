@@ -155,8 +155,9 @@ export const NewMaterialForm = ({
   const [selected, setSelected] = useState("Lambertian");
 
   return (
-    <>
-      <label htmlFor={id}>new material: </label>
+    <div className="OptionsForm">
+      <h3>new material</h3>
+      <label htmlFor={id}>kind: </label>
       <NewMaterialSelect
         id={id}
         selected={selected}
@@ -181,7 +182,7 @@ export const NewMaterialForm = ({
         }
         text={"add"}
       />
-    </>
+    </div>
   );
 };
 
