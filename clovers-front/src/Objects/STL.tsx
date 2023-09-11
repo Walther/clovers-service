@@ -4,7 +4,6 @@ import { DeleteButton } from "../Inputs/DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Inputs/Number";
 import { TextInput } from "../Inputs/Text";
 import { CheckboxInput } from "../Inputs/Checkbox";
-import { Material, MaterialForm } from "../Materials/Material";
 
 export type STL = {
   kind: "STL";
@@ -13,7 +12,7 @@ export type STL = {
   scale: number;
   center: [number, number, number];
   rotation: [number, number, number];
-  material: Material;
+  material: string;
   priority: boolean;
 };
 
@@ -67,9 +66,10 @@ export const STLForm = ({
         path={path}
         setState={setState}
       />
-      <MaterialForm
-        material={object.material}
-        path={[...path, "material"]}
+      <TextInput
+        fieldname="material"
+        object={object}
+        path={path}
         setState={setState}
       />
     </div>

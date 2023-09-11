@@ -1,11 +1,13 @@
 import { ReactElement } from "react";
 import { DeleteButton } from "../Inputs/DeleteButton";
 import { TripleNumberInput, NumberInput } from "../Inputs/Number";
+import { TextInput } from "../Inputs/Text";
 
 export type Dielectric = {
   kind: "Dielectric";
   color: [number, number, number];
   refractive_index: number;
+  name: string;
 };
 
 export const DielectricForm = ({
@@ -17,10 +19,16 @@ export const DielectricForm = ({
   path: R.Path;
   setState: React.Dispatch<React.SetStateAction<Dielectric>>;
 }): ReactElement => {
-  const mat = "Dielectric";
+  const kind = "Dielectric";
   return (
     <div className="OptionsForm">
-      <h3>{mat}</h3>
+      <h3>{material.name || kind}</h3>
+      <TextInput
+        fieldname="name"
+        object={material}
+        path={path}
+        setState={setState}
+      />
       <DeleteButton path={path} setState={setState} />
       <NumberInput
         fieldname="refractive_index"

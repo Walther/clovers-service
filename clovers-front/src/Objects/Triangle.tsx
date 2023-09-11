@@ -3,7 +3,6 @@ import { DeleteButton } from "../Inputs/DeleteButton";
 import { TripleNumberInput } from "../Inputs/Number";
 import { TextInput } from "../Inputs/Text";
 import { CheckboxInput } from "../Inputs/Checkbox";
-import { Material, MaterialForm } from "../Materials/Material";
 
 export type Triangle = {
   kind: "Triangle";
@@ -11,7 +10,7 @@ export type Triangle = {
   q: [number, number, number];
   u: [number, number, number];
   v: [number, number, number];
-  material: Material;
+  material: string;
   priority: boolean;
 };
 
@@ -58,9 +57,10 @@ export const TriangleForm = ({
         path={path}
         setState={setState}
       />
-      <MaterialForm
-        material={object.material}
-        path={[...path, "material"]}
+      <TextInput
+        fieldname="material"
+        object={object}
+        path={path}
         setState={setState}
       />
     </div>

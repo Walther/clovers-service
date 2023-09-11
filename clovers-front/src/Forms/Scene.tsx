@@ -16,13 +16,7 @@ export const defaultSceneObjects: SceneObjects = [
     q: [555, 0, 0],
     u: [0, 0, 555],
     v: [0, 555, 0],
-    material: {
-      kind: "Lambertian",
-      albedo: {
-        kind: "SolidColor",
-        color: [0.12, 0.45, 0.15],
-      },
-    },
+    material: "green wall",
     comment: "green wall, left",
     priority: false,
   },
@@ -31,13 +25,7 @@ export const defaultSceneObjects: SceneObjects = [
     q: [0, 0, 555],
     u: [0, 0, -555],
     v: [0, 555, 0],
-    material: {
-      kind: "Lambertian",
-      albedo: {
-        kind: "SolidColor",
-        color: [0.65, 0.05, 0.05],
-      },
-    },
+    material: "red wall",
     comment: "red wall, right",
     priority: false,
   },
@@ -46,13 +34,7 @@ export const defaultSceneObjects: SceneObjects = [
     q: [0, 0, 0],
     u: [555, 0, 0],
     v: [0, 0, 555],
-    material: {
-      kind: "Lambertian",
-      albedo: {
-        kind: "SolidColor",
-        color: [0.73, 0.73, 0.73],
-      },
-    },
+    material: "grey wall",
     comment: "floor",
     priority: false,
   },
@@ -61,13 +43,7 @@ export const defaultSceneObjects: SceneObjects = [
     q: [0, 555, 0],
     u: [555, 0, 0],
     v: [0, 0, 555],
-    material: {
-      kind: "Lambertian",
-      albedo: {
-        kind: "SolidColor",
-        color: [0.73, 0.73, 0.73],
-      },
-    },
+    material: "grey wall",
     comment: "ceiling",
     priority: false,
   },
@@ -76,13 +52,7 @@ export const defaultSceneObjects: SceneObjects = [
     q: [0, 0, 555],
     u: [555, 0, 0],
     v: [0, 555, 0],
-    material: {
-      kind: "Lambertian",
-      albedo: {
-        kind: "SolidColor",
-        color: [0.73, 0.73, 0.73],
-      },
-    },
+    material: "grey wall",
     comment: "back wall",
     priority: false,
   },
@@ -91,13 +61,7 @@ export const defaultSceneObjects: SceneObjects = [
     q: [113, 554, 127],
     u: [330, 0, 0],
     v: [0, 0, 305],
-    material: {
-      kind: "DiffuseLight",
-      emit: {
-        kind: "SolidColor",
-        color: [7, 7, 7],
-      },
-    },
+    material: "lamp",
     comment: "big ceiling light",
     priority: true,
   },
@@ -115,14 +79,7 @@ export const defaultSceneObjects: SceneObjects = [
         kind: "Boxy",
         corner_0: [0, 0, 0],
         corner_1: [165, 330, 165],
-        priority: false,
-        material: {
-          kind: "Lambertian",
-          albedo: {
-            kind: "SolidColor",
-            color: [0.73, 0.73, 0.73],
-          },
-        },
+        material: "grey wall",
         comment: "tall box",
       },
     },
@@ -131,11 +88,7 @@ export const defaultSceneObjects: SceneObjects = [
     kind: "Sphere",
     center: [190, 90, 190],
     radius: 90,
-    material: {
-      kind: "Dielectric",
-      refractive_index: 1.5,
-      color: [1, 1, 1],
-    },
+    material: "glass",
     comment: "glass sphere",
     priority: true,
   },

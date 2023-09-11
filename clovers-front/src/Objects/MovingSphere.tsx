@@ -3,7 +3,6 @@ import { DeleteButton } from "../Inputs/DeleteButton";
 import { NumberInput, TripleNumberInput } from "../Inputs/Number";
 import { TextInput } from "../Inputs/Text";
 import { CheckboxInput } from "../Inputs/Checkbox";
-import { Material, MaterialForm } from "../Materials/Material";
 
 export type MovingSphere = {
   kind: "MovingSphere";
@@ -13,7 +12,7 @@ export type MovingSphere = {
   time_0: number;
   time_1: number;
   radius: number;
-  material: Material;
+  material: string;
   aabb: any; // TODO: remove when fixed in upstream
   priority: boolean;
 };
@@ -73,9 +72,10 @@ export const MovingSphereForm = ({
         path={path}
         setState={setState}
       />
-      <MaterialForm
-        material={object.material}
-        path={[...path, "material"]}
+      <TextInput
+        fieldname="material"
+        object={object}
+        path={path}
         setState={setState}
       />
     </div>

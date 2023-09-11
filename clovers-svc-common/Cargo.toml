@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-clovers = { git = "https://github.com/Walther/clovers/", rev = "48ca4b0821a2e13b57f428577a4f35106be8c001", default-features = false, features = [
+clovers = { git = "https://github.com/Walther/clovers/", rev = "d69304066dd538e08439e7a9f0e27e15ba336a5a", default-features = false, features = [
   "serde-derive",
   "stl",
 ] }
