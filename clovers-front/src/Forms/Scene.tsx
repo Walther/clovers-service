@@ -88,7 +88,7 @@ export const defaultSceneObjects: SceneObjects = [
     kind: "Sphere",
     center: [190, 90, 190],
     radius: 90,
-    material: "glass",
+    material: "dense flint glass SF10",
     comment: "glass sphere",
     priority: true,
   },

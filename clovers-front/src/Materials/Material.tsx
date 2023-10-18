@@ -6,9 +6,11 @@ import { DiffuseLight, DiffuseLightForm } from "./DiffuseLight";
 import { Isotropic, IsotropicForm } from "./Isotropic";
 import { Lambertian, LambertianForm } from "./Lambertian";
 import { Metal, MetalForm } from "./Metal";
+import { Dispersive, DispersiveForm } from "./Dispersive";
 
 export type Material =
   | Dielectric
+  | Dispersive
   | DiffuseLight
   | Isotropic
   | Lambertian
@@ -17,6 +19,7 @@ export type Material =
 // TODO: can this be cleaner?
 const MaterialKinds = [
   "Dielectric",
+  "Dispersive",
   "DiffuseLight",
   "Isotropic",
   "Lambertian",
@@ -64,6 +67,48 @@ export const defaultMaterials: Array<Material> = [
       color: [0.73, 0.73, 0.73],
     },
   },
+  {
+    name: "non-dispersive glass",
+    kind: "Dielectric",
+    refractive_index: 1.5,
+    color: [1, 1, 1],
+  },
+  {
+    name: "fused silica",
+    kind: "Dispersive",
+    cauchy_a: 1.458,
+    cauchy_b: 0.00354,
+  },
+  {
+    name: "borosilicate glass BK7",
+    kind: "Dispersive",
+    cauchy_a: 1.5046,
+    cauchy_b: 0.0042,
+  },
+  {
+    name: "hard crown glass K5",
+    kind: "Dispersive",
+    cauchy_a: 1.522,
+    cauchy_b: 0.00459,
+  },
+  {
+    name: "barium crown glass BaK4",
+    kind: "Dispersive",
+    cauchy_a: 1.569,
+    cauchy_b: 0.00531,
+  },
+  {
+    name: "barium flint glass BaF10",
+    kind: "Dispersive",
+    cauchy_a: 1.67,
+    cauchy_b: 0.00743,
+  },
+  {
+    name: "dense flint glass SF10",
+    kind: "Dispersive",
+    cauchy_a: 1.728,
+    cauchy_b: 0.01342,
+  },
 ];
 
 const DebugForm = ({ material }: { material: Material }): ReactElement => {
@@ -99,6 +144,10 @@ export const MaterialForm = ({
     case "Dielectric":
       return (
         <DielectricForm material={material} path={path} setState={setState} />
+      );
+    case "Dispersive":
+      return (
+        <DispersiveForm material={material} path={path} setState={setState} />
       );
     case "DiffuseLight":
       return (
