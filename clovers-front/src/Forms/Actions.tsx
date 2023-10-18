@@ -1,17 +1,20 @@
 import { ReactElement } from "react";
 import { Button } from "../Inputs/Button";
 import { FileInput } from "../Inputs/File";
+import { ExampleForm } from "../Examples/Example";
 
 export const ActionForm = ({
   handlePreview,
   handleRender,
   handleImport,
   handleExport,
+  handleExample,
 }: {
   handlePreview: any;
   handleRender: any;
   handleImport: any;
   handleExport: any;
+  handleExample: any;
 }): ReactElement => {
   return (
     <div className="OptionsForm">
@@ -45,6 +48,9 @@ export const ActionForm = ({
         handleClick={() => handleExport()}
         text="export"
       />
+      <hr />
+      <h3>examples</h3>
+      <ExampleForm handleExample={handleExample} />
     </div>
   );
 };

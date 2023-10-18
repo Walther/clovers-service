@@ -7,6 +7,7 @@ import { Isotropic, IsotropicForm } from "./Isotropic";
 import { Lambertian, LambertianForm } from "./Lambertian";
 import { Metal, MetalForm } from "./Metal";
 import { Dispersive, DispersiveForm } from "./Dispersive";
+import cornell from "../Examples/cornell.json";
 
 export type Material =
   | Dielectric
@@ -28,88 +29,7 @@ const MaterialKinds = [
 
 export type Materials = Array<Material>;
 
-export const defaultMaterials: Array<Material> = [
-  {
-    name: "lamp",
-    kind: "DiffuseLight",
-    emit: {
-      kind: "SolidColor",
-      color: [7, 7, 7],
-    },
-  },
-  {
-    name: "glass",
-    kind: "Dielectric",
-    refractive_index: 1.5,
-    color: [1, 1, 1],
-  },
-  {
-    name: "green wall",
-    kind: "Lambertian",
-    albedo: {
-      kind: "SolidColor",
-      color: [0.12, 0.45, 0.15],
-    },
-  },
-  {
-    name: "red wall",
-    kind: "Lambertian",
-    albedo: {
-      kind: "SolidColor",
-      color: [0.65, 0.05, 0.05],
-    },
-  },
-  {
-    name: "grey wall",
-    kind: "Lambertian",
-    albedo: {
-      kind: "SolidColor",
-      color: [0.73, 0.73, 0.73],
-    },
-  },
-  {
-    name: "non-dispersive glass",
-    kind: "Dielectric",
-    refractive_index: 1.5,
-    color: [1, 1, 1],
-  },
-  {
-    name: "fused silica",
-    kind: "Dispersive",
-    cauchy_a: 1.458,
-    cauchy_b: 0.00354,
-  },
-  {
-    name: "borosilicate glass BK7",
-    kind: "Dispersive",
-    cauchy_a: 1.5046,
-    cauchy_b: 0.0042,
-  },
-  {
-    name: "hard crown glass K5",
-    kind: "Dispersive",
-    cauchy_a: 1.522,
-    cauchy_b: 0.00459,
-  },
-  {
-    name: "barium crown glass BaK4",
-    kind: "Dispersive",
-    cauchy_a: 1.569,
-    cauchy_b: 0.00531,
-  },
-  {
-    name: "barium flint glass BaF10",
-    kind: "Dispersive",
-    cauchy_a: 1.67,
-    cauchy_b: 0.00743,
-  },
-  {
-    name: "dense flint glass SF10",
-    kind: "Dispersive",
-    cauchy_a: 1.728,
-    cauchy_b: 0.01342,
-  },
-];
+export const defaultMaterials: Materials = cornell.materials as Materials;
 
 const DebugForm = ({ material }: { material: Material }): ReactElement => {
   const id = useId();

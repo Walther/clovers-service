@@ -19,7 +19,7 @@ import { ActionForm } from "./Forms/Actions";
 import { Preview } from "./Preview";
 import { REACT_APP_BACKEND, WS_ENDPOINT } from "./config";
 import useWebSocket from "react-use-websocket";
-import { collectFile, handleImport, handleExport } from "./io";
+import { collectFile, handleImport, handleExport, loadExample } from "./io";
 import { RenderResults } from "./RenderResults";
 import { RenderQueue } from "./RenderQueue";
 import {
@@ -209,6 +209,14 @@ function App() {
                 });
                 handleExport(scene_file);
               }}
+              handleExample={() =>
+                loadExample({
+                  setMessage,
+                  setCameraOptions,
+                  setSceneObjects,
+                  setMaterials,
+                })
+              }
             />
             <RenderOptionsForm
               object={renderOptions}

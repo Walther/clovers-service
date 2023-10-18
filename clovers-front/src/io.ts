@@ -4,6 +4,15 @@ import { RenderOptions } from "./Forms/RenderOptions";
 import { SceneObject } from "./Objects/SceneObject";
 import { Materials } from "./Materials/Material";
 
+import cornell from "./Examples/cornell.json";
+import dispersive from "./Examples/dispersive.json";
+const examples = {
+  cornell,
+  dispersive,
+};
+type examplesType = keyof typeof examples;
+export const exampleNames = Object.keys(examples);
+
 export type handleImportParams = {
   setMessage: (msg: string) => void;
   setCameraOptions: (camera: CameraOptions) => void;
@@ -87,4 +96,32 @@ export const collectFile = ({
     opts,
     scene_file,
   };
+};
+
+export const loadExample = ({
+  setMessage,
+  setCameraOptions,
+  setSceneObjects,
+  setMaterials,
+}: handleImportParams) => {
+  try {
+    const importElement: any = document.getElementById("exampleSelect");
+    const name = importElement.value as examplesType;
+    const {
+      // Ignoring a couple of fields for now that are handled in implicit / hidden settings.
+      // time_0,
+      // time_1,
+      // background_color,
+      camera,
+      objects,
+      materials,
+      // priority_objects, // TODO: handle import for priority objects
+    } = examples[name];
+    setCameraOptions(camera as CameraOptions);
+    setSceneObjects(objects as SceneObjects);
+    setMaterials(materials as Materials);
+  } catch (e) {
+    setMessage(`cannot load; could not parse example file: ${e}`);
+    return;
+  }
 };
