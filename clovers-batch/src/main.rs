@@ -83,7 +83,7 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     let mut img: RgbImage = ImageBuffer::new(width, height);
     img.enumerate_pixels_mut().for_each(|(x, y, pixel)| {
         let index = y * width + x;
-        *pixel = Rgb(pixelbuffer[index as usize].to_rgb_u8());
+        *pixel = Rgb(pixelbuffer[index as usize].into());
     });
     // Graphics assume origin at bottom left corner of the screen
     // Our buffer writes pixels from top left corner. Simple fix, just flip it!

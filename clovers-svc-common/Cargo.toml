@@ -7,12 +7,13 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-clovers = { git = "https://github.com/Walther/clovers/", rev = "c3f4db460f9d27ae0c2303ee53dfc0ce45c9e525", default-features = false, features = [
+clovers = { git = "https://github.com/Walther/clovers/", rev = "11a2c2854bb9f16c786d4e0e16abc638bdde9826", default-features = false, features = [
   "serde-derive",
   "stl",
   "traces",
 ] }
 dotenv = "0.15.0"
+palette = { version = "0.7.3", features = ["serializing"] }
 rand = { version = "0.8.5", features = ["small_rng"], default-features = false }
 rayon = "1.7.0"
 redis = { version = "0.22.3", features = ["tokio-comp", "connection-manager"] }
