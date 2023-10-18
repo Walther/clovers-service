@@ -1,33 +1,32 @@
 // TODO: refactoring
-// This is mostly copy-pasted from `clovers-cli` at commit 11542fc1cb6728501d66a9d8c7c58847f358c4bc
+// This is mostly copy-pasted from `clovers-cli` at commit 11a2c2854bb9f16c786d4e0e16abc638bdde9826
 
-use crate::clovers::{
-    color::Color, colorize::colorize, normals::normal_map, ray::Ray, scenes::Scene, Float,
-    RenderOpts,
+use clovers::{colorize::colorize, normals::normal_map, ray::Ray, scenes, Float, RenderOpts};
+use palette::{
+    chromatic_adaptation::AdaptInto, convert::IntoColorUnclamped, white_point::E, IntoColor,
+    LinSrgb, Srgb, Xyz,
 };
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
 use rayon::prelude::*;
+use scenes::Scene;
 
-/// The main drawing function, returns a `Vec<Color>` as a pixelbuffer.
-pub fn draw(opts: RenderOpts, scene: &Scene) -> Vec<Color> {
+/// The main drawing function, returns a `Vec<Srgb>` as a pixelbuffer.
+pub fn draw(opts: RenderOpts, scene: &Scene) -> Vec<Srgb<u8>> {
     // Progress bar
     let pixels = (opts.width * opts.height) as u64;
 
-    let black = Color::new(0.0, 0.0, 0.0);
+    let black: Srgb<u8> = Srgb::new(0, 0, 0);
     let mut pixelbuffer = vec![black; pixels as usize];
 
     pixelbuffer
         .par_iter_mut()
         .enumerate()
         .for_each(|(index, pixel)| {
-            // Enumerate gives us an usize, width and height are u32. perform conversions
-            let x = index % (opts.width as usize);
-            let y = index / (opts.width as usize);
-
-            // Convert most of these to Floats
-            let x = x as Float;
-            let y = y as Float;
+            // Enumerate gives us an usize, opts.width and opts.height are u32
+            // Most internal functions expect a Float, perform conversions
+            let x = (index % (opts.width as usize)) as Float;
+            let y = (index / (opts.width as usize)) as Float;
             let width = opts.width as Float;
             let height = opts.height as Float;
 
@@ -35,31 +34,30 @@ pub fn draw(opts: RenderOpts, scene: &Scene) -> Vec<Color> {
             let mut rng = SmallRng::from_entropy();
 
             // Initialize a mutable base color for the pixel
-            let mut color: Color = Color::new(0.0, 0.0, 0.0);
+            let mut color: LinSrgb = LinSrgb::new(0.0, 0.0, 0.0);
 
-            // TODO: could this be made nicer?
             if opts.normalmap {
                 // If we are rendering just a normalmap, make it quick and early return
                 let u = x / width;
                 let v = y / height;
                 let ray: Ray = scene.camera.get_ray(u, v, &mut rng);
                 color = normal_map(&ray, scene, &mut rng);
-                *pixel = color;
-            } else {
-                // Otherwise, do a regular render
-
-                // Multisampling for antialiasing
-                for _sample in 0..opts.samples {
-                    if let Some(s) = sample(scene, x, y, width, height, &mut rng, opts.max_depth) {
-                        color += s
-                    }
-                }
-                color /= opts.samples as Float;
-
-                // After multisampling, perform gamma correction and store final color into the pixel
-                color = color.gamma_correction(opts.gamma);
-                *pixel = color;
+                let color: Srgb = color.into_color();
+                *pixel = color.into_format();
+                return;
             }
+            // Otherwise, do a regular render
+
+            // Multisampling for antialiasing
+            for _sample in 0..opts.samples {
+                if let Some(s) = sample(scene, x, y, width, height, &mut rng, opts.max_depth) {
+                    color += s
+                }
+            }
+            color /= opts.samples as Float;
+            // Gamma / component transfer function
+            let color: Srgb = color.into_color();
+            *pixel = color.into_format();
         });
 
     pixelbuffer
@@ -74,13 +72,14 @@ fn sample(
     height: Float,
     rng: &mut SmallRng,
     max_depth: u32,
-) -> Option<Color> {
+) -> Option<LinSrgb> {
     let u = (x + rng.gen::<Float>()) / width;
     let v = (y + rng.gen::<Float>()) / height;
     let ray: Ray = scene.camera.get_ray(u, v, rng);
-    let new_color = colorize(&ray, scene, 0, max_depth, rng);
-    // skip NaN and Infinity
-    if new_color.r.is_finite() && new_color.g.is_finite() && new_color.b.is_finite() {
+    let new_color: Xyz<E> = colorize(&ray, scene, 0, max_depth, rng);
+    let new_color: Xyz = new_color.adapt_into();
+    let new_color: LinSrgb = new_color.into_color_unclamped();
+    if new_color.red.is_finite() && new_color.green.is_finite() && new_color.blue.is_finite() {
         return Some(new_color);
     }
     None

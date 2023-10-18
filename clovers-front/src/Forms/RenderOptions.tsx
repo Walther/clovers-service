@@ -9,7 +9,6 @@ export type RenderOptions = {
   height: number;
   samples: number;
   max_depth: number;
-  gamma: number;
   quiet: boolean;
   normalmap: boolean;
 };
@@ -18,7 +17,6 @@ export const defaultRenderOptions: RenderOptions = {
   height: 1024,
   samples: 10,
   max_depth: 100,
-  gamma: 2.0,
   quiet: false,
   normalmap: false,
 };
@@ -82,12 +80,6 @@ export const RenderOptionsForm = ({
       />
       <NumberInput
         fieldname="max_depth"
-        object={object}
-        path={path}
-        setState={setState}
-      />
-      <NumberInput
-        fieldname="gamma"
         object={object}
         path={path}
         setState={setState}

@@ -6,9 +6,12 @@ import { DiffuseLight, DiffuseLightForm } from "./DiffuseLight";
 import { Isotropic, IsotropicForm } from "./Isotropic";
 import { Lambertian, LambertianForm } from "./Lambertian";
 import { Metal, MetalForm } from "./Metal";
+import { Dispersive, DispersiveForm } from "./Dispersive";
+import cornell from "../Examples/cornell.json";
 
 export type Material =
   | Dielectric
+  | Dispersive
   | DiffuseLight
   | Isotropic
   | Lambertian
@@ -17,6 +20,7 @@ export type Material =
 // TODO: can this be cleaner?
 const MaterialKinds = [
   "Dielectric",
+  "Dispersive",
   "DiffuseLight",
   "Isotropic",
   "Lambertian",
@@ -25,46 +29,7 @@ const MaterialKinds = [
 
 export type Materials = Array<Material>;
 
-export const defaultMaterials: Array<Material> = [
-  {
-    name: "lamp",
-    kind: "DiffuseLight",
-    emit: {
-      kind: "SolidColor",
-      color: [7, 7, 7],
-    },
-  },
-  {
-    name: "glass",
-    kind: "Dielectric",
-    refractive_index: 1.5,
-    color: [1, 1, 1],
-  },
-  {
-    name: "green wall",
-    kind: "Lambertian",
-    albedo: {
-      kind: "SolidColor",
-      color: [0.12, 0.45, 0.15],
-    },
-  },
-  {
-    name: "red wall",
-    kind: "Lambertian",
-    albedo: {
-      kind: "SolidColor",
-      color: [0.65, 0.05, 0.05],
-    },
-  },
-  {
-    name: "grey wall",
-    kind: "Lambertian",
-    albedo: {
-      kind: "SolidColor",
-      color: [0.73, 0.73, 0.73],
-    },
-  },
-];
+export const defaultMaterials: Materials = cornell.materials as Materials;
 
 const DebugForm = ({ material }: { material: Material }): ReactElement => {
   const id = useId();
@@ -99,6 +64,10 @@ export const MaterialForm = ({
     case "Dielectric":
       return (
         <DielectricForm material={material} path={path} setState={setState} />
+      );
+    case "Dispersive":
+      return (
+        <DispersiveForm material={material} path={path} setState={setState} />
       );
     case "DiffuseLight":
       return (

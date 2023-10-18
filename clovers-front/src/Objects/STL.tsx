@@ -77,7 +77,7 @@ export const STLForm = ({
 };
 
 // TODO: user file upload
-const STLPaths = ["", "bunny.stl", "dragon.stl", "teapot.stl"];
+const STLPaths = ["", "bunny.stl", "dragon.stl", "prism.stl", "teapot.stl"];
 export const STLSelect = ({
   id,
   selected,
