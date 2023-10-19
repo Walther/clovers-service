@@ -61,24 +61,28 @@ export const RenderOptionsForm = ({
       <hr />
 
       <NumberInput
+        tooltip="width of the image in pixels"
         fieldname="width"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="height of the image in pixels"
         fieldname="height"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="number of samples per pixel to generate"
         fieldname="samples"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="maximum bounce depth for rays"
         fieldname="max_depth"
         object={object}
         path={path}

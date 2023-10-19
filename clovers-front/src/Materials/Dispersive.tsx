@@ -31,12 +31,14 @@ export const DispersiveForm = ({
       />
       <DeleteButton path={path} setState={setState} />
       <NumberInput
+        tooltip="cauchy equation constant A"
         fieldname="cauchy_a"
         object={material}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="cauchy equation constant B"
         fieldname="cauchy_b"
         object={material}
         path={path}

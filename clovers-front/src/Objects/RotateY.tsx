@@ -33,6 +33,7 @@ export const RotateYForm = ({
         setState={setState}
       />
       <NumberInput
+        tooltip="rotation angle, in degrees"
         fieldname="angle"
         object={object}
         path={path}

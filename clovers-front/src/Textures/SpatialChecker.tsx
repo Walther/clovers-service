@@ -24,18 +24,21 @@ export const SpatialCheckerForm = ({
       <h3>{mat}</h3>
       <DeleteButton path={path} setState={setState} />
       <NumberInput
+        tooltip="density of the spatial checker"
         fieldname="density"
         object={texture}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="sRGB float, even squares"
         fieldname="even"
         object={texture}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="sRGB float, odd squares"
         fieldname="odd"
         object={texture}
         path={path}

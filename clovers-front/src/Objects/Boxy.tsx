@@ -33,12 +33,14 @@ export const BoxyForm = ({
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="corner coordinate"
         fieldname="corner_0"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="diagonally opposite corner coordinate"
         fieldname="corner_1"
         object={object}
         path={path}

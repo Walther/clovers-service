@@ -43,18 +43,21 @@ export const STLForm = ({
       />
       <STLSelect id={id} selected={selected} setSelected={setSelected} />
       <NumberInput
+        tooltip="scaling factor for the object"
         fieldname="scale"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate"
         fieldname="center"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="roll, pitch, yaw"
         fieldname="rotation"
         object={object}
         path={path}

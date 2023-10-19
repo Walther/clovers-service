@@ -37,30 +37,35 @@ export const MovingSphereForm = ({
         setState={setState}
       />
       <NumberInput
+        tooltip="radius of the sphere"
         fieldname="radius"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate, start of the movement"
         fieldname="center_0"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate, end of the movement"
         fieldname="center_1"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="start time of the movement"
         fieldname="time_0"
         object={object}
         path={[...path, "time_0"]}
         setState={setState}
       />
       <NumberInput
+        tooltip="end time of the movement"
         fieldname="time_1"
         object={object}
         path={[...path, "time_1"]}

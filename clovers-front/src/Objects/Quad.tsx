@@ -34,18 +34,21 @@ export const QuadForm = ({
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="corner coordinate"
         fieldname="q"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="side vector u"
         fieldname="u"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="side vector v"
         fieldname="v"
         object={object}
         path={path}

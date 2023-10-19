@@ -33,6 +33,7 @@ export const TranslateForm = ({
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="offset vector"
         fieldname="offset"
         object={object}
         path={path}

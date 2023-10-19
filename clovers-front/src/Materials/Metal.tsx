@@ -32,6 +32,7 @@ export const MetalForm = ({
       />
       <DeleteButton path={path} setState={setState} />
       <NumberInput
+        tooltip="fuzziness of the material, 0 for smooth"
         fieldname="fuzz"
         object={material}
         path={path}

@@ -35,6 +35,7 @@ export const ConstantMediumForm = ({
         setState={setState}
       />
       <NumberInput
+        tooltip="density of the fog"
         fieldname="density"
         object={object}
         path={path}

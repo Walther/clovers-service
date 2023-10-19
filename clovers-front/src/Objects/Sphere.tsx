@@ -33,12 +33,14 @@ export const SphereForm = ({
         setState={setState}
       />
       <NumberInput
+        tooltip="radius of the sphere"
         fieldname="radius"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate"
         fieldname="center"
         object={object}
         path={path}
