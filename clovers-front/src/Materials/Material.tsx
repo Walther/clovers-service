@@ -36,7 +36,9 @@ const DebugForm = ({ material }: { material: Material }): ReactElement => {
   return (
     <div className="OptionsForm">
       <h3>other material</h3>
-      <label htmlFor={id}>json: </label>
+      <label title="json for the unknown material" htmlFor={id}>
+        json:
+      </label>
       <input id={id} type="text" value={JSON.stringify(material)} />
     </div>
   );
@@ -126,7 +128,9 @@ export const NewMaterialForm = ({
   return (
     <div className="OptionsForm">
       <h3>new material</h3>
-      <label htmlFor={id}>kind: </label>
+      <label title="select the type of the new material to add" htmlFor={id}>
+        kind:
+      </label>
       <NewMaterialSelect
         id={id}
         selected={selected}

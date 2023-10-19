@@ -19,13 +19,20 @@ export const ActionForm = ({
   return (
     <div className="OptionsForm">
       <h3>raytrace</h3>
-      <label htmlFor="previewButton">preview:</label>
+      <label title="create a quick preview render" htmlFor="previewButton">
+        preview:
+      </label>
       <Button
         id="previewButton"
         handleClick={() => handlePreview()}
         text="start"
       />
-      <label htmlFor="renderButton">render:</label>
+      <label
+        title="create a task for a higher-quality render"
+        htmlFor="renderButton"
+      >
+        render:
+      </label>
       <Button
         id="renderButton"
         handleClick={() => handleRender()}
@@ -34,7 +41,12 @@ export const ActionForm = ({
       <hr />
       <h3>import</h3>
       <FileInput id="importFileInput" />
-      <label htmlFor="importButton">load selected file:</label>
+      <label
+        title="load the selected file, replacing the current scene"
+        htmlFor="importButton"
+      >
+        load selected file:
+      </label>
       <Button
         id="importButton"
         handleClick={() => handleImport()}
@@ -42,7 +54,12 @@ export const ActionForm = ({
       />
       <hr />
       <h3>export</h3>
-      <label htmlFor="exportButton">save to file:</label>
+      <label
+        title="export the current scene into a file"
+        htmlFor="exportButton"
+      >
+        save to file:
+      </label>
       <Button
         id="exportButton"
         handleClick={() => handleExport()}

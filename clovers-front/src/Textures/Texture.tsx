@@ -14,7 +14,9 @@ const DebugForm = ({ texture }: { texture: Texture }): ReactElement => {
   return (
     <div className="OptionsForm">
       <h3>texture</h3>
-      <label htmlFor={id}>json: </label>
+      <label title="json for the unknown texture" htmlFor={id}>
+        json:
+      </label>
       <input id={id} type="text" value={JSON.stringify(texture)} readOnly />
     </div>
   );
@@ -93,7 +95,9 @@ export const NewTextureForm = ({
 
   return (
     <>
-      <label htmlFor={id}>new texture: </label>
+      <label title="select the type of the new texture to add" htmlFor={id}>
+        new texture:
+      </label>
       <TextureSelect id={id} selected={selected} setSelected={setSelected} />
       <Button
         handleClick={() =>

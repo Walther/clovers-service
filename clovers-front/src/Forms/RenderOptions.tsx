@@ -40,7 +40,7 @@ export const RenderOptionsForm = ({
     <div className="OptionsForm">
       <h3>render options</h3>
 
-      <label>presets</label>
+      <label title="a selection of rendering setting presets">presets</label>
       <Button
         handleClick={(_e) => setState(defaultRenderOptions)}
         text={"1k*1k"}
@@ -96,7 +96,12 @@ export const RenderOptionsForm = ({
         setState={setState}
       />
       <hr />
-      <label htmlFor="est_rays">estimated upper bound for rays:</label>
+      <label
+        title="a rough estimate, potentially useful for guessing render times"
+        htmlFor="est_rays"
+      >
+        estimated upper bound for rays:
+      </label>
       <span id="est_rays">{maxRaysM} M</span>
     </div>
   );

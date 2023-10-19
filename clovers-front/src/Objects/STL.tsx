@@ -100,7 +100,9 @@ export const STLSelect = ({
   ));
   return (
     <>
-      <label htmlFor={id}>stl file:</label>
+      <label title="select the STL object to add" htmlFor={id}>
+        stl file:
+      </label>
       <select
         id={id}
         value={selected}
