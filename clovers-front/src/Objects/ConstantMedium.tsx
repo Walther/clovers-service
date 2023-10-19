@@ -29,6 +29,7 @@ export const ConstantMediumForm = ({
       <h3>ConstantMedium</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}

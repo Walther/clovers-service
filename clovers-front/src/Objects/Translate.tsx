@@ -27,6 +27,7 @@ export const TranslateForm = ({
       <h3>Translate</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}

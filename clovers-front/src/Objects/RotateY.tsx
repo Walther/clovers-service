@@ -27,6 +27,7 @@ export const RotateYForm = ({
       <h3>RotateY</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}

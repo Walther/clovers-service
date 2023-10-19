@@ -28,6 +28,7 @@ export const QuadForm = ({
       <h3>Quad</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}
@@ -62,6 +63,7 @@ export const QuadForm = ({
         setState={setState}
       />
       <TextInput
+        tooltip="unique name (pointer) of the material for this object"
         fieldname="material"
         object={object}
         path={path}
