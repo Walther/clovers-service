@@ -124,6 +124,36 @@ export const NewMaterialForm = ({
 }): ReactElement => {
   const id = useId();
   const [selected, setSelected] = useState("Lambertian");
+  const [hex, setHex] = useState("#000000");
+  const [srgb, setSrgb] = useState([0.0, 0.0, 0.0]);
+
+  const handleHex = (hex: string) => {
+    setHex(hex);
+
+    if (hex.length === 4) {
+      let r: any = "0x" + hex[1] + hex[1];
+      let g: any = "0x" + hex[2] + hex[2];
+      let b: any = "0x" + hex[3] + hex[3];
+
+      r = r / 255.0;
+      g = g / 255.0;
+      b = b / 255.0;
+
+      setSrgb([r, g, b]);
+    }
+
+    if (hex.length === 7) {
+      let r: any = "0x" + hex[1] + hex[2];
+      let g: any = "0x" + hex[3] + hex[4];
+      let b: any = "0x" + hex[5] + hex[6];
+
+      r = r / 255.0;
+      g = g / 255.0;
+      b = b / 255.0;
+
+      setSrgb([r, g, b]);
+    }
+  };
 
   return (
     <div className="OptionsForm">
@@ -154,6 +184,42 @@ export const NewMaterialForm = ({
           })
         }
         text={"add"}
+      />
+      <hr />
+      <h3>color helper</h3>
+      <label
+        title="hex representation of a color, #abc or #abcdef"
+        htmlFor={"colorHelper"}
+      >
+        hex input:
+      </label>
+      <input
+        id={"colorHelper"}
+        type="text"
+        value={hex}
+        className="Input"
+        onChange={(e) => handleHex(e.target.value)}
+      />
+      <label title={"red"} htmlFor={"red"}>
+        red:
+      </label>
+      <input id={"colorHelper_red"} type="text" value={srgb[0]} disabled />
+      <label title={"green"} htmlFor={"green"}>
+        green:
+      </label>
+      <input id={"colorHelper_green"} type="text" value={srgb[1]} disabled />
+      <label title={"blue"} htmlFor={"blue"}>
+        blue:
+      </label>
+      <input id={"colorHelper_blue"} type="text" value={srgb[2]} disabled />
+      <label title={"result"} htmlFor={"result"}>
+        result:
+      </label>
+      <input
+        id={"colorHelper_result"}
+        type="text"
+        disabled
+        style={{ background: hex }}
       />
     </div>
   );
