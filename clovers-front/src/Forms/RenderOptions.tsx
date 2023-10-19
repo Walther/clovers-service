@@ -89,6 +89,7 @@ export const RenderOptionsForm = ({
         setState={setState}
       />
       <CheckboxInput
+        tooltip="render only the normalmap of the scene. very fast!"
         fieldname="normalmap"
         object={object}
         path={path}

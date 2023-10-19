@@ -3,11 +3,13 @@ import * as R from "ramda";
 import "./Input.scss";
 
 export const CheckboxInput = ({
+  tooltip,
   fieldname,
   object,
   path,
   setState,
 }: {
+  tooltip: string;
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
@@ -19,7 +21,9 @@ export const CheckboxInput = ({
 
   return (
     <>
-      <label htmlFor={id}>{fieldname}: </label>
+      <label title={tooltip} htmlFor={id}>
+        {fieldname}:
+      </label>
       <input
         id={id}
         type="checkbox"

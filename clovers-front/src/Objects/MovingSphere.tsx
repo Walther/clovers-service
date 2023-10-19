@@ -72,6 +72,7 @@ export const MovingSphereForm = ({
         setState={setState}
       />
       <CheckboxInput
+        tooltip="prioritize object in multiple importance sampling"
         fieldname="priority"
         object={object}
         path={path}
