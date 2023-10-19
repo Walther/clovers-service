@@ -24,6 +24,7 @@ export const DispersiveForm = ({
     <div className="OptionsForm">
       <h3>{material.name || kind}</h3>
       <TextInput
+        tooltip="unique name of the material"
         fieldname="name"
         object={material}
         path={path}
@@ -31,12 +32,14 @@ export const DispersiveForm = ({
       />
       <DeleteButton path={path} setState={setState} />
       <NumberInput
+        tooltip="cauchy equation constant A"
         fieldname="cauchy_a"
         object={material}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="cauchy equation constant B"
         fieldname="cauchy_b"
         object={material}
         path={path}

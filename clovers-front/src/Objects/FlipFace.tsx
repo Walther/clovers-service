@@ -25,12 +25,14 @@ export const FlipFaceForm = ({
       <h3>FlipFace</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}
         setState={setState}
       />
       <CheckboxInput
+        tooltip="prioritize object in multiple importance sampling"
         fieldname="priority"
         object={object}
         path={path}

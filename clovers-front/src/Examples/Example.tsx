@@ -32,13 +32,23 @@ export const ExampleForm = ({ handleExample }: { handleExample: any }) => {
 
   return (
     <>
-      <label htmlFor="exampleSelect">select example:</label>
+      <label
+        title="select a scene from a list of examples"
+        htmlFor="exampleSelect"
+      >
+        select example:
+      </label>
       <ExampleSelect
         id={"exampleSelect"}
         selected={selectedExample}
         setSelected={setSelectedExample}
       />
-      <label htmlFor="loadExampleButton">load example:</label>
+      <label
+        title="load the example, replacing the current scene"
+        htmlFor="loadExampleButton"
+      >
+        load example:
+      </label>
       <Button
         id="loadExampleButton"
         handleClick={() => handleExample()}

@@ -43,7 +43,9 @@ const DebugForm = ({ object }: { object: SceneObject }): ReactElement => {
   return (
     <div className="OptionsForm">
       <h3>other object: {name}</h3>
-      <label htmlFor={id}>json: </label>
+      <label title="json for the unknown object" htmlFor={id}>
+        json:{" "}
+      </label>
       <input id={id} type="text" value={JSON.stringify(object)} readOnly />
     </div>
   );
@@ -174,7 +176,9 @@ export const NewObjectForm = ({
   return (
     <div className="OptionsForm">
       <h3>new object</h3>
-      <label htmlFor={id}>kind: </label>
+      <label title="select the type of the new object to add" htmlFor={id}>
+        kind:
+      </label>
       <ObjectSelect id={id} selected={selected} setSelected={setSelected} />
       <Button
         handleClick={() =>

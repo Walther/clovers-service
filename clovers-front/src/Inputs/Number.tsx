@@ -3,11 +3,13 @@ import * as R from "ramda";
 import "./Input.scss";
 
 export const NumberInput = ({
+  tooltip,
   fieldname,
   object,
   path,
   setState,
 }: {
+  tooltip: string;
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
@@ -19,7 +21,9 @@ export const NumberInput = ({
 
   return (
     <>
-      <label htmlFor={id}>{fieldname}: </label>
+      <label title={tooltip} htmlFor={id}>
+        {fieldname}:
+      </label>
       <input
         id={id}
         type="text"
@@ -34,11 +38,13 @@ export const NumberInput = ({
 
 /** Returns a component with three number input fields. Note that this calls `Number()` for the event.target.value. */
 export const TripleNumberInput = ({
+  tooltip,
   fieldname,
   object,
   path,
   setState,
 }: {
+  tooltip: string;
   fieldname: string;
   object: any; // TODO:
   path: R.Path;
@@ -52,7 +58,9 @@ export const TripleNumberInput = ({
 
   return (
     <>
-      <label htmlFor={id + "_x"}>{fieldname}: </label>
+      <label title={tooltip} htmlFor={id + "_x"}>
+        {fieldname}:
+      </label>
       <div className="TripleInput">
         <input
           id={id + "_x"}

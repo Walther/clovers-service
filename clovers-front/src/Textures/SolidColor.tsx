@@ -21,6 +21,7 @@ export const SolidColorForm = ({
       <h3>{mat}</h3>
       <DeleteButton path={path} setState={setState} />
       <TripleNumberInput
+        tooltip="sRGB float"
         fieldname="color"
         object={texture}
         path={path}

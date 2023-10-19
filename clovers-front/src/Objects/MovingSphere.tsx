@@ -31,48 +31,56 @@ export const MovingSphereForm = ({
       <h3>MovingSphere</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="radius of the sphere"
         fieldname="radius"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate, start of the movement"
         fieldname="center_0"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate, end of the movement"
         fieldname="center_1"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="start time of the movement"
         fieldname="time_0"
         object={object}
         path={[...path, "time_0"]}
         setState={setState}
       />
       <NumberInput
+        tooltip="end time of the movement"
         fieldname="time_1"
         object={object}
         path={[...path, "time_1"]}
         setState={setState}
       />
       <CheckboxInput
+        tooltip="prioritize object in multiple importance sampling"
         fieldname="priority"
         object={object}
         path={path}
         setState={setState}
       />
       <TextInput
+        tooltip="unique name (pointer) of the material for this object"
         fieldname="material"
         object={object}
         path={path}

@@ -24,6 +24,7 @@ export const DielectricForm = ({
     <div className="OptionsForm">
       <h3>{material.name || kind}</h3>
       <TextInput
+        tooltip="unique name of the material"
         fieldname="name"
         object={material}
         path={path}
@@ -31,12 +32,14 @@ export const DielectricForm = ({
       />
       <DeleteButton path={path} setState={setState} />
       <NumberInput
+        tooltip="refractive index of the material"
         fieldname="refractive_index"
         object={material}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="sRGB float"
         fieldname="color"
         object={material}
         path={path}

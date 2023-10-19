@@ -27,30 +27,35 @@ export const SphereForm = ({
       <h3>Sphere</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}
         setState={setState}
       />
       <NumberInput
+        tooltip="radius of the sphere"
         fieldname="radius"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate"
         fieldname="center"
         object={object}
         path={path}
         setState={setState}
       />
       <CheckboxInput
+        tooltip="prioritize object in multiple importance sampling"
         fieldname="priority"
         object={object}
         path={path}
         setState={setState}
       />
       <TextInput
+        tooltip="unique name (pointer) of the material for this object"
         fieldname="material"
         object={object}
         path={path}

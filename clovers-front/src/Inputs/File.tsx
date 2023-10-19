@@ -20,7 +20,7 @@ export const FileInput = ({ id }: { id: string }): ReactElement => {
         onChange={handleFile}
         className="Input fileInput"
       />
-      <label htmlFor={id} className="fileInputLabel">
+      <label title="file input" htmlFor={id} className="fileInputLabel">
         {name}
       </label>
     </>

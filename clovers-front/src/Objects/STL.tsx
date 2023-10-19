@@ -36,6 +36,7 @@ export const STLForm = ({
       <h3>STL</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}
@@ -43,30 +44,35 @@ export const STLForm = ({
       />
       <STLSelect id={id} selected={selected} setSelected={setSelected} />
       <NumberInput
+        tooltip="scaling factor for the object"
         fieldname="scale"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="center coordinate"
         fieldname="center"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="roll, pitch, yaw"
         fieldname="rotation"
         object={object}
         path={path}
         setState={setState}
       />
       <CheckboxInput
+        tooltip="prioritize object in multiple importance sampling"
         fieldname="priority"
         object={object}
         path={path}
         setState={setState}
       />
       <TextInput
+        tooltip="unique name (pointer) of the material for this object"
         fieldname="material"
         object={object}
         path={path}
@@ -94,7 +100,9 @@ export const STLSelect = ({
   ));
   return (
     <>
-      <label htmlFor={id}>stl file:</label>
+      <label title="select the STL object to add" htmlFor={id}>
+        stl file:
+      </label>
       <select
         id={id}
         value={selected}

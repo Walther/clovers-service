@@ -27,30 +27,35 @@ export const BoxyForm = ({
       <h3>Boxy</h3>
       <DeleteButton path={path} setState={setState} />
       <TextInput
+        tooltip="descriptive comment or name of the object"
         fieldname="comment"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="corner coordinate"
         fieldname="corner_0"
         object={object}
         path={path}
         setState={setState}
       />
       <TripleNumberInput
+        tooltip="diagonally opposite corner coordinate"
         fieldname="corner_1"
         object={object}
         path={path}
         setState={setState}
       />
       <CheckboxInput
+        tooltip="prioritize object in multiple importance sampling"
         fieldname="priority"
         object={object}
         path={path}
         setState={setState}
       />
       <TextInput
+        tooltip="unique name (pointer) of the material for this object"
         fieldname="material"
         object={object}
         path={path}

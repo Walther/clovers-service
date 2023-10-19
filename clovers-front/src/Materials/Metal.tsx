@@ -25,6 +25,7 @@ export const MetalForm = ({
     <div className="OptionsForm">
       <h3>{material.name || kind}</h3>
       <TextInput
+        tooltip="unique name of the material"
         fieldname="name"
         object={material}
         path={path}
@@ -32,6 +33,7 @@ export const MetalForm = ({
       />
       <DeleteButton path={path} setState={setState} />
       <NumberInput
+        tooltip="fuzziness of the material, 0 for smooth"
         fieldname="fuzz"
         object={material}
         path={path}
