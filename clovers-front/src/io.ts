@@ -4,11 +4,26 @@ import { RenderOptions } from "./Forms/RenderOptions";
 import { SceneObject } from "./Objects/SceneObject";
 import { Materials } from "./Materials/Material";
 
+import boing from "./Examples/boing.json";
+import colorchecker from "./Examples/colorchecker.json";
 import cornell from "./Examples/cornell.json";
+import cornell_with_smoke from "./Examples/cornell_with_smoke.json";
 import dispersive from "./Examples/dispersive.json";
+import grey from "./Examples/grey.json";
+import scene from "./Examples/scene.json";
+import spatial_checker_smoke from "./Examples/spatial_checker_smoke.json";
+import the_next_week from "./Examples/the_next_week.json";
+
 const examples = {
+  boing,
+  colorchecker,
   cornell,
+  cornell_with_smoke,
   dispersive,
+  grey,
+  scene,
+  spatial_checker_smoke,
+  the_next_week,
 };
 type examplesType = keyof typeof examples;
 export const exampleNames = Object.keys(examples);
