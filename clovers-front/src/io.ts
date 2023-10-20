@@ -1,7 +1,6 @@
 import { implicitSceneSettings, SceneObjects } from "./Forms/Scene";
 import { CameraOptions } from "./Forms/Camera";
 import { RenderOptions } from "./Forms/RenderOptions";
-import { SceneObject } from "./Objects/SceneObject";
 import { Materials } from "./Materials/Material";
 
 import boing from "./Examples/boing.json";
@@ -59,7 +58,6 @@ export const handleImport = ({
           camera,
           objects,
           materials,
-          // priority_objects, // TODO: handle import for priority objects
         } = json;
         setCameraOptions(camera);
         setSceneObjects(objects);
@@ -104,7 +102,6 @@ export const collectFile = ({
     ...implicitSceneSettings,
     camera: cameraOptions,
     objects: sceneObjects,
-    priority_objects: sceneObjects.filter((obj: SceneObject) => obj.priority),
     materials: materials,
   };
   return {
@@ -130,7 +127,6 @@ export const loadExample = ({
       camera,
       objects,
       materials,
-      // priority_objects, // TODO: handle import for priority objects
     } = examples[name];
     setCameraOptions(camera as CameraOptions);
     setSceneObjects(objects as SceneObjects);
