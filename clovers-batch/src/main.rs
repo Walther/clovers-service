@@ -1,6 +1,7 @@
 use std::io::Cursor;
 
 use clovers_svc_common::clovers::scenes::{self, Scene};
+use clovers_svc_common::clovers::RenderOpts;
 use clovers_svc_common::render_result::*;
 use clovers_svc_common::render_task::*;
 use clovers_svc_common::*;
@@ -16,6 +17,10 @@ use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 const POLL_DELAY_MS: u64 = 1_000;
+const MAX_WIDTH: u32 = 3840;
+const MAX_HEIGHT: u32 = 2160;
+const MAX_SAMPLES: u32 = 1024;
+const MAX_DEPTH: u32 = 100;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -53,7 +58,7 @@ async fn main() -> anyhow::Result<()> {
 
 async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     info!("fetching rendertask: {id}");
-    let render_task: RenderTask = match get_render_task(id, postgres_pool).await {
+    let t: RenderTask = match get_render_task(id, postgres_pool).await {
         Ok(Some(data)) => data,
         Ok(None) => {
             error!("rendertask not found: {id}");
@@ -65,16 +70,22 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
         }
     };
 
-    info!("initializing scene: {id}");
-    let scene: Scene = scenes::initialize(
-        render_task.scene_file,
-        render_task.opts.width,
-        render_task.opts.height,
-    );
+    let scene_file = t.scene_file;
+    // Enforce limits for renders
+    let width = t.opts.width.min(MAX_WIDTH);
+    let height = t.opts.height.min(MAX_HEIGHT);
+    let samples = t.opts.samples.min(MAX_SAMPLES);
+    let max_depth = t.opts.max_depth.min(MAX_DEPTH);
+    let opts = RenderOpts {
+        width,
+        height,
+        samples,
+        max_depth,
+        ..t.opts
+    };
 
-    let opts = render_task.opts;
-    let width = opts.width;
-    let height = opts.height;
+    info!("initializing scene: {id}");
+    let scene: Scene = scenes::initialize(scene_file, width, height);
 
     info!("rendering scene: {id}");
     let pixelbuffer = draw(opts, &scene);
