@@ -4,10 +4,10 @@ version: "3.9"
 services:
   backend:
     build:
-      context: .
-      dockerfile: ./clovers-back/dev.Dockerfile
+      context: ./clovers-back/
+      dockerfile: dev.Dockerfile
     volumes:
-      - ./:/app
+      - ./clovers-back/:/app
     command: sh -c "cargo watch -x 'run --release --bin clovers-back'"
     ports:
       - 8080:8080
@@ -18,10 +18,11 @@ services:
 
   batch:
     build:
-      context: .
-      dockerfile: ./clovers-batch/dev.Dockerfile
+      context: ./clovers-batch/
+      dockerfile: dev.Dockerfile
     volumes:
-      - ./:/app
+      - ./clovers-batch/:/app
+      - ./stl:/app/stl
     command: sh -c "cargo watch -x 'run --release --bin clovers-batch'"
     env_file: ./clovers-batch/.env
     depends_on:
@@ -31,16 +32,17 @@ services:
 
   preview:
     build:
-      context: .
-      dockerfile: ./clovers-preview/dev.Dockerfile
+      context: ./clovers-preview/
+      dockerfile: dev.Dockerfile
     volumes:
-      - ./:/app
+      - ./clovers-preview/:/app
+      - ./stl:/app/stl
     command: sh -c "cargo watch -x 'run --release --bin clovers-preview'"
     env_file: ./clovers-preview/.env
     depends_on:
       - redis
       - backend
-  
+
   frontend:
     build:
       context: ./clovers-front

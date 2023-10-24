@@ -1,13 +1,11 @@
 use std::io::Cursor;
 
-use clovers_svc_common::clovers::scenes::{self, Scene};
-use clovers_svc_common::clovers::RenderOpts;
-use clovers_svc_common::render_result::*;
-use clovers_svc_common::render_task::*;
-use clovers_svc_common::*;
-
+use clovers::scenes::Scene;
+use clovers::RenderOpts;
+use common::load_configs;
 use image::{ImageBuffer, Rgb, RgbImage};
 use redis::aio::ConnectionManager;
+use render_task::pop_render_queue;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::types::Uuid;
 use sqlx::{Pool, Postgres};
@@ -15,6 +13,14 @@ use tokio::time::{sleep, Duration};
 use tracing::{error, info};
 use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+use crate::common::{draw, RenderResult, RenderTask};
+use crate::render_result::{delete_render_task, save_render_result};
+use crate::render_task::get_render_task;
+
+mod common;
+mod render_result;
+mod render_task;
 
 const POLL_DELAY_MS: u64 = 1_000;
 const MAX_WIDTH: u32 = 3840;
@@ -85,7 +91,7 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     };
 
     info!("initializing scene: {id}");
-    let scene: Scene = scenes::initialize(scene_file, width, height);
+    let scene: Scene = clovers::scenes::initialize(scene_file, width, height);
 
     info!("rendering scene: {id}");
     let pixelbuffer = draw(opts, &scene);

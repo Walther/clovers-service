@@ -8,17 +8,20 @@ use axum::http::StatusCode;
 use axum::response::AppendHeaders;
 use axum::response::IntoResponse;
 use axum::Json;
-use clovers_svc_common::preview_result::*;
-use clovers_svc_common::preview_task::*;
-use clovers_svc_common::render_result::*;
-use clovers_svc_common::render_task::*;
-use clovers_svc_common::*;
 use redis::aio::ConnectionManager;
 use sqlx::types::Uuid;
 use sqlx::Pool;
 use sqlx::Postgres;
 use tokio::sync::Mutex;
 use tracing::error;
+
+use crate::common::RenderTask;
+use crate::preview::get_preview_result;
+use crate::preview::queue_previewtask;
+use crate::render_result::get_render_result;
+use crate::render_result::list_render_results;
+use crate::render_task::list_render_tasks;
+use crate::render_task::queue_rendertask;
 
 /// Queues a preview task to the Redis preview queue, to be processed by the batch worker.
 pub(crate) async fn preview_post(
@@ -96,29 +99,6 @@ pub(crate) async fn queue_list_all(
         }
     };
     Ok((StatusCode::OK, Json(rendertasks)))
-}
-
-/// Get the task by id in the queue
-pub(crate) async fn queue_get(
-    Path(id): Path<String>,
-    State(postgres_pool): State<Pool<Postgres>>,
-) -> Result<impl IntoResponse, impl IntoResponse> {
-    let id: Uuid = match id.parse() {
-        Ok(id) => id,
-        Err(e) => {
-            error!("{e}");
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
-        }
-    };
-    let rendertask = match get_render_task(id, &postgres_pool).await {
-        Ok(data) => data,
-        Err(e) => {
-            error!("{e}");
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
-        }
-    };
-
-    Ok((StatusCode::OK, Json(rendertask)))
 }
 
 /// Get the render result by id

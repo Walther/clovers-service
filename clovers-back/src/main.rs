@@ -1,5 +1,9 @@
 use std::{net::SocketAddr, sync::Arc};
 
+mod common;
+mod preview;
+mod render_result;
+mod render_task;
 mod rest;
 mod ws;
 
@@ -13,7 +17,6 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use clovers_svc_common::load_configs;
 use redis::aio::ConnectionManager;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tokio::sync::Mutex;
@@ -24,6 +27,8 @@ use tower_http::{
 };
 use tracing::Level;
 use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitExt};
+
+use crate::common::load_configs;
 
 #[derive(Clone, FromRef)]
 struct AppState {
@@ -72,8 +77,6 @@ async fn main() -> anyhow::Result<()> {
         .route("/queue", post(rest::queue_post))
         // `GET /queue` lists all the tasks in the queue
         .route("/queue", get(rest::queue_list_all))
-        // `GET /queue/:id` gets the specific task by id
-        .route("/queue/:id", get(rest::queue_get))
         // `GET /render/` gets all the render results in the db
         .route("/render", get(rest::render_result_list_all))
         // `GET /render/:id` gets the specific render result by id

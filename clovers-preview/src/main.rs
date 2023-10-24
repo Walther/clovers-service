@@ -1,16 +1,18 @@
-use std::io::Cursor;
-
-use clovers_svc_common::clovers::scenes::{self, Scene};
-use clovers_svc_common::clovers::RenderOpts;
-use clovers_svc_common::preview_result::save_preview_result;
-use clovers_svc_common::preview_task::*;
-use clovers_svc_common::*;
+use clovers::scenes::Scene;
+use clovers::RenderOpts;
 use image::{ImageBuffer, Rgb, RgbImage};
+use preview::pop_preview_queue;
 use redis::aio::ConnectionManager;
+use std::io::Cursor;
 use tokio::time::{sleep, Duration};
 use tracing::{error, info};
 use tracing_subscriber::fmt::time;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+mod common;
+use common::*;
+mod preview;
+use crate::preview::save_preview_result;
 
 const POLL_DELAY_MS: u64 = 1_000;
 const MAX_WIDTH: u32 = 1920;
@@ -65,7 +67,7 @@ async fn render(preview_task: PreviewTask, redis: &mut ConnectionManager) {
     };
 
     info!("initializing preview {preview_id}");
-    let scene: Scene = scenes::initialize(scene_file, width, height);
+    let scene: Scene = clovers::scenes::initialize(scene_file, width, height);
 
     info!("rendering preview {preview_id}");
     let pixelbuffer = draw(opts, &scene);

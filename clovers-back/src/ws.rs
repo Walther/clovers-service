@@ -5,8 +5,6 @@ use axum::extract::ConnectInfo;
 use axum::extract::State;
 use axum::extract::WebSocketUpgrade;
 use axum::response::IntoResponse;
-use clovers_svc_common::preview_result::exists_preview_result;
-use clovers_svc_common::preview_task::queue_previewtask;
 use futures::stream::SplitSink;
 use futures::{sink::SinkExt, stream::StreamExt};
 use redis::aio::ConnectionManager;
@@ -24,8 +22,10 @@ use tokio::time::sleep;
 use tracing::error;
 use tracing::info;
 
-use clovers_svc_common::render_result::list_render_results;
-use clovers_svc_common::render_task::list_render_tasks;
+use crate::preview::exists_preview_result;
+use crate::preview::queue_previewtask;
+use crate::render_result::list_render_results;
+use crate::render_task::list_render_tasks;
 
 /// WebSocket connection initiation handler
 pub(crate) async fn ws_handler(
