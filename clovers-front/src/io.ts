@@ -74,7 +74,6 @@ export const handleImport = ({
   setMessage("scene file imported");
 };
 
-// TODO: proper return type
 export const handleExport = (scene_file: any) => {
   // TODO: https://caniuse.com/native-filesystem-api
   const stringified = JSON.stringify(scene_file);
@@ -85,7 +84,6 @@ export const handleExport = (scene_file: any) => {
   downloadLink.click();
 };
 
-// TODO: proper return type
 export const collectFile = ({
   renderOptions,
   cameraOptions,

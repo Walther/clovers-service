@@ -133,7 +133,6 @@ function App() {
       setMessage(`Queued a new render task: ${id}`);
       refreshQueue();
     } catch (error: any) {
-      // TODO: AxiosError somehow?
       setMessage(error.response.data);
     }
   };
@@ -150,7 +149,6 @@ function App() {
       );
       setQueue(response.data);
     } catch (error: any) {
-      // TODO: AxiosError somehow?
       setMessage(error?.response?.data?.error);
     }
   };
@@ -167,7 +165,6 @@ function App() {
       );
       setRenders(response.data);
     } catch (error: any) {
-      // TODO: AxiosError somehow?
       setMessage(error?.response?.data?.error);
     }
   };
