@@ -41,7 +41,6 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::EnvFilter::new(&config.rustlog))
         .with(tracing_subscriber::fmt::layer().with_timer(time::UtcTime::rfc_3339()))
         .init();
-    tracing::debug!("starting with configuration: {:?}", &config);
 
     // set up postgres
     let postgres_pool = PgPoolOptions::new()

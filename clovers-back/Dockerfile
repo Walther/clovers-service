@@ -16,7 +16,7 @@ COPY . .
 RUN cargo build --release --bin clovers-back
 
 # We do not need the Rust toolchain to run the binary!
-FROM debian:bullseye-slim AS runtime
+FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 COPY --from=builder /app/target/release/clovers-back /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/clovers-back"]

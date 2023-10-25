@@ -44,8 +44,8 @@ pub fn load_configs() -> anyhow::Result<Config> {
     dotenv().ok();
     let listen_address = dotenv::var("LISTEN_ADDRESS")?.parse()?;
     let rustlog = dotenv::var("RUST_LOG")?;
-    let redis_connectioninfo = dotenv::var("REDIS_CONNETIONINFO")?.parse()?;
-    let postgres_connectioninfo = dotenv::var("POSTGRES_CONNETIONINFO")?.parse()?;
+    let redis_connectioninfo = dotenv::var("REDIS_CONNECTIONINFO")?.parse()?;
+    let postgres_connectioninfo = dotenv::var("POSTGRES_CONNECTIONINFO")?.parse()?;
     let frontend_address = dotenv::var("FRONTEND_ADDRESS")?.parse()?;
 
     Ok(Config {

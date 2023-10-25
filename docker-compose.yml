@@ -19,6 +19,8 @@ services:
     build:
       context: .
       dockerfile: ./clovers-batch/Dockerfile
+    volumes:
+      - ./:/app
     env_file: ./clovers-batch/.env
     depends_on:
       - postgres
@@ -28,10 +30,9 @@ services:
   preview:
     build:
       context: .
-      dockerfile: ./clovers-preview/dev.Dockerfile
+      dockerfile: ./clovers-preview/Dockerfile
     volumes:
       - ./:/app
-    command: sh -c "cargo watch -x 'run --release --bin clovers-preview'"
     env_file: ./clovers-preview/.env
     depends_on:
       - redis
