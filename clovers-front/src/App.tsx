@@ -78,6 +78,11 @@ function App() {
     },
   });
 
+  const nobackend = () => {
+    console.error("REACT_APP_BACKEND not defined");
+    setMessage("not connected to a backend. rendering not available.");
+  };
+
   const handlePreview = async () => {
     const body = collectFile({
       renderOptions,
@@ -92,9 +97,7 @@ function App() {
 
     try {
       if (!REACT_APP_BACKEND) {
-        // TODO: better handling...
-        console.error("REACT_APP_BACKEND not defined");
-        setMessage("not connected to a backend. rendering not available.");
+        nobackend();
         return;
       }
       sendJsonMessage(data);
@@ -115,9 +118,7 @@ function App() {
 
     try {
       if (!REACT_APP_BACKEND) {
-        // TODO: better handling...
-        console.error("REACT_APP_BACKEND not defined");
-        setMessage("not connected to a backend. rendering not available.");
+        nobackend();
         return;
       }
       const response = await axios.post(
@@ -140,8 +141,7 @@ function App() {
   const refreshQueue = async () => {
     try {
       if (!REACT_APP_BACKEND) {
-        // TODO: better handling...
-        console.error("REACT_APP_BACKEND not defined");
+        nobackend();
         return;
       }
       const response = await axios.get<Array<string>>(
@@ -156,8 +156,7 @@ function App() {
   const refreshResults = async () => {
     try {
       if (!REACT_APP_BACKEND) {
-        // TODO: better handling...
-        console.error("REACT_APP_BACKEND not defined");
+        nobackend();
         return;
       }
       const response = await axios.get<Array<string>>(
