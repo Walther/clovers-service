@@ -8,7 +8,11 @@ import {
   RenderOptionsForm,
   defaultRenderOptions,
 } from "./Forms/RenderOptions";
-import { defaultSceneObjects, SceneForm, SceneObjects } from "./Forms/Scene";
+import {
+  defaultSceneObjects,
+  ObjectsForm,
+  SceneObjects,
+} from "./Forms/ObjectsForm";
 import {
   CameraForm,
   CameraOptions,
@@ -21,7 +25,6 @@ import { REACT_APP_BACKEND, WS_ENDPOINT } from "./config";
 import useWebSocket from "react-use-websocket";
 import { collectFile, handleImport, handleExport, loadExample } from "./io";
 import { RenderResults } from "./RenderResults";
-import { RenderQueue } from "./RenderQueue";
 import {
   Materials,
   MaterialsForm,
@@ -154,6 +157,7 @@ function App() {
   };
 
   const refreshResults = async () => {
+    refreshQueue();
     try {
       if (!REACT_APP_BACKEND) {
         nobackend();
@@ -183,6 +187,10 @@ function App() {
       </header>
       <main>
         <div className="LeftGroup">
+          <h2>preview</h2>
+          <Preview previewId={previewId} />
+          <h2>status</h2>
+          <MessageBox message={message} />
           <h2>actions & options</h2>
           <div className="OptionsGroup">
             <ActionForm
@@ -224,36 +232,34 @@ function App() {
               setState={setCameraOptions}
               path={[]}
             />
-            <div className="ResultBox">
-              <h3>queue</h3>
-              <Button handleClick={() => refreshQueue()} text="refresh queue" />
-              <RenderQueue queue={queue} />
-            </div>
+          </div>
+          <h2>results</h2>
+          <div className="OptionsGroup">
             <div className="ResultBox">
               <h3>renders</h3>
               <Button
                 handleClick={() => refreshResults()}
                 text="refresh renders"
               />
+              queue length: {queue.length}
               <RenderResults renders={renders} />
             </div>
           </div>
-          <h2>status</h2>
-          <MessageBox message={message} />
-          <Preview previewId={previewId} />
         </div>
-        <div className="MiddleGroup">
-          <h2>objects</h2>
-          <NewObjectForm setState={setSceneObjects} path={[]} />
-          <SceneForm
-            sceneObjects={sceneObjects}
-            setSceneObjects={setSceneObjects}
-          />
-        </div>
-        <div className="RightGroup">
-          <h2>materials</h2>
-          <NewMaterialForm setState={setMaterials} path={[]} />
-          <MaterialsForm materials={materials} setMaterials={setMaterials} />
+        <div className="RightGroup OptionsGroup">
+          <div>
+            <h2>objects</h2>
+            <NewObjectForm setState={setSceneObjects} path={[]} />
+            <ObjectsForm
+              sceneObjects={sceneObjects}
+              setSceneObjects={setSceneObjects}
+            />
+          </div>
+          <div>
+            <h2>materials</h2>
+            <NewMaterialForm setState={setMaterials} path={[]} />
+            <MaterialsForm materials={materials} setMaterials={setMaterials} />
+          </div>
         </div>
       </main>
       <footer>

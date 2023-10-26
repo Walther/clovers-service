@@ -34,8 +34,7 @@ main {
     display: grid;
     grid-template-columns:
       [left-column] auto
-      [center-column] 1fr
-      [right-column] 1fr;
+      [right-column] auto;
     column-gap: 1rem;
   }
 }

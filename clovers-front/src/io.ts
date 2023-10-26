@@ -1,4 +1,4 @@
-import { implicitSceneSettings, SceneObjects } from "./Forms/Scene";
+import { implicitSceneSettings, SceneObjects } from "./Forms/ObjectsForm";
 import { CameraOptions } from "./Forms/Camera";
 import { RenderOptions } from "./Forms/RenderOptions";
 import { Materials } from "./Materials/Material";

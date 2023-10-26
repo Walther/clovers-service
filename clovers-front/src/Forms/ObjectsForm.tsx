@@ -14,7 +14,7 @@ export type ScenePriorityObjects = Array<SceneObject>;
 export const defaultSceneObjects: SceneObjects =
   cornell.objects as SceneObjects;
 
-export const SceneForm = ({
+export const ObjectsForm = ({
   sceneObjects,
   setSceneObjects,
 }: {
