@@ -187,9 +187,7 @@ function App() {
       </header>
       <main>
         <div className="LeftGroup">
-          <h2>preview</h2>
           <Preview previewId={previewId} />
-          <h2>status</h2>
           <MessageBox message={message} />
           <h2>actions & options</h2>
           <div className="OptionsGroup">
@@ -233,18 +231,6 @@ function App() {
               path={[]}
             />
           </div>
-          <h2>results</h2>
-          <div className="OptionsGroup">
-            <div className="ResultBox">
-              <h3>renders</h3>
-              <Button
-                handleClick={() => refreshResults()}
-                text="refresh renders"
-              />
-              queue length: {queue.length}
-              <RenderResults renders={renders} />
-            </div>
-          </div>
         </div>
         <div className="RightGroup OptionsGroup">
           <div>
@@ -259,6 +245,19 @@ function App() {
             <h2>materials</h2>
             <NewMaterialForm setState={setMaterials} path={[]} />
             <MaterialsForm materials={materials} setMaterials={setMaterials} />
+          </div>
+          <div>
+            <h2>results</h2>
+            <div className="OptionsGroup">
+              <div className="ResultBox">
+                <Button
+                  handleClick={() => refreshResults()}
+                  text="refresh renders"
+                />
+                queue length: {queue.length}
+                <RenderResults renders={renders} />
+              </div>
+            </div>
           </div>
         </div>
       </main>
