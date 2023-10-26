@@ -11,7 +11,7 @@ export const NumberInput = ({
 }: {
   tooltip: string;
   fieldname: string;
-  object: any; // TODO:
+  object: any;
   path: R.Path;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {
@@ -46,7 +46,7 @@ export const TripleNumberInput = ({
 }: {
   tooltip: string;
   fieldname: string;
-  object: any; // TODO:
+  object: any;
   path: R.Path;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {

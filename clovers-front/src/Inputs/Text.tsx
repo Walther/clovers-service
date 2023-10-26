@@ -11,7 +11,7 @@ export const TextInput = ({
 }: {
   tooltip: string;
   fieldname: string;
-  object: any; // TODO:
+  object: any;
   path: R.Path;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }): ReactElement => {

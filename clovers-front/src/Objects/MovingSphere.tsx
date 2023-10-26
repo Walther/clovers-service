@@ -13,7 +13,6 @@ export type MovingSphere = {
   time_1: number;
   radius: number;
   material: string;
-  aabb: any; // TODO: remove when fixed in upstream
   priority: boolean;
 };
 

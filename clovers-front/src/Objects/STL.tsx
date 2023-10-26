@@ -82,7 +82,6 @@ export const STLForm = ({
   );
 };
 
-// TODO: user file upload
 const STLPaths = ["", "bunny.stl", "dragon.stl", "prism.stl", "teapot.stl"];
 export const STLSelect = ({
   id,
@@ -91,7 +90,7 @@ export const STLSelect = ({
 }: {
   id: string;
   selected: string;
-  setSelected: (value: string) => void; // TODO: this is a weird type for this
+  setSelected: (value: string) => void;
 }): ReactElement => {
   const options = STLPaths.map((name, index) => (
     <option value={"stl/" + name} key={index}>
