@@ -1,9 +1,15 @@
+#root {
+  max-width: 3200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
 .App {
   display: grid;
   grid-template-columns:
-    [left-column] minmax(1rem, auto)
+    [left-column] minmax(0.5rem, auto)
     [main-column] minmax(350px, auto)
-    [right-column] minmax(1rem, auto);
+    [right-column] minmax(0.5rem, auto);
   grid-template-rows: [nav-row] auto [main-row] 1fr [footer-row] auto;
   min-height: 100%;
 }
@@ -33,9 +39,9 @@ main {
   @media only screen and (min-width: 2048px) {
     display: grid;
     grid-template-columns:
-      [left-column] auto
-      [right-column] auto;
-    column-gap: 1rem;
+      [left-column] 1fr
+      [right-column] 1fr;
+    gap: 1rem;
   }
 }
 
@@ -71,7 +77,6 @@ footer {
   background: white;
   color: var(--blackish);
   padding: 1rem;
-  width: 100%;
 }
 
 .actionsMenu .Button {
@@ -80,4 +85,19 @@ footer {
 
 details summary:hover {
   cursor: pointer;
+}
+
+.RightGroup {
+  @media only screen and (min-width: 700px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: stretch;
+    gap: 1rem;
+  }
+  @media only screen and (min-width: 1400px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: stretch;
+    gap: 1rem;
+  }
 }

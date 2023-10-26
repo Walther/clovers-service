@@ -188,8 +188,8 @@ function App() {
       <main>
         <div className="LeftGroup">
           <Preview previewId={previewId} />
-          <MessageBox message={message} />
           <h2>actions & options</h2>
+          <MessageBox message={message} />
           <div className="OptionsGroup">
             <ActionForm
               handlePreview={handlePreview}
@@ -232,7 +232,7 @@ function App() {
             />
           </div>
         </div>
-        <div className="RightGroup OptionsGroup">
+        <div className="RightGroup">
           <div>
             <h2>objects</h2>
             <NewObjectForm setState={setSceneObjects} path={[]} />
@@ -248,15 +248,13 @@ function App() {
           </div>
           <div>
             <h2>results</h2>
-            <div className="OptionsGroup">
-              <div className="ResultBox">
-                <Button
-                  handleClick={() => refreshResults()}
-                  text="refresh renders"
-                />
-                queue length: {queue.length}
-                <RenderResults renders={renders} />
-              </div>
+            <div className="ResultBox">
+              <Button
+                handleClick={() => refreshResults()}
+                text="refresh renders"
+              />
+              queue length: {queue.length}
+              <RenderResults renders={renders} />
             </div>
           </div>
         </div>
