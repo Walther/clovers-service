@@ -219,7 +219,7 @@ export const NewMaterialForm = ({
         id={"colorHelper_result"}
         type="text"
         disabled
-        style={{ background: hex }}
+        style={{ background: hex, opacity: 1 }}
       />
     </div>
   );
