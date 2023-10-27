@@ -197,9 +197,22 @@ function App() {
       <main>
         <div className="LeftGroup">
           <Preview previewId={previewId} />
-          <h2>actions & options</h2>
           <MessageBox message={message} />
-          <div className="OptionsGroup">
+          <div>
+            <h2>results</h2>
+            <div className="ResultBox">
+              <Button
+                handleClick={() => refreshResults()}
+                text="refresh renders"
+              />
+              queue length: {queue.length}
+              <RenderResults renders={renders} />
+            </div>
+          </div>
+        </div>
+        <div className="RightGroup">
+          <div>
+            <h2>actions</h2>
             <ActionForm
               handlePreview={handlePreview}
               handleRender={handleRender}
@@ -232,26 +245,31 @@ function App() {
                 })
               }
             />
+          </div>
+          <div>
+            <h2>options</h2>
             <RenderOptionsForm
               object={renderOptions}
               setState={setRenderOptions}
               path={[]}
             />
-            <div>
-              <CameraForm
-                object={cameraOptions}
-                setState={setCameraOptions}
-                path={[]}
-              />
-              <SceneOptionsForm
-                object={sceneOptions}
-                setState={setSceneOptions}
-                path={[]}
-              />
-            </div>
           </div>
-        </div>
-        <div className="RightGroup">
+          <div>
+            <h2>camera</h2>
+            <CameraForm
+              object={cameraOptions}
+              setState={setCameraOptions}
+              path={[]}
+            />
+          </div>
+          <div>
+            <h2>scene</h2>
+            <SceneOptionsForm
+              object={sceneOptions}
+              setState={setSceneOptions}
+              path={[]}
+            />
+          </div>
           <div>
             <h2>objects</h2>
             <NewObjectForm setState={setSceneObjects} path={[]} />
@@ -264,17 +282,6 @@ function App() {
             <h2>materials</h2>
             <NewMaterialForm setState={setMaterials} path={[]} />
             <MaterialsForm materials={materials} setMaterials={setMaterials} />
-          </div>
-          <div>
-            <h2>results</h2>
-            <div className="ResultBox">
-              <Button
-                handleClick={() => refreshResults()}
-                text="refresh renders"
-              />
-              queue length: {queue.length}
-              <RenderResults renders={renders} />
-            </div>
           </div>
         </div>
       </main>

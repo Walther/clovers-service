@@ -14,10 +14,15 @@
 .Button:hover,
 .fileInputLabel:hover {
   background: var(--grey-lightened);
+  background: var(--green) !important;
   cursor: pointer;
 }
 
 .Button:active,
 .fileInputLabel:active {
-  background: var(--grey-darkened);
+  margin-left: 0.5rem;
+}
+
+#previewButton {
+  background-color: var(--orange);
 }

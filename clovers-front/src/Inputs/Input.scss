@@ -2,8 +2,7 @@
 .OptionsForm .InputError,
 .InputError:focus,
 .OptionsForm .InputError:focus {
-  accent-color: var(--pink);
-  border: 2px solid var(--pink);
+  background-color: var(--pink);
 }
 
 input,
@@ -37,7 +36,10 @@ select::selection {
 input:active,
 input:focus,
 select:active,
-select:focus {
+select:focus,
+select:hover,
+input:hover {
+  background-color: var(--green);
   box-shadow: none;
   border: none;
 }
