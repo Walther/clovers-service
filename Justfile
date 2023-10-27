@@ -22,7 +22,7 @@ prod-down:
   docker compose -f {{prodyaml}} down
 
 worker-down:
-  docker compose -f {{workeryaml}} up --build
+  docker compose -f {{workeryaml}} down
 
 # Clean up the services. Run build afterwards before up.
 clean:
