@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
-import { Button } from "../Inputs/Button";
 import { TripleNumberInput } from "../Inputs/Number";
 import { NumberInput } from "../Inputs/Number";
+import cornell from "../Examples/cornell.json";
 
 export type CameraOptions = {
   look_from: [number, number, number];
@@ -12,14 +12,8 @@ export type CameraOptions = {
   focus_distance: number;
 };
 
-export const defaultCameraOptions: CameraOptions = {
-  look_from: [278.0, 278.0, -800.0],
-  look_at: [278.0, 278.0, 0.0],
-  up: [0.0, 1.0, 0.0],
-  vertical_fov: 40.0,
-  aperture: 0.0,
-  focus_distance: 10.0,
-};
+export const defaultCameraOptions: CameraOptions =
+  cornell.camera as CameraOptions;
 
 export const CameraForm = ({
   object,
@@ -75,10 +69,6 @@ export const CameraForm = ({
         object={object}
         path={path}
         setState={setState}
-      />
-      <Button
-        handleClick={() => setState(defaultCameraOptions)}
-        text={"defaults"}
       />
     </div>
   );

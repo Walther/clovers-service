@@ -31,20 +31,6 @@ h3 {
   font-size: 1.25rem;
 }
 
-main {
-  grid-column: main-column;
-  grid-row: main-row;
-  height: 100%;
-  min-width: 0;
-  @media only screen and (min-width: 2048px) {
-    display: grid;
-    grid-template-columns:
-      [left-column] 1fr
-      [right-column] 1fr;
-    gap: 1rem;
-  }
-}
-
 header {
   display: grid;
   justify-items: start;
@@ -87,17 +73,45 @@ details summary:hover {
   cursor: pointer;
 }
 
+main {
+  grid-column: main-column;
+  grid-row: main-row;
+  height: 100%;
+  min-width: 0;
+  // x-small to medium screens: single column main layout
+  // large and xl screens: two column main layout
+  @media only screen and (min-width: 1800px) {
+    display: grid;
+    grid-template-columns:
+      [left-column] 1fr
+      [right-column] 1fr;
+    gap: 1rem;
+  }
+}
+
 .RightGroup {
+  // x-small screens: no grid
+  // small screens: two columns for the form group
+  // medium screens: three columns for the form group
+  // large screens: main layout has split to two, revert back to two columns for the form group
+  // xl screens: main layout is in two, but we have room for three columns again for the form group
+
   @media only screen and (min-width: 700px) {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content min-content min-content;
     justify-items: stretch;
+    align-items: start;
     gap: 1rem;
   }
-  @media only screen and (min-width: 1400px) {
-    display: grid;
+
+  @media only screen and (min-width: 1400px) and (max-width: 1800px) {
     grid-template-columns: 1fr 1fr 1fr;
-    justify-items: stretch;
-    gap: 1rem;
+  }
+
+  // implied two-column 1fr 1fr between 1800px and 2300px
+
+  @media only screen and (min-width: 2300px) {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
