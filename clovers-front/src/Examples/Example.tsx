@@ -39,7 +39,7 @@ export const ExampleForm = ({ handleExample }: { handleExample: any }) => {
         select example:
       </label>
       <ExampleSelect
-        id={"exampleSelect"}
+        id="exampleSelect"
         selected={selectedExample}
         setSelected={setSelectedExample}
       />
