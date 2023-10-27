@@ -2,12 +2,6 @@ import { ReactElement } from "react";
 import { ObjectForm, SceneObject } from "../Objects/SceneObject";
 import cornell from "../Examples/cornell.json";
 
-export const implicitSceneSettings = {
-  time_0: 0,
-  time_1: 1,
-  background_color: [0, 0, 0],
-};
-
 export type SceneObjects = Array<SceneObject>;
 export type ScenePriorityObjects = Array<SceneObject>;
 

@@ -31,10 +31,17 @@ import {
   NewMaterialForm,
   defaultMaterials,
 } from "./Materials/Material";
+import {
+  SceneOptions,
+  SceneOptionsForm,
+  defaultSceneOptions,
+} from "./Forms/Scene";
 
 function App() {
   const [renderOptions, setRenderOptions] =
     useState<RenderOptions>(defaultRenderOptions);
+  const [sceneOptions, setSceneOptions] =
+    useState<SceneOptions>(defaultSceneOptions);
   const [cameraOptions, setCameraOptions] =
     useState<CameraOptions>(defaultCameraOptions);
   const [sceneObjects, setSceneObjects] =
@@ -89,6 +96,7 @@ function App() {
   const handlePreview = async () => {
     const body = collectFile({
       renderOptions,
+      sceneOptions,
       cameraOptions,
       sceneObjects,
       materials,
@@ -114,6 +122,7 @@ function App() {
     setMessage("Ready.");
     const body = collectFile({
       renderOptions,
+      sceneOptions,
       cameraOptions,
       sceneObjects,
       materials,
@@ -197,6 +206,7 @@ function App() {
               handleImport={() =>
                 handleImport({
                   setMessage,
+                  setSceneOptions,
                   setCameraOptions,
                   setSceneObjects,
                   setMaterials,
@@ -205,6 +215,7 @@ function App() {
               handleExport={() => {
                 const { scene_file } = collectFile({
                   renderOptions,
+                  sceneOptions,
                   cameraOptions,
                   sceneObjects,
                   materials,
@@ -214,6 +225,7 @@ function App() {
               handleExample={() =>
                 loadExample({
                   setMessage,
+                  setSceneOptions,
                   setCameraOptions,
                   setSceneObjects,
                   setMaterials,
@@ -225,11 +237,18 @@ function App() {
               setState={setRenderOptions}
               path={[]}
             />
-            <CameraForm
-              object={cameraOptions}
-              setState={setCameraOptions}
-              path={[]}
-            />
+            <div>
+              <CameraForm
+                object={cameraOptions}
+                setState={setCameraOptions}
+                path={[]}
+              />
+              <SceneOptionsForm
+                object={sceneOptions}
+                setState={setSceneOptions}
+                path={[]}
+              />
+            </div>
           </div>
         </div>
         <div className="RightGroup">
