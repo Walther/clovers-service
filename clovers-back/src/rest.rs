@@ -164,3 +164,31 @@ pub(crate) async fn render_result_list_all(
 
     Ok((StatusCode::OK, Json(render_results)))
 }
+
+/// Get the thumbnail by id
+pub(crate) async fn thumb_get(
+    Path(id): Path<String>,
+    State(postgres_pool): State<Pool<Postgres>>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let id: Uuid = match id.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+    let thumb: Vec<u8> = match get_thumb(id, &postgres_pool).await {
+        Ok(Some(data)) => data,
+        Ok(None) => return Err((StatusCode::NOT_FOUND, Json("not found".to_string()))),
+        Err(e) => {
+            error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+
+    Ok((
+        StatusCode::OK,
+        AppendHeaders([(CONTENT_TYPE, "image/png")]),
+        thumb,
+    ))
+}

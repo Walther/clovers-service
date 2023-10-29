@@ -13,7 +13,7 @@ pub async fn save_preview_result(
 ) -> Result<Uuid> {
     let key = format!("{PREVIEW_RESULTS_NAME}.{preview_id}");
     redis_connection
-        .set_ex(key, render_result.data, PREVIEW_EXPIRY_SECONDS)
+        .set_ex(key, render_result.image, PREVIEW_EXPIRY_SECONDS)
         .await?;
     Ok(preview_id)
 }

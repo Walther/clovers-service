@@ -6,7 +6,8 @@ use clovers_svc_common::render_result::*;
 use clovers_svc_common::render_task::*;
 use clovers_svc_common::*;
 
-use image::{ImageBuffer, Rgb, RgbImage};
+use image::imageops::FilterType::Lanczos3;
+use image::{DynamicImage, ImageBuffer, Rgb, RgbImage};
 use redis::aio::ConnectionManager;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::types::Uuid;
@@ -99,15 +100,27 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     // Graphics assume origin at bottom left corner of the screen
     // Our buffer writes pixels from top left corner. Simple fix, just flip it!
     image::imageops::flip_vertical_in_place(&mut img);
-    let mut data: Vec<u8> = Vec::new();
-    match img.write_to(&mut Cursor::new(&mut data), image::ImageOutputFormat::Png) {
+    // Write the image png
+    let mut image: Vec<u8> = Vec::new();
+    match img.write_to(&mut Cursor::new(&mut image), image::ImageOutputFormat::Png) {
         Ok(_) => (),
         Err(e) => {
             error!("could not write image data to buffer: {id} - {e}");
             return;
         }
     };
-    let render_result = RenderResult { data };
+    // Write the thumbnail png
+    let thumb_img = DynamicImage::from(img).resize(256, 256, Lanczos3);
+    let mut thumb: Vec<u8> = Vec::new();
+    match thumb_img.write_to(&mut Cursor::new(&mut thumb), image::ImageOutputFormat::Png) {
+        Ok(_) => (),
+        Err(e) => {
+            error!("could not write image data to buffer: {id} - {e}");
+            return;
+        }
+    };
+
+    let render_result = RenderResult { image, thumb };
     match save_render_result(render_result, postgres_pool).await {
         Ok(result_id) => info!("saved render {id} result at {result_id}"),
         Err(e) => error!("could not save render result for: {id} - {e}"),

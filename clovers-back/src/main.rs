@@ -77,6 +77,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/render", get(rest::render_result_list_all))
         // `GET /render/:id` gets the specific render result by id
         .route("/render/:id", get(rest::render_result_get))
+        // `GET /thumb/:id` gets the specific thumbnail by id
+        .route("/thumb/:id", get(rest::thumb_get))
         // WebSocket
         .route("/ws", get(ws::ws_handler))
         // redis and postgres

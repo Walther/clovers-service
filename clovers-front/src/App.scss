@@ -109,3 +109,10 @@ main {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
+
+.RenderResults {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}

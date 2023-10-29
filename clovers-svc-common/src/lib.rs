@@ -69,8 +69,10 @@ pub struct RenderTask {
 /// The main object for the rendering result. Contains an image and assorted metadata.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RenderResult {
-    /// minimum viable test: vec of bytes
-    pub data: Vec<u8>,
+    /// png as bytes
+    pub image: Vec<u8>,
+    /// png as bytes
+    pub thumb: Vec<u8>,
 }
 
 #[derive(Serialize, Deserialize)]
