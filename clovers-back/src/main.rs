@@ -29,12 +29,25 @@ use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitEx
 struct AppState {
     redis: Arc<Mutex<ConnectionManager>>,
     postgres: Pool<Postgres>,
+    s3: aws_sdk_s3::Client,
 }
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // load configs
     let config = load_configs()?;
+    // FIXME: https://github.com/awslabs/aws-sdk-rust/issues/932
+    let endpoint_url = dotenv::var("AWS_ENDPOINT_URL")?;
+    let awsconfig = aws_config::from_env()
+        .endpoint_url(&endpoint_url)
+        .load()
+        .await;
+    let endpoint_url_s3 = dotenv::var("AWS_ENDPOINT_URL_S3")?;
+    let s3config = aws_sdk_s3::config::Builder::from(&awsconfig)
+        .endpoint_url(&endpoint_url_s3)
+        .force_path_style(true)
+        .build();
+    let s3client = aws_sdk_s3::Client::from_conf(s3config);
 
     // set up the tracing
     tracing_subscriber::registry()
@@ -55,6 +68,7 @@ async fn main() -> anyhow::Result<()> {
     let state = AppState {
         redis: Arc::new(Mutex::new(redis_connection_manager)),
         postgres: postgres_pool,
+        s3: s3client,
     };
 
     // assemble the application

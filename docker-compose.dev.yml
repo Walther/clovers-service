@@ -71,6 +71,33 @@ services:
     volumes:
       - redis_data:/data
 
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
+    image: localstack/localstack:2.3
+    ports:
+      - "4566:4566" # LocalStack Gateway
+    environment:
+      - SERVICES=s3:4566
+      - DEBUG=${DEBUG-}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+
+  createbucket:
+    image: amazon/aws-cli:2.13.29
+    depends_on:
+      - localstack
+    volumes:
+      - bucket:/aws
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=eu-north-1
+    entrypoint: /bin/sh -c
+    command: >
+      "
+        aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket clovers --region eu-north-1 --create-bucket-configuration LocationConstraint=eu-north-1
+      "
 volumes:
   pg_data:
   redis_data:
+  bucket:

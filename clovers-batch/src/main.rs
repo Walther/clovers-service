@@ -27,6 +27,18 @@ const MAX_DEPTH: u32 = 100;
 async fn main() -> anyhow::Result<()> {
     // load configs
     let config = load_configs()?;
+    // FIXME: https://github.com/awslabs/aws-sdk-rust/issues/932
+    let endpoint_url = dotenv::var("AWS_ENDPOINT_URL")?;
+    let awsconfig = aws_config::from_env()
+        .endpoint_url(&endpoint_url)
+        .load()
+        .await;
+    let endpoint_url_s3 = dotenv::var("AWS_ENDPOINT_URL_S3")?;
+    let s3config = aws_sdk_s3::config::Builder::from(&awsconfig)
+        .endpoint_url(&endpoint_url_s3)
+        .force_path_style(true)
+        .build();
+    let s3client = aws_sdk_s3::Client::from_conf(s3config);
 
     // set up the tracing
     tracing_subscriber::registry()
@@ -48,7 +60,7 @@ async fn main() -> anyhow::Result<()> {
     loop {
         match pop_render_queue(&mut redis_connection_manager).await {
             Ok(render_task_id) => {
-                render(render_task_id, &postgres_pool).await;
+                render(render_task_id, &postgres_pool, &s3client).await;
             }
             Err(_e) => {
                 sleep(Duration::from_millis(POLL_DELAY_MS)).await;
@@ -57,7 +69,7 @@ async fn main() -> anyhow::Result<()> {
     }
 }
 
-async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
+async fn render(id: Uuid, postgres_pool: &Pool<Postgres>, s3client: &aws_sdk_s3::Client) {
     info!("fetching rendertask: {id}");
     let t: RenderTask = match get_render_task(id, postgres_pool).await {
         Ok(Some(data)) => data,
@@ -121,7 +133,7 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     };
 
     let render_result = RenderResult { image, thumb };
-    match save_render_result(render_result, postgres_pool).await {
+    match save_render_result(render_result, postgres_pool, s3client).await {
         Ok(result_id) => info!("saved render {id} result at {result_id}"),
         Err(e) => error!("could not save render result for: {id} - {e}"),
     };

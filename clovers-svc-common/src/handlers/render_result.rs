@@ -1,4 +1,5 @@
 use anyhow::{anyhow, Result};
+use aws_sdk_s3::primitives::ByteStream;
 use sqlx;
 use sqlx::types::Uuid;
 use sqlx::Pool;
@@ -6,21 +7,21 @@ use sqlx::Postgres;
 use sqlx::Row;
 
 use crate::RenderResult;
+use crate::BUCKET_NAME;
 
 /// Saves the full rendering result
 pub async fn save_render_result(
     render_result: RenderResult,
     postgres_pool: &Pool<Postgres>,
+    s3: &aws_sdk_s3::Client,
 ) -> Result<Uuid> {
     let id: Uuid = match sqlx::query(
         r#"
-INSERT INTO render_results ( image, thumb )
-VALUES ( $1, $2 )
+INSERT INTO render_results
+VALUES ( default )
 RETURNING id
       "#,
     )
-    .bind(render_result.image)
-    .bind(render_result.thumb)
     .fetch_one(postgres_pool)
     .await
     {
@@ -32,33 +33,41 @@ RETURNING id
         }
     };
 
+    let path = format!("images/{id}");
+    put_object(s3, path, render_result.image).await?;
+    let path = format!("thumbs/{id}");
+    put_object(s3, path, render_result.thumb).await?;
+
     Ok(id)
 }
 
-/// Gets the full rendering result by id.
-pub async fn get_render_result(
-    id: Uuid,
-    postgres_pool: &Pool<Postgres>,
-) -> Result<Option<Vec<u8>>> {
-    let data: Option<Vec<u8>> = match sqlx::query(
-        r#"
-SELECT image FROM render_results
-WHERE id = ( $1 )
-      "#,
-    )
-    .bind(id)
-    .fetch_optional(postgres_pool)
-    .await
+pub async fn put_object(
+    s3: &aws_sdk_s3::Client,
+    path: String,
+    data: Vec<u8>,
+) -> Result<(), anyhow::Error> {
+    tracing::debug!("put_object called");
+    let body = ByteStream::from(data);
+    match s3
+        .put_object()
+        .bucket(BUCKET_NAME)
+        .key(path)
+        .body(body)
+        .send()
+        .await
     {
-        Ok(Some(row)) => row.try_get("image")?,
-        Ok(None) => None,
+        Ok(_) => Ok(()),
         Err(e) => {
-            let error_message = format!("Error fetching image {id} from postgres: {e}");
-            tracing::error!("{error_message}");
-            return Err(anyhow!("{error_message}"));
+            let source = e.into_source()?;
+            tracing::error!("{source}");
+            Err(anyhow!(source.to_string()))
         }
-    };
+    }
+}
 
+pub async fn get_object(s3: &aws_sdk_s3::Client, path: String) -> Result<Vec<u8>, anyhow::Error> {
+    let object = s3.get_object().bucket(BUCKET_NAME).key(path).send().await?;
+    let data = object.body.collect().await?.into_bytes().into();
     Ok(data)
 }
 
@@ -92,26 +101,20 @@ SELECT id FROM render_results
     Ok(render_result_ids)
 }
 
-/// Gets the thumbnail by id.
-pub async fn get_thumb(id: Uuid, postgres_pool: &Pool<Postgres>) -> Result<Option<Vec<u8>>> {
-    let data: Option<Vec<u8>> = match sqlx::query(
-        r#"
-SELECT thumb FROM render_results
-WHERE id = ( $1 )
-      "#,
-    )
-    .bind(id)
-    .fetch_optional(postgres_pool)
-    .await
-    {
-        Ok(Some(row)) => row.try_get("thumb")?,
-        Ok(None) => None,
-        Err(e) => {
-            let error_message = format!("Error fetching thumbnail {id} from postgres: {e}");
-            tracing::error!("{error_message}");
-            return Err(anyhow!("{error_message}"));
-        }
-    };
+/// Gets the full rendering result by id.
+pub async fn get_render_result(id: Uuid, s3: &aws_sdk_s3::Client) -> Result<Option<Vec<u8>>> {
+    let path = format!("images/{id}");
+    match get_object(s3, path).await {
+        Ok(it) => Ok(Some(it)),
+        Err(err) => Err(err),
+    }
+}
 
-    Ok(data)
+/// Gets the thumbnail by id.
+pub async fn get_thumb(id: Uuid, s3: &aws_sdk_s3::Client) -> Result<Option<Vec<u8>>> {
+    let path = format!("thumbs/{id}");
+    match get_object(s3, path).await {
+        Ok(it) => Ok(Some(it)),
+        Err(err) => Err(err),
+    }
 }
