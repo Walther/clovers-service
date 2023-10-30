@@ -23,6 +23,8 @@ pub const PREVIEW_QUEUE_NAME: &str = "preview_queue";
 pub const PREVIEW_RESULTS_NAME: &str = "preview_results";
 // Redis expiry time for the preview results
 pub const PREVIEW_EXPIRY_SECONDS: usize = 60;
+// S3 compatible bucket name for the image storage
+pub const BUCKET_NAME: &str = "clovers";
 
 /// Main configuration structure for the application
 #[derive(Debug)]
@@ -69,8 +71,10 @@ pub struct RenderTask {
 /// The main object for the rendering result. Contains an image and assorted metadata.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RenderResult {
-    /// minimum viable test: vec of bytes
-    pub data: Vec<u8>,
+    /// png as bytes
+    pub image: Vec<u8>,
+    /// png as bytes
+    pub thumb: Vec<u8>,
 }
 
 #[derive(Serialize, Deserialize)]

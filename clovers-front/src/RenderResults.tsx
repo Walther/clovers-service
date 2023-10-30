@@ -12,19 +12,22 @@ export const RenderResults = ({
 
   return (
     <div className="RenderResults">
-      <ul>
-        {renders.map((task_id: string, index) => (
-          <li key={index}>
-            <a
-              href={`${REACT_APP_BACKEND}/render/${task_id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {task_id}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {renders.map((task_id: string, index) => (
+        <div key={index}>
+          <a
+            href={`${REACT_APP_BACKEND}/render/${task_id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <figure>
+              <img
+                src={`${REACT_APP_BACKEND}/thumb/${task_id}`}
+                alt={`thumbnail for image ${task_id}`}
+              />
+            </figure>
+          </a>
+        </div>
+      ))}
     </div>
   );
 };

@@ -4,6 +4,7 @@ mod rest;
 mod ws;
 
 use axum::{
+    error_handling::HandleErrorLayer,
     extract::FromRef,
     http::{
         header::{self},
@@ -11,12 +12,14 @@ use axum::{
     },
     response::IntoResponse,
     routing::{get, post},
-    Json, Router,
+    BoxError, Json, Router,
 };
 use clovers_svc_common::load_configs;
 use redis::aio::ConnectionManager;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tokio::sync::Mutex;
+use tower::ServiceBuilder;
+use tower_governor::{errors::display_error, governor::GovernorConfigBuilder, GovernorLayer};
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
@@ -29,12 +32,25 @@ use tracing_subscriber::{fmt::time, layer::SubscriberExt, util::SubscriberInitEx
 struct AppState {
     redis: Arc<Mutex<ConnectionManager>>,
     postgres: Pool<Postgres>,
+    s3: aws_sdk_s3::Client,
 }
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // load configs
     let config = load_configs()?;
+    // FIXME: https://github.com/awslabs/aws-sdk-rust/issues/932
+    let endpoint_url = dotenv::var("AWS_ENDPOINT_URL")?;
+    let awsconfig = aws_config::from_env()
+        .endpoint_url(&endpoint_url)
+        .load()
+        .await;
+    let endpoint_url_s3 = dotenv::var("AWS_ENDPOINT_URL_S3")?;
+    let s3config = aws_sdk_s3::config::Builder::from(&awsconfig)
+        .endpoint_url(&endpoint_url_s3)
+        .force_path_style(true)
+        .build();
+    let s3client = aws_sdk_s3::Client::from_conf(s3config);
 
     // set up the tracing
     tracing_subscriber::registry()
@@ -55,7 +71,12 @@ async fn main() -> anyhow::Result<()> {
     let state = AppState {
         redis: Arc::new(Mutex::new(redis_connection_manager)),
         postgres: postgres_pool,
+        s3: s3client,
     };
+
+    // set up ratelimiting
+    // TODO: endpoint specific ratelimits, especially for POST /render
+    let governor_conf = Box::new(GovernorConfigBuilder::default().finish().unwrap());
 
     // assemble the application
     let app = Router::new()
@@ -77,6 +98,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/render", get(rest::render_result_list_all))
         // `GET /render/:id` gets the specific render result by id
         .route("/render/:id", get(rest::render_result_get))
+        // `GET /thumb/:id` gets the specific thumbnail by id
+        .route("/thumb/:id", get(rest::thumb_get))
         // WebSocket
         .route("/ws", get(ws::ws_handler))
         // redis and postgres
@@ -99,6 +122,17 @@ async fn main() -> anyhow::Result<()> {
                         .level(Level::INFO)
                         .latency_unit(LatencyUnit::Micros),
                 ),
+        )
+        .layer(
+            ServiceBuilder::new()
+                // this middleware goes above `GovernorLayer` because it will receive
+                // errors returned by `GovernorLayer` below
+                .layer(HandleErrorLayer::new(|e: BoxError| async move {
+                    display_error(e)
+                }))
+                .layer(GovernorLayer {
+                    config: Box::leak(governor_conf),
+                }),
         );
 
     // run the app

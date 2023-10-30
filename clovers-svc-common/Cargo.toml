@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
+aws-config = "0.56.1"
+aws-sdk-s3 = "0.34.0"
 clovers = { git = "https://github.com/Walther/clovers/", rev = "c1d1f41bc764db50ce79eec7d75d464d2943b815", default-features = false, features = [
   "serde-derive",
   "stl",

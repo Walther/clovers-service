@@ -17,6 +17,7 @@ RUN cargo build --release --bin clovers-back
 
 # We do not need the Rust toolchain to run the binary!
 FROM debian:bookworm-slim AS runtime
+RUN apt update && apt install -y ca-certificates
 WORKDIR /app
 COPY --from=builder /app/target/release/clovers-back /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/clovers-back"]

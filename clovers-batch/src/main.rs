@@ -6,7 +6,8 @@ use clovers_svc_common::render_result::*;
 use clovers_svc_common::render_task::*;
 use clovers_svc_common::*;
 
-use image::{ImageBuffer, Rgb, RgbImage};
+use image::imageops::FilterType::Lanczos3;
+use image::{DynamicImage, ImageBuffer, Rgb, RgbImage};
 use redis::aio::ConnectionManager;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::types::Uuid;
@@ -26,6 +27,18 @@ const MAX_DEPTH: u32 = 100;
 async fn main() -> anyhow::Result<()> {
     // load configs
     let config = load_configs()?;
+    // FIXME: https://github.com/awslabs/aws-sdk-rust/issues/932
+    let endpoint_url = dotenv::var("AWS_ENDPOINT_URL")?;
+    let awsconfig = aws_config::from_env()
+        .endpoint_url(&endpoint_url)
+        .load()
+        .await;
+    let endpoint_url_s3 = dotenv::var("AWS_ENDPOINT_URL_S3")?;
+    let s3config = aws_sdk_s3::config::Builder::from(&awsconfig)
+        .endpoint_url(&endpoint_url_s3)
+        .force_path_style(true)
+        .build();
+    let s3client = aws_sdk_s3::Client::from_conf(s3config);
 
     // set up the tracing
     tracing_subscriber::registry()
@@ -47,7 +60,7 @@ async fn main() -> anyhow::Result<()> {
     loop {
         match pop_render_queue(&mut redis_connection_manager).await {
             Ok(render_task_id) => {
-                render(render_task_id, &postgres_pool).await;
+                render(render_task_id, &postgres_pool, &s3client).await;
             }
             Err(_e) => {
                 sleep(Duration::from_millis(POLL_DELAY_MS)).await;
@@ -56,7 +69,7 @@ async fn main() -> anyhow::Result<()> {
     }
 }
 
-async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
+async fn render(id: Uuid, postgres_pool: &Pool<Postgres>, s3client: &aws_sdk_s3::Client) {
     info!("fetching rendertask: {id}");
     let t: RenderTask = match get_render_task(id, postgres_pool).await {
         Ok(Some(data)) => data,
@@ -99,16 +112,28 @@ async fn render(id: Uuid, postgres_pool: &Pool<Postgres>) {
     // Graphics assume origin at bottom left corner of the screen
     // Our buffer writes pixels from top left corner. Simple fix, just flip it!
     image::imageops::flip_vertical_in_place(&mut img);
-    let mut data: Vec<u8> = Vec::new();
-    match img.write_to(&mut Cursor::new(&mut data), image::ImageOutputFormat::Png) {
+    // Write the image png
+    let mut image: Vec<u8> = Vec::new();
+    match img.write_to(&mut Cursor::new(&mut image), image::ImageOutputFormat::Png) {
         Ok(_) => (),
         Err(e) => {
             error!("could not write image data to buffer: {id} - {e}");
             return;
         }
     };
-    let render_result = RenderResult { data };
-    match save_render_result(render_result, postgres_pool).await {
+    // Write the thumbnail png
+    let thumb_img = DynamicImage::from(img).resize(256, 256, Lanczos3);
+    let mut thumb: Vec<u8> = Vec::new();
+    match thumb_img.write_to(&mut Cursor::new(&mut thumb), image::ImageOutputFormat::Png) {
+        Ok(_) => (),
+        Err(e) => {
+            error!("could not write image data to buffer: {id} - {e}");
+            return;
+        }
+    };
+
+    let render_result = RenderResult { image, thumb };
+    match save_render_result(render_result, postgres_pool, s3client).await {
         Ok(result_id) => info!("saved render {id} result at {result_id}"),
         Err(e) => error!("could not save render result for: {id} - {e}"),
     };

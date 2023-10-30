@@ -20,23 +20,23 @@ export const ActionForm = ({
     <div className="OptionsForm">
       <h3>path tracing</h3>
       <label title="create a quick preview render" htmlFor="previewButton">
-        preview:
+        quick preview:
       </label>
       <Button
         id="previewButton"
         handleClick={() => handlePreview()}
-        text="start"
+        text="preview"
       />
       <label
         title="create a task for a higher-quality render"
         htmlFor="renderButton"
       >
-        render:
+        full render:
       </label>
       <Button
         id="renderButton"
         handleClick={() => handleRender()}
-        text="start"
+        text="add to render queue"
       />
       <hr />
       <h3>examples</h3>

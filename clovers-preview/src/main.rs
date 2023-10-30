@@ -79,15 +79,18 @@ async fn render(preview_task: PreviewTask, redis: &mut ConnectionManager) {
     // Graphics assume origin at bottom left corner of the screen
     // Our buffer writes pixels from top left corner. Simple fix, just flip it!
     image::imageops::flip_vertical_in_place(&mut img);
-    let mut data: Vec<u8> = Vec::new();
-    match img.write_to(&mut Cursor::new(&mut data), image::ImageOutputFormat::Png) {
+    let mut image: Vec<u8> = Vec::new();
+    match img.write_to(&mut Cursor::new(&mut image), image::ImageOutputFormat::Png) {
         Ok(_) => (),
         Err(e) => {
             error!("could not write image data to buffer {preview_id} error {e}");
             return;
         }
     };
-    let preview_result = RenderResult { data };
+    // No thumbnail for previews
+    // FIXME: cleaner abstractions
+    let thumb: Vec<u8> = vec![];
+    let preview_result = RenderResult { image, thumb };
     match save_preview_result(preview_id, preview_result, redis).await {
         Ok(_) => info!("saved new preview {preview_id}"),
         Err(e) => error!("could not save preview result {preview_id} error {e}"),

@@ -124,7 +124,7 @@ pub(crate) async fn queue_get(
 /// Get the render result by id
 pub(crate) async fn render_result_get(
     Path(id): Path<String>,
-    State(postgres_pool): State<Pool<Postgres>>,
+    State(s3): State<aws_sdk_s3::Client>,
 ) -> Result<impl IntoResponse, impl IntoResponse> {
     let id: Uuid = match id.parse() {
         Ok(id) => id,
@@ -133,7 +133,7 @@ pub(crate) async fn render_result_get(
             return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
         }
     };
-    let render_result: Vec<u8> = match get_render_result(id, &postgres_pool).await {
+    let render_result: Vec<u8> = match get_render_result(id, &s3).await {
         Ok(Some(data)) => data,
         Ok(None) => return Err((StatusCode::NOT_FOUND, Json("not found".to_string()))),
         Err(e) => {
@@ -163,4 +163,32 @@ pub(crate) async fn render_result_list_all(
     let render_results: Vec<Uuid> = render_results;
 
     Ok((StatusCode::OK, Json(render_results)))
+}
+
+/// Get the thumbnail by id
+pub(crate) async fn thumb_get(
+    Path(id): Path<String>,
+    State(s3): State<aws_sdk_s3::Client>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let id: Uuid = match id.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+    let thumb: Vec<u8> = match get_thumb(id, &s3).await {
+        Ok(Some(data)) => data,
+        Ok(None) => return Err((StatusCode::NOT_FOUND, Json("not found".to_string()))),
+        Err(e) => {
+            error!("{e}");
+            return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(e.to_string())));
+        }
+    };
+
+    Ok((
+        StatusCode::OK,
+        AppendHeaders([(CONTENT_TYPE, "image/png")]),
+        thumb,
+    ))
 }
