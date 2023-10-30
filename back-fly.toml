@@ -13,6 +13,11 @@ dockerfile = "./clovers-back/Dockerfile"
 FRONTEND_ADDRESS = "https://clovers.fly.dev"
 LISTEN_ADDRESS = "0.0.0.0:8080"
 RUST_LOG = "clovers=trace,clovers_back=trace,clovers_svc_common=trace,tower_http=trace"
+AWS_DEFAULT_REGION = "eu-central-003"
+AWS_REGION = "eu-central-003"
+ENDPOINT_URL = "https://s3.eu-central-003.backblazeb2.com"
+AWS_ENDPOINT_URL = "https://s3.eu-central-003.backblazeb2.com"
+AWS_ENDPOINT_URL_S3 = "https://s3.eu-central-003.backblazeb2.com"
 
 [http_service]
 internal_port = 8080
