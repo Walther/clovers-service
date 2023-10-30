@@ -15,30 +15,36 @@ pub async fn save_render_result(
     postgres_pool: &Pool<Postgres>,
     s3: &aws_sdk_s3::Client,
 ) -> Result<Uuid> {
-    let id: Uuid = match sqlx::query(
+    let uuid = Uuid::new_v4();
+
+    // first store the image in the S3 compatible storage
+    let path = format!("images/{uuid}");
+    put_object(s3, path, render_result.image).await?;
+    let path = format!("thumbs/{uuid}");
+    put_object(s3, path, render_result.thumb).await?;
+
+    // then insert into database
+    // this prevents the frontend race condition for the thumbnails
+    let _id: Uuid = match sqlx::query(
         r#"
-INSERT INTO render_results
-VALUES ( default )
+INSERT INTO render_results ( id )
+VALUES ( $1 )
 RETURNING id
       "#,
     )
+    .bind(uuid)
     .fetch_one(postgres_pool)
     .await
     {
         Ok(row) => row.try_get("id")?,
         Err(e) => {
-            let error_message = format!("Error saving rendertask to postgres: {e}");
+            let error_message = format!("Error saving render_result to postgres: {e}");
             tracing::error!("{error_message}");
             return Err(anyhow!("{error_message}"));
         }
     };
 
-    let path = format!("images/{id}");
-    put_object(s3, path, render_result.image).await?;
-    let path = format!("thumbs/{id}");
-    put_object(s3, path, render_result.thumb).await?;
-
-    Ok(id)
+    Ok(uuid)
 }
 
 pub async fn put_object(
