@@ -67,8 +67,8 @@ sequenceDiagram
     postgres->>batch: ;
     note over batch: rendering
     batch->>postgres: delete render_task
-    batch->>postgres: save render_result id
     batch->>bucket: save image and thumbnail
+    batch->>postgres: save render_result id
     front-->batch: ;
     front->>back: GET /renders
     back->>postgres: get render_result ids
