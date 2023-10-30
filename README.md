@@ -154,6 +154,6 @@ sequenceDiagram
 | 2023-10-26 | 5.5   | Improvement: major UI overhaul! New layout, remove flex, grid only. Improved responsiveness & breakpoints. |
 | 2023-10-27 | 4.5   | Feature: scene options handling, add One Weekend scene. Improvements: further layout and breakpoint polish |
 | 2023-10-29 | 12.5  | Feature: images and thumbnails in S3 compatible storage. Ridiculously long work & debug with the SDK.      |
-| 2023-10-30 | 1.5   | Feature: finish the S3 compatible work and add basic ratelimiting to the backend                           |
+| 2023-10-30 | 5.5   | Feature: finish the S3 compatible work                                                                     |
 | ---        | ---   | ---                                                                                                        |
-| total      | 180.0 |                                                                                                            |
+| total      | 184.0 |                                                                                                            |
