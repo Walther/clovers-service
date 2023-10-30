@@ -17,6 +17,7 @@ RUN cargo build --release --bin clovers-batch
 
 # We do not need the Rust toolchain to run the binary!
 FROM debian:bookworm-slim AS runtime
+RUN apt update && apt install -y ca-certificates
 WORKDIR /app
 COPY ./stl ./stl
 COPY --from=builder /app/target/release/clovers-batch /usr/local/bin
