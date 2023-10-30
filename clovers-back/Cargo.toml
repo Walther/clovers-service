@@ -22,6 +22,8 @@ sqlx = { version = "0.6", features = [
   "json",
 ] }
 tokio = { version = "1.32", features = ["full"] }
+tower = "0.4.13"
 tower-http = { version = "0.4.3", features = ["trace", "cors"] }
+tower_governor = "0.1.0"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "time"] }

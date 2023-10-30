@@ -4,6 +4,7 @@ mod rest;
 mod ws;
 
 use axum::{
+    error_handling::HandleErrorLayer,
     extract::FromRef,
     http::{
         header::{self},
@@ -11,12 +12,14 @@ use axum::{
     },
     response::IntoResponse,
     routing::{get, post},
-    Json, Router,
+    BoxError, Json, Router,
 };
 use clovers_svc_common::load_configs;
 use redis::aio::ConnectionManager;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tokio::sync::Mutex;
+use tower::ServiceBuilder;
+use tower_governor::{errors::display_error, governor::GovernorConfigBuilder, GovernorLayer};
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer},
@@ -71,6 +74,10 @@ async fn main() -> anyhow::Result<()> {
         s3: s3client,
     };
 
+    // set up ratelimiting
+    // TODO: endpoint specific ratelimits, especially for POST /render
+    let governor_conf = Box::new(GovernorConfigBuilder::default().finish().unwrap());
+
     // assemble the application
     let app = Router::new()
         // `GET /` goes to `hello`
@@ -115,6 +122,17 @@ async fn main() -> anyhow::Result<()> {
                         .level(Level::INFO)
                         .latency_unit(LatencyUnit::Micros),
                 ),
+        )
+        .layer(
+            ServiceBuilder::new()
+                // this middleware goes above `GovernorLayer` because it will receive
+                // errors returned by `GovernorLayer` below
+                .layer(HandleErrorLayer::new(|e: BoxError| async move {
+                    display_error(e)
+                }))
+                .layer(GovernorLayer {
+                    config: Box::leak(governor_conf),
+                }),
         );
 
     // run the app
