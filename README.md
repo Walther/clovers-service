@@ -28,6 +28,10 @@ Main database for the service. Persistent data.
 
 Queue service for the preview rendering tasks and results. Ephemeral data.
 
+## bucket
+
+S3 compatible storage for images and thumbnails.
+
 ## Usage
 
 Note: first time build times will be slow.
@@ -48,11 +52,11 @@ sequenceDiagram
     participant postgres
     participant redis
     participant batch
+    participant bucket
     loop
       batch->>redis: pop render_task queue
       redis-->>batch: nil
     end
-    note left of batch: todo: remove redis <br> in full render flow?
     front->>back: POST /render
     back->>postgres: save render_task
     back->>redis: queue render_task id
@@ -63,16 +67,16 @@ sequenceDiagram
     postgres->>batch: ;
     note over batch: rendering
     batch->>postgres: delete render_task
-    batch->>postgres: save render_result
-    note left of batch: todo: object storage?
+    batch->>postgres: save render_result id
+    batch->>bucket: save image and thumbnail
     front-->batch: ;
     front->>back: GET /renders
     back->>postgres: get render_result ids
     postgres->>back: ;
     back->>front: ;
     front->>back: GET /renders/:id
-    back->>postgres: get render_result
-    postgres->>back: ;
+    back->>bucket: get image
+    bucket->>back: ;
     back->>front: .png;
 ```
 
@@ -107,7 +111,7 @@ sequenceDiagram
     back->>redis: get preview
     redis->>back: ;
     back->>front: .png
-    note right of redis: todo: redis TTL <br> for auto cleanup
+    note over redis: redis object TTL <br> for auto cleanup
 ```
 
 ## Work log
