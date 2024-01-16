@@ -3,7 +3,6 @@ import { ReactElement, useId, useState } from "react";
 import { Button } from "../Inputs/Button";
 import { Boxy, BoxyForm } from "./Boxy";
 import { ConstantMedium, ConstantMediumForm } from "./ConstantMedium";
-import { FlipFace, FlipFaceForm } from "./FlipFace";
 import { MovingSphere, MovingSphereForm } from "./MovingSphere";
 import { Quad, QuadForm } from "./Quad";
 import { RotateY, RotateYForm } from "./RotateY";
@@ -15,7 +14,6 @@ import { Triangle, TriangleForm } from "./Triangle";
 export type SceneObject =
   | Boxy
   | ConstantMedium
-  | FlipFace
   | MovingSphere
   | Quad
   | RotateY
@@ -27,7 +25,6 @@ export type SceneObject =
 export const SceneObjectNames = [
   "Boxy",
   "ConstantMedium",
-  "FlipFace",
   "MovingSphere",
   "Quad",
   "RotateY",
@@ -79,14 +76,6 @@ export const ObjectForm = ({
       return (
         <ConstantMediumForm
           object={object as ConstantMedium}
-          setState={setState}
-          path={path}
-        />
-      );
-    case "FlipFace":
-      return (
-        <FlipFaceForm
-          object={object as FlipFace}
           setState={setState}
           path={path}
         />
