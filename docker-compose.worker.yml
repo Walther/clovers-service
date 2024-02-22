@@ -12,6 +12,7 @@ services:
     env_file: .worker.env
 
   preview:
+    restart: always
     build:
       context: .
       dockerfile: ./clovers-preview/Dockerfile
