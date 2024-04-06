@@ -43,12 +43,6 @@ port = 80
 handlers = ["tls", "http"]
 port = 443
 
-[[services.tcp_checks]]
-grace_period = "10s"
-interval = "30s"
-restart_limit = 0
-timeout = "5s"
-
 [[http_service.checks]]
 grace_period = "10s"
 interval = "30s"
